@@ -31,6 +31,28 @@
         html.high-contrast .text-slate-600, html.high-contrast .text-slate-500, html.high-contrast .text-slate-400 { color: #f1f5f9 !important; }
         html.high-contrast .bg-slate-50, html.high-contrast .bg-slate-100 { background-color: #121212 !important; border-color: #DC2626 !important; }
         html.high-contrast a:hover { text-decoration: underline !important; }
+
+        /* Strict visibility and background enforcement for navbars and dropdowns */
+        #mobileNavMenu.hidden,
+        #moreNavDropdown.hidden,
+        #notificationDrawer.hidden,
+        #personaDropdown.hidden,
+        #commandPaletteModal.hidden,
+        #accessibilityModal.hidden {
+            display: none !important;
+        }
+
+        .app-header-black {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+
+        @media (max-width: 1023px) {
+            .nav-desktop-only { display: none !important; }
+        }
+        @media (min-width: 1024px) {
+            .nav-mobile-only { display: none !important; }
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-800 antialiased selection:bg-[#DC2626] selection:text-white">
@@ -46,7 +68,7 @@
     @endphp
 
     <!-- Main Top Navigation Bar (Africa University Kwang-Lim Chapel - Pure Black Theme) -->
-    <header class="sticky top-0 z-40 bg-black text-white border-b-2 border-[#DC2626] shadow-md">
+    <header class="sticky top-0 z-40 bg-black text-white border-b-2 border-[#DC2626] shadow-md app-header-black" style="background-color: #000000 !important; color: #ffffff !important;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Left: Logo & Chapel Branding -->
@@ -56,14 +78,14 @@
                             <x-umc-logo class="w-full h-full text-white" />
                         </div>
                         <div class="flex flex-col text-left leading-tight">
-                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#EF4444]">AFRICA UNIVERSITY</span>
-                            <span class="text-sm font-bold text-white tracking-tight">Kwang-Lim Chapel</span>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-[#EF4444]" style="color: #EF4444 !important;">AFRICA UNIVERSITY</span>
+                            <span class="text-sm font-bold text-white tracking-tight" style="color: #FFFFFF !important;">Kwang-Lim Chapel</span>
                         </div>
                     </a>
                 </div>
 
                 <!-- Center: Desktop Navigation Links (Pill Style) -->
-                <nav class="hidden lg:flex items-center space-x-1.5">
+                <nav class="nav-desktop-only hidden lg:flex items-center space-x-1.5">
                     <a href="{{ route('dashboard') }}" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition {{ request()->routeIs('dashboard') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
                         <span class="nav-label" data-en="Dashboard" data-sn="Dhibhodhi">Dashboard</span>
                     </a>
@@ -94,7 +116,7 @@
                                 <svg class="w-3.5 h-3.5 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
 
-                            <div id="moreNavDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-100 p-2 z-50 animate-scale-up">
+                            <div id="moreNavDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-100 p-2 z-50 animate-scale-up" style="background-color: #ffffff !important; color: #1e293b !important;">
                                 <div class="space-y-0.5">
                                     <a href="{{ route('hymns.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('hymns.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
                                         <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
@@ -249,7 +271,7 @@
                     @endauth
 
                     <!-- Mobile Navigation Hamburger Toggle (on screens < lg) -->
-                    <button type="button" onclick="toggleMobileNav(event)" class="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer" title="Menu">
+                    <button id="mobileNavToggle" type="button" onclick="toggleMobileNav(event)" class="nav-mobile-only lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer" title="Menu">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
                     </button>
                 </div>
@@ -257,25 +279,53 @@
         </div>
 
         <!-- Mobile Dropdown Navigation Menu (< lg) -->
-        <div id="mobileNavMenu" class="hidden lg:hidden bg-black border-t border-white/10 px-4 py-3 space-y-1">
-            <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('dashboard') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Dashboard</a>
+        <div id="mobileNavMenu" class="hidden nav-mobile-only bg-black border-t border-white/10 px-4 py-3 space-y-1 shadow-2xl app-header-black" style="background-color: #000000 !important; color: #ffffff !important;">
+            <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('dashboard') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                <span class="nav-label" data-en="Dashboard" data-sn="Dhibhodhi">Dashboard</span>
+            </a>
             @if(!$isCampusLife)
-                <a href="{{ route('requests.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('requests.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Requests</a>
+                <a href="{{ route('requests.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('requests.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Requests" data-sn="Zvikumbiro">Requests</span>
+                </a>
             @endif
-            <a href="{{ route('calendar.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('calendar.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Calendar</a>
+            <a href="{{ route('calendar.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('calendar.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                <span class="nav-label" data-en="Calendar" data-sn="Karenda">Calendar</span>
+            </a>
             @if(!$isCampusLife)
-                <a href="{{ route('worship.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('worship.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Call to Services</a>
-                <a href="{{ route('equipment.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('equipment.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Sound &amp; Equipment</a>
-                <a href="{{ route('hymns.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('hymns.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Methodist Hymnal</a>
-                <a href="{{ route('clubs.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('clubs.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Fellowships Registry</a>
-                <a href="{{ route('vault.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('vault.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Records Vault</a>
-                <a href="{{ route('handover.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('handover.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Leadership Handover</a>
-                <a href="{{ route('reports.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('reports.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Activity Reports</a>
-                <a href="{{ route('members.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('members.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Members &amp; Attendance</a>
-                <a href="{{ route('guidelines.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('guidelines.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Chapel Policy &amp; Guidelines</a>
+                <a href="{{ route('worship.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('worship.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Call to Services" data-sn="Mabasa eKereke">Call to Services</span>
+                </a>
+                <a href="{{ route('equipment.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('equipment.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Sound & Equipment" data-sn="Zvishandiso zveRuzha">Sound &amp; Equipment</span>
+                </a>
+                <a href="{{ route('hymns.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('hymns.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Methodist Hymnal" data-sn="Nziyo dzeMethodist">Methodist Hymnal</span>
+                </a>
+                <a href="{{ route('clubs.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('clubs.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Fellowships Registry" data-sn="Mibatanidzwa">Fellowships Registry</span>
+                </a>
+                <a href="{{ route('vault.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('vault.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Records Vault" data-sn="Gungwa reMagwaro">Records Vault</span>
+                </a>
+                <a href="{{ route('handover.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('handover.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Leadership Handover" data-sn="Kugashidzana Masimba">Leadership Handover</span>
+                </a>
+                <a href="{{ route('reports.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('reports.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Activity Reports" data-sn="Mishumo">Activity Reports</span>
+                </a>
+                <a href="{{ route('members.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('members.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Members & Attendance" data-sn="Nhengo neKupinda">Members &amp; Attendance</span>
+                </a>
+                <a href="{{ route('guidelines.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('guidelines.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                    <span class="nav-label" data-en="Chapel Policy & Guidelines" data-sn="Mitemo yeChapel">Chapel Policy &amp; Guidelines</span>
+                </a>
                 @if($isOfficeUser)
-                    <a href="{{ route('users.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('users.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Staff &amp; User Registry</a>
-                    <a href="{{ route('audit.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('audit.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">System Audit Log</a>
+                    <a href="{{ route('users.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('users.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                        <span class="nav-label" data-en="Staff & User Registry" data-sn="Vashandi neVashandisi">Staff &amp; User Registry</span>
+                    </a>
+                    <a href="{{ route('audit.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('audit.*') ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
+                        <span class="nav-label" data-en="System Audit Log" data-sn="Gwaro reAudit">System Audit Log</span>
+                    </a>
                 @endif
             @endif
         </div>
@@ -447,6 +497,8 @@
                 if (notif) notif.classList.add('hidden');
                 const persona = document.getElementById('personaDropdown');
                 if (persona) persona.classList.add('hidden');
+                const mobileMenu = document.getElementById('mobileNavMenu');
+                if (mobileMenu) mobileMenu.classList.add('hidden');
             }
         });
 
@@ -488,6 +540,11 @@
             const personaBtn = document.getElementById('personaButton');
             if (persona && !persona.contains(e.target) && personaBtn && !personaBtn.contains(e.target)) {
                 persona.classList.add('hidden');
+            }
+            const mobileMenu = document.getElementById('mobileNavMenu');
+            const mobileNavToggle = document.getElementById('mobileNavToggle');
+            if (mobileMenu && !mobileMenu.contains(e.target) && mobileNavToggle && !mobileNavToggle.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
             }
         });
 
