@@ -1,0 +1,23 @@
+{
+  "$schema": "https://dokploy.com/schema.json",
+  "name": "kwanglim-chapel-backend",
+  "description": "Backend API & Services for Kwang-Lim Chapel - Africa University",
+  "buildType": "dockerfile",
+  "dockerfilePath": "./Dockerfile",
+  "dockerContextPath": ".",
+  "port": 80,
+  "healthCheckPath": "/up",
+  "restartPolicy": "unless-stopped",
+  "mounts": [
+    {
+      "type": "volume",
+      "name": "chapel_backend_storage",
+      "mountPath": "/var/www/html/storage"
+    },
+    {
+      "type": "volume",
+      "name": "chapel_backend_database",
+      "mountPath": "/var/www/html/database"
+    }
+  ]
+}

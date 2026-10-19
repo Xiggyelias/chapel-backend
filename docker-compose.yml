@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kwanglim_chapel_backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-8000}:80"
+    environment:
+      - APP_NAME=KwangLimChapel
+      - APP_ENV=${APP_ENV:-production}
+      - APP_KEY=${APP_KEY:-base64:X8p7F3gL1wK9mQ2vR5tY8uI1oP4sD7fG0hJ3kL6zX9c=}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_URL=${APP_URL:-http://localhost:8000}
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=/var/www/html/database/database.sqlite
+      - SESSION_DRIVER=file
+      - QUEUE_CONNECTION=sync
+      - SEED_ON_DEPLOY=${SEED_ON_DEPLOY:-false}
+    volumes:
+      - chapel_backend_storage:/var/www/html/storage
+      - chapel_backend_database:/var/www/html/database
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:80/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - chapel_network
+
+volumes:
+  chapel_backend_storage:
+    name: chapel_backend_storage
+  chapel_backend_database:
+    name: chapel_backend_database
+
+networks:
+  chapel_network:
+    name: chapel_network
+    driver: bridge

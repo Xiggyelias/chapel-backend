@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offline Mode - Africa University Kwang-Lim Chapel</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #002147;
+            color: #ffffff;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid #D4AF37;
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .crest {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            color: #FFC72C;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem;
+            color: #ffffff;
+        }
+        .subtitle {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #FFC72C;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin: 0 0 1.5rem;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.2);
+            color: #FFC72C;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        button {
+            background: #D4AF37;
+            color: #002147;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #FFC72C;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <svg class="crest" viewBox="0 0 100 100" fill="currentColor">
+            <rect x="45" y="15" width="10" height="70" rx="3" />
+            <rect x="25" y="32" width="50" height="10" rx="3" />
+            <circle cx="50" cy="37" r="14" fill="none" stroke="#FFC72C" stroke-width="3" stroke-dasharray="4 3"/>
+        </svg>
+        <div class="subtitle">Africa University Chaplaincy</div>
+        <h1>Offline / Low Bandwidth Mode</h1>
+        <div class="badge">Offline-Friendly PWA Active</div>
+        <p>
+            You are currently offline or experiencing limited network connectivity in the Valley of Hope. Your previously opened records and cached calendar data remain securely available on your device.
+        </p>
+        <button onclick="window.location.reload()">
+            Retry Connection &rarr;
+        </button>
+    </div>
+</body>
+</html>
