@@ -45,8 +45,8 @@
         $userInitial = strtoupper(substr($userName, 0, 1));
     @endphp
 
-    <!-- Main Top Navigation Bar (Africa University Kwang-Lim Chapel) -->
-    <header class="sticky top-0 z-40 bg-[#0F172A] text-white border-b-2 border-[#DC2626] shadow-md">
+    <!-- Main Top Navigation Bar (Africa University Kwang-Lim Chapel - Pure Black Theme) -->
+    <header class="sticky top-0 z-40 bg-black text-white border-b-2 border-[#DC2626] shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Left: Logo & Chapel Branding -->
@@ -87,53 +87,63 @@
                             <span class="nav-label" data-en="Sound & Equipment" data-sn="Zvishandiso zveRuzha">Sound &amp; Equipment</span>
                         </a>
 
-                        <!-- More Dropdown -->
+                        <!-- More Dropdown (Cascading exact menu) -->
                         <div class="relative">
                             <button type="button" onclick="toggleMoreMenu(event)" class="flex items-center space-x-1 px-3.5 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition cursor-pointer {{ request()->routeIs(['hymns.*', 'vault.*', 'handover.*', 'reports.*', 'members.*', 'clubs.*', 'users.*', 'audit.*', 'guidelines.*']) ? 'bg-[#DC2626] text-white shadow-xs' : 'text-slate-200 hover:text-white hover:bg-white/10' }}">
                                 <span class="nav-label" data-en="More" data-sn="Zvimwe">More</span>
                                 <svg class="w-3.5 h-3.5 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                             </button>
 
-                            <div id="moreNavDropdown" class="hidden absolute left-0 mt-2 w-56 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-50 text-xs animate-scale-up">
-                                <div class="p-1.5 space-y-0.5">
-                                    <a href="{{ route('hymns.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('hymns.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
-                                        <span class="nav-label" data-en="Methodist Hymnal" data-sn="Nziyo dzeMethodist">Methodist Hymnal</span>
+                            <div id="moreNavDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white text-slate-800 rounded-2xl shadow-2xl border border-slate-100 p-2 z-50 animate-scale-up">
+                                <div class="space-y-0.5">
+                                    <a href="{{ route('hymns.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('hymns.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Methodist Hymnal" data-sn="Nziyo dzeMethodist">Methodist Hymnal</span>
                                     </a>
-                                    <a href="{{ route('clubs.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('clubs.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v4m-4 0h4"/></svg>
-                                        <span class="nav-label" data-en="Fellowships Registry" data-sn="Mibatanidzwa">Fellowships Registry</span>
+
+                                    <a href="{{ route('clubs.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('clubs.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v4m-4 0h4"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Fellowships Registry" data-sn="Mibatanidzwa">Fellowships Registry</span>
                                     </a>
-                                    <a href="{{ route('vault.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('vault.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-                                        <span class="nav-label" data-en="Records Vault" data-sn="Gungwa reMagwaro">Records Vault</span>
+
+                                    <a href="{{ route('vault.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('vault.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Records Vault" data-sn="Gungwa reMagwaro">Records Vault</span>
                                     </a>
-                                    <a href="{{ route('handover.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('handover.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-                                        <span class="nav-label" data-en="Leadership Handover" data-sn="Kugashidzana Masimba">Leadership Handover</span>
+
+                                    <a href="{{ route('handover.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('handover.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Leadership Handover" data-sn="Kugashidzana Masimba">Leadership Handover</span>
                                     </a>
-                                    <a href="{{ route('reports.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('reports.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                        <span class="nav-label" data-en="Budget & Reports" data-sn="Mishumo neMari">Budget &amp; Reports</span>
+
+                                    <a href="{{ route('reports.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('reports.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Activity Reports" data-sn="Mishumo">Activity Reports</span>
                                     </a>
-                                    <a href="{{ route('members.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('members.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                                        <span class="nav-label" data-en="Members & Attendance" data-sn="Nhengo neKupinda">Members &amp; Attendance</span>
+
+                                    <a href="{{ route('members.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('members.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-[#DC2626] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Members & Attendance" data-sn="Nhengo neKupinda">Members &amp; Attendance</span>
                                     </a>
+
+                                    <div class="my-1.5 border-t border-slate-100"></div>
+
+                                    <a href="{{ route('guidelines.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('guidelines.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                        <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                                        <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Chapel Policy & Guidelines" data-sn="Mitemo yeChapel">Chapel Policy &amp; Guidelines</span>
+                                    </a>
+
                                     @if($isOfficeUser)
-                                        <a href="{{ route('users.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('users.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                                            <span class="nav-label" data-en="Staff & Users" data-sn="Vashandi neVashandisi">Staff &amp; Users</span>
+                                        <a href="{{ route('users.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('users.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                            <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                            <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="Staff & User Registry" data-sn="Vashandi neVashandisi">Staff &amp; User Registry</span>
                                         </a>
-                                        <a href="{{ route('audit.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('audit.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                                            <span class="nav-label" data-en="Audit Ledger" data-sn="Gwaro reAudit">Audit Ledger</span>
+
+                                        <a href="{{ route('audit.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition group {{ request()->routeIs('audit.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-800' }}">
+                                            <svg class="w-4 h-4 text-slate-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                                            <span class="text-xs sm:text-[13px] font-medium nav-label" data-en="System Audit Log" data-sn="Gwaro reAudit">System Audit Log</span>
                                         </a>
                                     @endif
-                                    <a href="{{ route('guidelines.index') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl hover:bg-slate-100 font-medium transition {{ request()->routeIs('guidelines.*') ? 'bg-red-50 text-[#DC2626] font-bold' : 'text-slate-700' }}">
-                                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                                        <span class="nav-label" data-en="Chapel Guidelines" data-sn="Mitemo yeChapel">Chapel Guidelines</span>
-                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -192,7 +202,7 @@
                         </div>
                     </div>
 
-                    <!-- Blue Accessibility Wheelchair Button (Exactly as in screenshot) -->
+                    <!-- Blue Accessibility Wheelchair Button -->
                     <button type="button" onclick="document.getElementById('accessibilityModal').classList.remove('hidden')" class="w-7 h-7 rounded-lg bg-[#2563EB] hover:bg-blue-600 text-white flex items-center justify-center transition cursor-pointer shadow-xs shrink-0" title="Accessibility & Language Preferences">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
                     </button>
@@ -247,7 +257,7 @@
         </div>
 
         <!-- Mobile Dropdown Navigation Menu (< lg) -->
-        <div id="mobileNavMenu" class="hidden lg:hidden bg-[#0B1120] border-t border-slate-800 px-4 py-3 space-y-1">
+        <div id="mobileNavMenu" class="hidden lg:hidden bg-black border-t border-white/10 px-4 py-3 space-y-1">
             <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('dashboard') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Dashboard</a>
             @if(!$isCampusLife)
                 <a href="{{ route('requests.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('requests.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Requests</a>
@@ -257,11 +267,16 @@
                 <a href="{{ route('worship.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('worship.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Call to Services</a>
                 <a href="{{ route('equipment.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('equipment.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Sound &amp; Equipment</a>
                 <a href="{{ route('hymns.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('hymns.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Methodist Hymnal</a>
-                <a href="{{ route('clubs.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('clubs.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Fellowships</a>
-                <a href="{{ route('vault.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('vault.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Vault</a>
-                <a href="{{ route('handover.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('handover.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Handover</a>
-                <a href="{{ route('reports.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('reports.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Reports</a>
-                <a href="{{ route('members.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('members.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Members</a>
+                <a href="{{ route('clubs.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('clubs.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Fellowships Registry</a>
+                <a href="{{ route('vault.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('vault.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Records Vault</a>
+                <a href="{{ route('handover.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('handover.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Leadership Handover</a>
+                <a href="{{ route('reports.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('reports.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Activity Reports</a>
+                <a href="{{ route('members.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('members.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Members &amp; Attendance</a>
+                <a href="{{ route('guidelines.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('guidelines.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Chapel Policy &amp; Guidelines</a>
+                @if($isOfficeUser)
+                    <a href="{{ route('users.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('users.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">Staff &amp; User Registry</a>
+                    <a href="{{ route('audit.index') }}" class="block px-3 py-2 rounded-xl text-xs font-semibold {{ request()->routeIs('audit.*') ? 'bg-[#DC2626] text-white' : 'text-slate-300 hover:bg-white/10' }}">System Audit Log</a>
+                @endif
             @endif
         </div>
     </header>
@@ -319,7 +334,7 @@
     <!-- Accessibility & Language Preferences Modal -->
     <div id="accessibilityModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden animate-scale-up" onclick="event.stopPropagation()">
-            <div class="bg-slate-900 px-6 py-4 flex items-center justify-between border-b border-white/10 text-white">
+            <div class="bg-black px-6 py-4 flex items-center justify-between border-b border-white/10 text-white">
                 <div class="flex items-center space-x-2">
                     <span class="text-lg">♿</span>
                     <div>
@@ -556,7 +571,7 @@
             if (ltBtn) {
                 ltBtn.textContent = isLarge ? 'Active (ON)' : 'Off';
                 ltBtn.className = isLarge
-                    ? 'px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-emerald-600 text-white border-emerald-700 cursor-pointer'
+                    ? 'px-3 py-1.5 rounded-lg text-xs font-bold border transition bg-emerald-600 text-white border-emerald-700 cursor-pointer' 
                     : 'px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer';
             }
 
