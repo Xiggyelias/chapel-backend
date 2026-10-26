@@ -93,7 +93,9 @@ class LiveSmokeRouteTest extends TestCase
     {
         $this->get('/login')->assertStatus(200);
         $this->get('/calendar/public')->assertStatus(200);
+        $this->get('/calendar/feed.ics')->assertStatus(200);
         $this->get('/clubs/register')->assertStatus(200);
+        $this->get('/clubs/charter-receipt')->assertStatus(200);
     }
 
     public function test_chaplain_can_access_all_office_routes_with_empty_data(): void
@@ -106,11 +108,15 @@ class LiveSmokeRouteTest extends TestCase
             '/vault',
             '/worship',
             '/worship/archive',
+            '/hymns',
             '/handover',
             '/members',
             '/equipment',
             '/reports',
             '/reports/budget-tracker',
+            '/reports/annual-report',
+            '/clubs',
+            '/notifications',
             '/guidelines',
             '/audit',
             '/users',
@@ -132,6 +138,8 @@ class LiveSmokeRouteTest extends TestCase
             '/calendar',
             '/vault',
             '/worship',
+            '/worship/archive',
+            '/hymns',
             '/handover',
             '/members',
             '/equipment',
@@ -154,10 +162,16 @@ class LiveSmokeRouteTest extends TestCase
             '/calendar',
             '/vault',
             '/worship',
+            '/worship/archive',
+            '/hymns',
             '/handover',
             '/members',
             '/equipment',
             '/reports',
+            '/reports/budget-tracker',
+            '/reports/annual-report',
+            '/clubs',
+            '/notifications',
             '/guidelines',
             '/audit',
             '/users',
@@ -179,6 +193,7 @@ class LiveSmokeRouteTest extends TestCase
             '/calendar',
             '/vault',
             '/worship',
+            '/hymns',
             '/handover',
             '/members',
             '/equipment',
