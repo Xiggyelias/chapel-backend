@@ -60,6 +60,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     sqlite \
     sqlite-dev \
+    libpq-dev \
     tzdata
 
 # Configure & install PHP extensions
@@ -68,6 +69,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         pdo \
         pdo_sqlite \
         pdo_mysql \
+        pdo_pgsql \
         mbstring \
         bcmath \
         zip \
