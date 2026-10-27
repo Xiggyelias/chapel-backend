@@ -27,7 +27,7 @@ if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
     chown -R www-data:www-data /var/www/html/database
     chmod -R 775 /var/www/html/database
     if [ -f "$DB_PATH" ]; then
-        chmod 664 "$DB_PATH"
+        chmod 666 "$DB_PATH"
     fi
 fi
 
@@ -43,9 +43,10 @@ php /var/www/html/artisan storage:link --force || true
 echo "Running database migrations..."
 php /var/www/html/artisan migrate --force
 
-# 6. Optional automated seed on first boot
-if [ "${SEED_ON_DEPLOY}" = "true" ]; then
-    echo "Running database seeders..."
+# 6. Automated seed if database is empty or SEED_ON_DEPLOY=true
+USER_COUNT=$(php /var/www/html/artisan tinker --execute="echo \App\Models\User::count();" 2>/dev/null || echo "0")
+if [ "${SEED_ON_DEPLOY}" = "true" ] || [ "$USER_COUNT" = "0" ]; then
+    echo "Seeding initial Africa University chapel data and hymns (users: $USER_COUNT)..."
     php /var/www/html/artisan db:seed --force
 fi
 

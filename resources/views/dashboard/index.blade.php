@@ -117,7 +117,7 @@
                         </div>
                         <p class="text-xs text-slate-600 leading-relaxed">{{ $ann->message }}</p>
                         <div class="text-[10px] text-slate-400 font-medium pt-1">
-                            Issued by {{ $ann->sender->name }} &bull; {{ $ann->published_date->format('M d, Y') }}
+                            Issued by {{ optional($ann->sender)->name ?? 'Chaplaincy Office' }} &bull; {{ optional($ann->published_date)->format('M d, Y') ?? '' }}
                         </div>
                     </div>
                 @endforeach

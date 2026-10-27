@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Trust all upstream proxies (Dokploy Traefik / Docker ingress) for proper HTTPS & IP resolution
+        $middleware->trustProxies(at: '*');
+
         $middleware->validateCsrfTokens(except: [
             'login',
             'demo-switch',
