@@ -25,6 +25,13 @@
             <p class="text-xs text-slate-500 mt-2 leading-relaxed">
                 An unexpected error occurred while processing your request. Please return to the dashboard or try again in a few moments.
             </p>
+
+            @if(config('app.debug') && isset($exception))
+                <div class="mt-4 p-3 bg-red-50 border border-red-200 text-red-800 text-left text-xs font-mono rounded-xl overflow-x-auto max-h-48 whitespace-pre-wrap">
+                    <div class="font-bold">Error: {{ $exception->getMessage() }}</div>
+                    <div class="text-[10px] text-red-600 mt-1">File: {{ $exception->getFile() }}:{{ $exception->getLine() }}</div>
+                </div>
+            @endif
         </div>
 
         <div class="pt-2">

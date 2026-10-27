@@ -15,7 +15,13 @@ class AuthController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $demoUsers = User::with('club')->get();
+        try {
+            $demoUsers = User::with('club')->get();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Could not load demo users for login view: ' . $e->getMessage());
+            $demoUsers = collect();
+        }
+
         return view('auth.login', compact('demoUsers'));
     }
 

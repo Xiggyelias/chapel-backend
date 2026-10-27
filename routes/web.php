@@ -40,12 +40,13 @@ Route::get('/clubs/register', [ClubController::class, 'create'])->name('clubs.re
 Route::post('/clubs/register', [ClubController::class, 'store'])->name('clubs.store');
 Route::get('/clubs/charter-receipt', [ClubController::class, 'receipt'])->name('clubs.receipt');
 
+// Public Landing / Entry Point (Safe Redirect)
+Route::get('/', function () {
+    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
+})->name('home');
+
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
-
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Profile & Password Change
