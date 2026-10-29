@@ -86,7 +86,7 @@
                 </div>
                 <div class="p-3 bg-slate-50/60 rounded-xl border border-slate-200/60">
                     <strong class="text-slate-400 uppercase tracking-wider text-[10px] block font-cinzel">Liturgist</strong>
-                    <span class="font-bold text-slate-900 text-sm mt-0.5 block">{{ $sheet->liturgist ?: 'Chapel Assistant' }}</span>
+                    <span class="font-bold text-slate-900 text-sm mt-0.5 block">{{ $sheet->liturgist ?: 'Assistant Chaplain' }}</span>
                 </div>
                 <div class="p-3 bg-slate-50/60 rounded-xl border border-slate-200/60">
                     <strong class="text-slate-400 uppercase tracking-wider text-[10px] block font-cinzel">Bible Reader</strong>
@@ -163,7 +163,7 @@
 
 <script>
     function dispatchWorshipDutyWhatsApp() {
-        const text = `⛪ *KWANG-LIM CHAPEL*\n*OFFICIAL WORSHIP LITURGY DUTY CALL*\n\n📅 *Service:* {{ $sheet->service_type }} &bull; {{ $sheet->service_date->format('l, F j, Y') }}\n📖 *Theme:* "{{ addslashes($sheet->theme ?: 'Chapel Assembly') }}"\n🎙️ *Preacher:* {{ addslashes($sheet->preacher ?: 'University Chaplain') }}\n✝️ *Liturgist:* {{ addslashes($sheet->liturgist ?: 'Chapel Assistant') }}\n📖 *Bible Reader:* {{ addslashes($sheet->bible_reader ?: 'Student Representative') }}\n🎵 *Choir / Praise Team:* {{ addslashes($sheet->choir ?: ($sheet->praise_worship_team ?: 'Praise the Lord Choir')) }}\n📜 *Scripture Lesson:* {{ addslashes($sheet->scripture ?: 'As Announced') }}\n🎶 *Hymns of Praise:* {{ addslashes($sheet->hymns ?: 'UMH / Shona Hymnody') }}\n\n_Ministers, liturgists, and choir members are requested to report to the vestry 30 minutes prior for vestment and altar prayer._\n\nKwang-Lim Chapel Ministry Office`;
+        const text = `⛪ *KWANG-LIM CHAPEL*\n*OFFICIAL WORSHIP LITURGY DUTY CALL*\n\n📅 *Service:* {{ $sheet->service_type }} &bull; {{ $sheet->service_date->format('l, F j, Y') }}\n📖 *Theme:* "{{ addslashes($sheet->theme ?: 'Chapel Assembly') }}"\n🎙️ *Preacher:* {{ addslashes($sheet->preacher ?: 'University Chaplain') }}\n✝️ *Liturgist:* {{ addslashes($sheet->liturgist ?: 'Assistant Chaplain') }}\n📖 *Bible Reader:* {{ addslashes($sheet->bible_reader ?: 'Student Representative') }}\n🎵 *Choir / Praise Team:* {{ addslashes($sheet->choir ?: ($sheet->praise_worship_team ?: 'Praise the Lord Choir')) }}\n📜 *Scripture Lesson:* {{ addslashes($sheet->scripture ?: 'As Announced') }}\n🎶 *Hymns of Praise:* {{ addslashes($sheet->hymns ?: 'UMH / Shona Hymnody') }}\n\n_Ministers, liturgists, and choir members are requested to report to the vestry 30 minutes prior for vestment and altar prayer._\n\nKwang-Lim Chapel Ministry Office`;
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 </script>

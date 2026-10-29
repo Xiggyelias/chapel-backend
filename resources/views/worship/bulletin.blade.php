@@ -135,7 +135,7 @@
         <div class="section-title">Ministers of Worship</div>
         <div class="grid-2" style="font-size: 14px;">
             <div><strong>Preacher:</strong> {{ $sheet->preacher ?: 'University Chaplain' }}</div>
-            <div><strong>Liturgist:</strong> {{ $sheet->liturgist ?: 'Chapel Assistant' }}</div>
+            <div><strong>Liturgist:</strong> {{ $sheet->liturgist ?: 'Assistant Chaplain' }}</div>
             <div><strong>Bible Reader:</strong> {{ $sheet->bible_reader ?: 'Student Representative' }}</div>
             <div><strong>Choir:</strong> {{ $sheet->choir ?: 'Praise the Lord Choir' }}</div>
             <div><strong>Praise & Worship:</strong> {{ $sheet->praise_worship_team ?: 'Chapel Band' }}</div>

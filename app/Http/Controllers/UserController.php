@@ -173,7 +173,7 @@ class UserController extends Controller
     {
         return match ($role) {
             'chaplain' => 'University Chaplain',
-            'chapel_assistant' => 'Chapel Assistant & Worship Coordinator',
+            'chapel_assistant' => 'Assistant Chaplain & Worship Coordinator',
             'chapel_secretary' => 'Chapel Secretary & Administrator',
             'club_president' => 'President',
             'club_executive' => 'Executive Officer',

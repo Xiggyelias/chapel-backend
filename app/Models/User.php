@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->role === 'chapel_assistant';
     }
 
+    public function isAssistantChaplain(): bool
+    {
+        return $this->role === 'chapel_assistant';
+    }
+
     public function isChapelSecretary(): bool
     {
         return $this->role === 'chapel_secretary';
@@ -104,7 +109,7 @@ class User extends Authenticatable
     {
         return match ($this->role) {
             'chaplain' => 'University Chaplain',
-            'chapel_assistant' => 'Chapel Assistant',
+            'chapel_assistant' => 'Assistant Chaplain',
             'chapel_secretary' => 'Chapel Secretary (Administrator)',
             'club_executive' => 'Club Executive',
             'club_president' => 'Club President (Chapel Committee)',

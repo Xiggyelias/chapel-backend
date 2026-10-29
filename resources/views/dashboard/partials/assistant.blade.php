@@ -1,4 +1,4 @@
-<!-- CHAPEL ASSISTANT OPERATIONAL & LITURGY DASHBOARD -->
+<!-- ASSISTANT CHAPLAIN OPERATIONAL & LITURGY DASHBOARD -->
 <div class="space-y-6">
 
     <!-- Priority Operational Metric Cards -->

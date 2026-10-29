@@ -136,7 +136,7 @@
                         <span class="w-2 h-2 rounded-full bg-[#DC2626]"></span>
                         <span>2. Proposed Schedule & Preferred Campus Venue</span>
                     </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Regular campus gathering hours subject to Chapel Assistant coordination</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5">Regular campus gathering hours subject to Assistant Chaplain coordination</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

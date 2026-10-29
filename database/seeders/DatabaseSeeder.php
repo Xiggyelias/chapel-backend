@@ -202,7 +202,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'pending_approval',
         ]);
 
-        // 3. Official Accounts (Two Administrators, Chaplain, Chapel Assistant, Campus Life, SRC, and Club Executives/Presidents)
+        // 3. Official Accounts (Two Administrators, Chaplain, Assistant Chaplain, Campus Life, SRC, and Club Executives/Presidents)
         $defaultPassword = Hash::make('Chapel@2026!');
 
         // Administrator 1 (Chapel Secretary)
@@ -241,13 +241,13 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        // Chapel Assistant (Reviews & approves like Chaplain, manages calendar)
+        // Assistant Chaplain (Reviews & approves like Chaplain, manages calendar)
         $assistant = User::create([
             'name' => 'Pastor Micah David',
             'email' => 'assistant@africau.edu',
             'password' => $defaultPassword,
             'role' => 'chapel_assistant',
-            'position' => 'Chapel Assistant & Worship Coordinator',
+            'position' => 'Assistant Chaplain & Worship Coordinator',
             'phone' => '+263 77 555 6677',
             'status' => 'active',
             'email_verified_at' => now(),
@@ -714,8 +714,8 @@ class DatabaseSeeder extends Seeder
             'incoming_president_phone' => '+263 77 123 4567',
             'checklist_running_activities' => 'Midweek discipleship Bible study groups, Semester Revival Weekend, Old Mutare Outreach partnership.',
             'checklist_pending_items' => 'Reconciliation of national leadership conference expenses with Chaplaincy office.',
-            'checklist_key_contacts' => 'Chaplain Rev. Supt. Eunice Marima, Assistant Pastor Micah David, Sound Desk Coordinator Mr. Dube.',
-            'checklist_yearly_calendar' => 'Full 2026/2027 calendar ratified with Chapel Assistant; Thursdays 18:00 hall slot secured.',
+            'checklist_key_contacts' => 'Chaplain Rev. Supt. Eunice Marima, Assistant Chaplain Pastor Micah David, Sound Desk Coordinator Mr. Dube.',
+            'checklist_yearly_calendar' => 'Full 2026/2027 calendar ratified with Assistant Chaplain; Thursdays 18:00 hall slot secured.',
             'folders_verified' => true,
             'folders_verified_by' => $admin1->id,
             'folders_verified_at' => Carbon::now()->subDays(10),

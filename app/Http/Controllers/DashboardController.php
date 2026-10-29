@@ -78,7 +78,7 @@ class DashboardController extends Controller
                 ->get();
 
         } elseif ($user->isChapelAssistant()) {
-            // 2. PASTOR KUDZAI MUREDZI - CHAPEL ASSISTANT (Master Operational Scheduler & Liturgy Coordinator)
+            // 2. PASTOR MICAH DAVID - ASSISTANT CHAPLAIN (Master Operational Scheduler & Liturgy Coordinator)
             $roleData['operational_pending'] = ChapelRequest::whereIn('status', ['submitted', 'under_review'])->count();
             $roleData['todays_events_count'] = Event::where('event_date', $today)->count();
             $roleData['pending_equipment_count'] = EquipmentRequest::where('status', 'pending')->count();

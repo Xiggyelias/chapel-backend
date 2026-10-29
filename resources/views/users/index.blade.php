@@ -17,7 +17,7 @@
                 Staff &amp; Executive User Registry
             </h1>
             <p class="text-xs text-slate-500 mt-1">
-                Manage and provision portal accounts for ministers, chapel assistants, and student fellowship executives.
+                Manage and provision portal accounts for ministers, assistant chaplains, and student fellowship executives.
             </p>
         </div>
 
@@ -40,7 +40,7 @@
         <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">
             <span class="text-[11px] font-bold uppercase tracking-wider text-[#DC2626]">Chapel Staff</span>
             <div class="text-3xl font-extrabold text-[#DC2626] mt-1">{{ $stats['chapel_staff'] }}</div>
-            <div class="text-xs text-slate-500 mt-0.5">Chaplain, Assistant, Secretary</div>
+            <div class="text-xs text-slate-500 mt-0.5">Chaplain, Assistant Chaplain, Secretary</div>
         </div>
 
         <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">
@@ -66,7 +66,7 @@
                 <select name="role" onchange="this.form.submit()" class="px-3.5 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] text-slate-700">
                     <option value="">All Roles</option>
                     <option value="chaplain" {{ request('role') == 'chaplain' ? 'selected' : '' }}>Chaplain</option>
-                    <option value="chapel_assistant" {{ request('role') == 'chapel_assistant' ? 'selected' : '' }}>Chapel Assistant</option>
+                    <option value="chapel_assistant" {{ request('role') == 'chapel_assistant' ? 'selected' : '' }}>Assistant Chaplain</option>
                     <option value="chapel_secretary" {{ request('role') == 'chapel_secretary' ? 'selected' : '' }}>Chapel Secretary</option>
                     <option value="club_president" {{ request('role') == 'club_president' ? 'selected' : '' }}>Club President</option>
                     <option value="club_executive" {{ request('role') == 'club_executive' ? 'selected' : '' }}>Club Executive</option>
@@ -126,7 +126,7 @@
                                 @if($u->isChaplain())
                                     <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-[#DC2626]">Chaplain</span>
                                 @elseif($u->isChapelAssistant())
-                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Chapel Assistant</span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Assistant Chaplain</span>
                                 @elseif($u->isChapelSecretary())
                                     <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">Secretary / Admin</span>
                                 @elseif($u->isClubPresident())
@@ -242,7 +242,7 @@
                     <select name="role" id="roleSelect" required onchange="handleRoleChange(this.value)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] text-slate-800">
                         <option value="">-- Select Role --</option>
                         <option value="chaplain">University Chaplain</option>
-                        <option value="chapel_assistant">Chapel Assistant (Calendar &amp; Equipment)</option>
+                        <option value="chapel_assistant">Assistant Chaplain (Calendar management, liturgy coordination, request reviews)</option>
                         <option value="chapel_secretary">Chapel Secretary (Chief Admin)</option>
                         <option value="club_president">Club President</option>
                         <option value="club_executive">Club Executive Officer</option>
