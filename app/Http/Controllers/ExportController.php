@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Club;
 use App\Models\Event;
-use App\Models\LeadershipTerm;
 use App\Models\Request as ChapelRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

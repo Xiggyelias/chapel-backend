@@ -1,91 +1,54 @@
 @extends('layouts.app')
 
-@section('title', 'Chaplaincy Dashboard')
+@section('title', 'Dashboard')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-    @if($user->mustChangePassword())
-        <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-2xs">
-            <div class="flex items-start sm:items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                </div>
-                <div>
-                    <h3 class="text-xs font-bold text-amber-950">Security Action Required: Update Initial Default Password</h3>
-                    <p class="text-[11px] text-amber-800 mt-0.5">You are signed in with a temporary password issued by the Chaplaincy Office. Please set your own private password.</p>
-                </div>
-            </div>
-            <a href="{{ route('profile.index') }}" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-amber-900 hover:bg-black text-white text-xs font-semibold shrink-0 transition active:scale-95 shadow-xs">
-                <span>Change Password</span>
-                <span>&rarr;</span>
-            </a>
-        </div>
-    @endif
+    @php
+        $primary = 'inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold shadow-xs transition';
+        $secondary = 'inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition';
+        $actions = match (true) {
+            $user->isChaplain() => [[route('requests.index', ['status' => 'submitted']), 'Review proposals'], [route('worship.create'), 'Plan a service']],
+            $user->isChapelAssistant() => [[route('requests.index', ['status' => 'submitted']), 'Review proposals'], [route('equipment.index'), 'Equipment desk'], [route('worship.create'), 'Plan a service']],
+            $user->isChapelSecretary() => [[route('clubs.register'), 'Charter a fellowship'], [route('users.index'), 'Manage accounts'], [route('handover.index'), 'Handovers']],
+            $user->isClubLeader() => [[route('requests.create'), 'New proposal'], [route('reports.create'), 'File a report']],
+            default => [[route('calendar.index'), 'Master calendar']],
+        };
+        $focus = match (true) {
+            $user->isChaplain() => 'Decisions, VC clearances and worship readiness that need your seal.',
+            $user->isChapelAssistant() => "Today's operations: reviews, venues, equipment and liturgy preparation.",
+            $user->isChapelSecretary() => "Charters, accounts and the health of every fellowship's records.",
+            $user->isClubLeader() => 'Everything your fellowship owes the Chaplaincy, and what is coming up.',
+            default => 'Approved chapel activities that affect campus life.',
+        };
+    @endphp
 
-    <!-- Clean Dashboard Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-200">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 pb-4 border-b border-slate-200">
         <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-[#DC2626]">{{ now()->format('l, F j') }}</p>
             <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                Welcome, {{ $user->name }}
+                {{ now()->hour < 12 ? 'Good morning' : (now()->hour < 17 ? 'Good afternoon' : 'Good evening') }}, {{ \Illuminate\Support\Str::of($user->name)->explode(' ')->last() }}
             </h1>
             <p class="text-xs text-slate-500 mt-0.5">
-                {{ $user->getRoleDisplayName() }} @if($user->club) &bull; {{ $user->club->name }} @endif &bull; Kwang-Lim Chapel
+                {{ $user->getRoleDisplayName() }}@if($user->club) &bull; {{ $user->club?->name }}@endif &mdash; {{ $focus }}
             </p>
         </div>
 
-        <!-- Quick Primary Actions (Clean, minimal, 1-2 buttons max) -->
-        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-            @if($user->isClubExecutive() || $user->isClubPresident())
-                <a href="{{ route('requests.create') }}" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold shadow-xs transition active:scale-95">
-                    <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                    <span>New Proposal</span>
-                </a>
-                <a href="{{ route('members.qr_kiosk', ['clubId' => $user->club_id]) }}" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition active:scale-95">
-                    <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-                    <span>QR Kiosk</span>
-                </a>
-            @elseif($user->isChaplain())
-                <a href="{{ route('requests.index') }}" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold shadow-xs transition active:scale-95">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>Review Queue</span>
-                </a>
-                <a href="{{ route('worship.index') }}" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition active:scale-95">
-                    <span>Sunday Liturgy</span>
-                </a>
-            @elseif($user->isChapelSecretary())
-                <a href="{{ route('clubs.register') }}" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold shadow-xs transition active:scale-95">
-                    <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                    <span>Charter Fellowship</span>
-                </a>
-                <a href="{{ route('users.index') }}" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition active:scale-95">
-                    <span>Staff & Users</span>
-                </a>
-            @elseif($user->isChapelAssistant())
-                <a href="{{ route('calendar.index') }}" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold shadow-xs transition active:scale-95">
-                    <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    <span>Venue Radar</span>
-                </a>
-                <a href="{{ route('equipment.index') }}" class="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition active:scale-95">
-                    <span>Sound and Equipment</span>
-                </a>
-            @else
-                <a href="{{ route('calendar.index') }}" class="inline-flex items-center space-x-2 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold shadow-xs transition active:scale-95">
-                    <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    <span>Master Calendar</span>
-                </a>
-            @endif
+        <div class="flex flex-wrap items-center gap-2">
+            @foreach($actions as $i => [$url, $label])
+                <a href="{{ $url }}" class="{{ $i === 0 ? $primary : $secondary }}">{{ $label }}</a>
+            @endforeach
         </div>
     </div>
 
-    <!-- ROLE-TAILORED POWER STRUCTURE VIEWPORT -->
     @if($user->isChaplain())
         @include('dashboard.partials.chaplain')
     @elseif($user->isChapelAssistant())
         @include('dashboard.partials.assistant')
     @elseif($user->isChapelSecretary())
         @include('dashboard.partials.secretary')
-    @elseif($user->isClubExecutive() || $user->isClubPresident())
+    @elseif($user->isClubLeader())
         @include('dashboard.partials.club')
     @else
         @include('dashboard.partials.campus_life')

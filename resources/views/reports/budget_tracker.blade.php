@@ -119,7 +119,7 @@
                                 <span class="text-[10px] text-slate-400">{{ $item->event_date->format('M d, Y') }}</span>
                             </td>
                             <td class="py-4 px-4 font-semibold text-slate-900">
-                                {{ $item->club->name ?? 'Chapel Ministry' }}
+                                {{ $item->club?->name ?? 'Chapel Ministry' }}
                             </td>
                             <td class="py-4 px-4 font-medium text-slate-900 max-w-xs">
                                 {{ $item->title }}

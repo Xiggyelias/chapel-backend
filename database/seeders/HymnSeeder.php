@@ -13,36 +13,7 @@ class HymnSeeder extends Seeder
         $jsonPath = __DIR__ . '/data/complete_hymns.json';
 
         if (file_exists($jsonPath)) {
-            $hymns = json_decode(file_get_contents($jsonPath), true);
-            $now = now()->toDateTimeString();
-
-            $records = [];
-            foreach ($hymns as $h) {
-                $records[] = [
-                    'hymnal_name' => $h['hymnal_name'] ?? 'The United Methodist Hymnal',
-                    'hymnal_code' => $h['hymnal_code'] ?? 'UMH',
-                    'number' => (string)$h['number'],
-                    'title' => $h['title'],
-                    'author' => $h['author'] ?? 'Traditional',
-                    'tune' => $h['tune'] ?? null,
-                    'meter' => $h['meter'] ?? null,
-                    'scripture_ref' => $h['scripture_ref'] ?? null,
-                    'category' => $h['category'] ?? 'General',
-                    'lyrics' => $h['lyrics'] ?? '',
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ];
-            }
-
-            DB::transaction(function () use ($records) {
-                foreach (array_chunk($records, 200) as $chunk) {
-                    Hymn::upsert(
-                        $chunk,
-                        ['hymnal_code', 'number'],
-                        ['hymnal_name', 'title', 'author', 'tune', 'meter', 'scripture_ref', 'category', 'lyrics', 'updated_at']
-                    );
-                }
-            });
+            $this->seedFromCatalogue(json_decode(file_get_contents($jsonPath), true));
 
             return;
         }
@@ -111,11 +82,65 @@ class HymnSeeder extends Seeder
             ],
         ];
 
-        foreach ($fallback as $h) {
-            Hymn::updateOrCreate(
-                ['hymnal_code' => $h['hymnal_code'], 'number' => $h['number']],
-                $h
-            );
+        $this->seedFromCatalogue($fallback);
+    }
+
+    /**
+     * Upserts the hymnal catalogue without ever destroying curated data:
+     * hymns whose lyrics the Office has entered are left untouched, and an
+     * entry without lyrics never blanks lyrics that already exist.
+     */
+    private function seedFromCatalogue(array $hymns): void
+    {
+        $now = now()->toDateTimeString();
+
+        $curated = Hymn::whereNotNull('lyrics_updated_by')->get(['hymnal_code', 'number'])
+            ->map(fn ($h) => "{$h->hymnal_code}|{$h->number}")
+            ->flip();
+
+        $withLyrics = [];
+        $withoutLyrics = [];
+
+        foreach ($hymns as $h) {
+            $code = $h['hymnal_code'] ?? 'UMH';
+            $number = (string) $h['number'];
+            if ($curated->has("{$code}|{$number}")) {
+                continue;
+            }
+
+            $lyrics = trim($h['lyrics'] ?? '');
+            $record = [
+                'hymnal_name' => $h['hymnal_name'] ?? 'The United Methodist Hymnal',
+                'hymnal_code' => $code,
+                'number' => $number,
+                'title' => $h['title'],
+                'author' => $h['author'] ?? 'Traditional',
+                'tune' => $h['tune'] ?? null,
+                'meter' => $h['meter'] ?? null,
+                'scripture_ref' => $h['scripture_ref'] ?? null,
+                'category' => $h['category'] ?? 'General',
+                'lyrics' => $lyrics,
+                'lyrics_status' => $lyrics === '' ? 'not_entered' : 'available',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+
+            if ($lyrics === '') {
+                $withoutLyrics[] = $record;
+            } else {
+                $withLyrics[] = $record;
+            }
         }
+
+        $metadata = ['hymnal_name', 'title', 'author', 'tune', 'meter', 'scripture_ref', 'category', 'updated_at'];
+
+        DB::transaction(function () use ($withLyrics, $withoutLyrics, $metadata) {
+            foreach (array_chunk($withLyrics, 200) as $chunk) {
+                Hymn::upsert($chunk, ['hymnal_code', 'number'], array_merge($metadata, ['lyrics', 'lyrics_status']));
+            }
+            foreach (array_chunk($withoutLyrics, 200) as $chunk) {
+                Hymn::upsert($chunk, ['hymnal_code', 'number'], $metadata);
+            }
+        });
     }
 }

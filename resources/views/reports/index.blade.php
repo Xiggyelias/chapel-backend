@@ -47,8 +47,8 @@
             <div class="p-5 sm:p-6 hover:bg-slate-50/70 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="space-y-1.5">
                     <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $rep->club->color_hex ?? '#DC2626' }}">
-                            {{ $rep->club->name }} ({{ $rep->club->code }})
+                        <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $rep->club?->color_hex ?? '#DC2626' }}">
+                            {{ $rep->club?->name }} ({{ $rep->club?->code }})
                         </span>
                         @if($rep->status === 'reviewed')
                             <span class="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">Reviewed by Chaplaincy</span>
@@ -66,7 +66,7 @@
                     <div class="text-xs text-slate-500 flex flex-wrap items-center gap-x-4 gap-y-1">
                         <span>👥 Attendance: <strong class="text-slate-900 font-mono">{{ $rep->attendance }} participants</strong></span>
                         <span>💰 Total Expenditure: <strong class="text-slate-900 font-mono">${{ number_format($rep->spending, 2) }}</strong></span>
-                        <span>Submitted by: {{ $rep->submitter->name ?? 'Club Executive' }} &bull; {{ $rep->created_at->format('M d, Y') }}</span>
+                        <span>Submitted by: {{ $rep->submitter?->name ?? 'Club Executive' }} &bull; {{ $rep->created_at->format('M d, Y') }}</span>
                     </div>
                 </div>
 
@@ -95,6 +95,10 @@
             </div>
         @endforelse
     </div>
+
+    @if($reports->hasPages())
+        <div>{{ $reports->links() }}</div>
+    @endif
 
 </div>
 @endsection

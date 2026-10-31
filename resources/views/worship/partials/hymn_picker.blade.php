@@ -181,17 +181,22 @@
                         if (scriptureDot) scriptureDot.classList.add('hidden');
                     }
 
-                    document.getElementById('hymnLyricsContent').textContent = h.lyrics;
+                    document.getElementById('hymnLyricsContent').textContent = h.lyrics_available
+                        ? h.lyrics
+                        : 'Lyrics not yet entered for this hymn. The title will be added to the order of service; please sing from the printed hymnal.';
 
                     // Alternates
                     const altContainer = document.getElementById('hymnAlternatesContainer');
                     const altList = document.getElementById('hymnAlternatesList');
                     if (data.alternates && data.alternates.length > 0) {
-                        let altHtml = '';
-                        data.alternates.forEach(alt => {
-                            altHtml += `<button type="button" onclick="fetchHymnByNumber('${alt.number}', '${alt.hymnal_code}')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold border border-slate-200 transition cursor-pointer">Switch to ${alt.hymnal_code} #${alt.number}: ${alt.title}</button>`;
-                        });
-                        altList.innerHTML = altHtml;
+                        altList.replaceChildren(...data.alternates.map(alt => {
+                            const btn = document.createElement('button');
+                            btn.type = 'button';
+                            btn.className = 'px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold border border-slate-200 transition cursor-pointer';
+                            btn.textContent = `Switch to ${alt.hymnal_code} #${alt.number}: ${alt.title}`;
+                            btn.addEventListener('click', () => fetchHymnByNumber(String(alt.number), alt.hymnal_code));
+                            return btn;
+                        }));
                         altContainer.classList.remove('hidden');
                     } else if (altContainer) {
                         altContainer.classList.add('hidden');
@@ -231,7 +236,7 @@
 
         // 2. Append to Lyrics field
         const lyricsInput = document.querySelector('textarea[name="lyrics"]');
-        if (lyricsInput) {
+        if (lyricsInput && hymn.lyrics_available) {
             const currentLyrics = lyricsInput.value ? lyricsInput.value.trim() : '';
             const sectionHeader = `[${hymn.full_title}]`;
             const hymnBlock = `${sectionHeader}\n${hymn.lyrics}`;
@@ -249,7 +254,9 @@
         const successBox = document.getElementById('hymnInsertSuccess');
         const successMsg = document.getElementById('hymnInsertSuccessMsg');
         if (successBox && successMsg) {
-            successMsg.textContent = `✓ Inserted "${hymn.full_title}" into Hymns and pasted all stanzas into the Lyrics field below!`;
+            successMsg.textContent = hymn.lyrics_available
+                ? `✓ Inserted "${hymn.full_title}" into Hymns and pasted all stanzas into the Lyrics field below.`
+                : `✓ Inserted "${hymn.full_title}" into Hymns. Its lyrics are not yet entered, so nothing was added to the Lyrics field.`;
             successBox.classList.remove('hidden');
             setTimeout(() => {
                 successBox.classList.add('hidden');

@@ -7,6 +7,7 @@ use App\Models\EquipmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use App\Services\PortalNotifier;
 
 class EquipmentController extends Controller
 {
@@ -79,6 +80,14 @@ class EquipmentController extends Controller
             'status' => $request->status,
             'remarks' => $request->remarks ?: $item->remarks,
         ]);
+
+        PortalNotifier::clubLeaders(
+            $item->club_id,
+            "Equipment {$request->status}: {$item->quantity}× {$item->item_name}",
+            $request->remarks ?: 'Needed ' . $item->needed_date->format('M j, Y'),
+            route('equipment.index'),
+            $request->status === 'rejected' ? 'critical' : 'info'
+        );
 
         return redirect()->route('equipment.index')->with('success', "Equipment status updated to {$request->status}.");
     }

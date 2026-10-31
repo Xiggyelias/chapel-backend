@@ -53,12 +53,12 @@
                         <tr class="hover:bg-slate-50/70 transition">
                             <td class="p-4">
                                 <div class="font-bold text-slate-900">{{ $item->item_name }}</div>
-                                <div class="text-[11px] text-slate-500">Qty: {{ $item->quantity }} &bull; By {{ $item->requester->name ?? 'Chapel Requester' }}</div>
+                                <div class="text-[11px] text-slate-500">Qty: {{ $item->quantity }} &bull; By {{ $item->requester?->name ?? 'Chapel Requester' }}</div>
                             </td>
 
                             <td class="p-4 whitespace-nowrap">
-                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $item->club->color_hex ?? '#DC2626' }}">
-                                    {{ $item->club->code }}
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $item->club?->color_hex ?? '#DC2626' }}">
+                                    {{ $item->club?->code }}
                                 </span>
                             </td>
 

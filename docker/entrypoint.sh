@@ -71,6 +71,9 @@ fi
 echo "Step 6: Running database migrations..."
 php /var/www/html/artisan migrate --force || echo "Warning: Migration command encountered an issue, proceeding..."
 
+# Move any uploads still on the public disk into private storage (idempotent)
+php /var/www/html/artisan chapel:secure-uploads || echo "Warning: Could not secure legacy uploads, proceeding..."
+
 # 7. Automated seed if database is empty or SEED_ON_DEPLOY=true
 USER_COUNT=$(php /var/www/html/artisan tinker --execute="echo \App\Models\User::count();" 2>/dev/null || echo "0")
 if [ "${SEED_ON_DEPLOY}" = "true" ] || [ "$USER_COUNT" = "0" ]; then

@@ -49,43 +49,8 @@
         <div class="p-6 text-center space-y-5">
             <div>
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Scan with Phone Camera</span>
-                <a href="{{ route('members.self_checkin', $token) }}" target="_blank" title="Click to test student self check-in" class="inline-block p-4 bg-slate-50 border-2 border-dashed border-[#DC2626]/40 rounded-3xl hover:scale-105 transition group cursor-pointer shadow-inner">
-                    <!-- Procedural QR Code Mockup in AU Crimson -->
-                    <svg class="w-48 h-48 mx-auto" viewBox="0 0 100 100" fill="#DC2626">
-                        <rect x="8" y="8" width="26" height="26" rx="4" fill="#DC2626"/>
-                        <rect x="12" y="12" width="18" height="18" rx="2" fill="#ffffff"/>
-                        <rect x="16" y="16" width="10" height="10" rx="1" fill="#DC2626"/>
-
-                        <rect x="66" y="8" width="26" height="26" rx="4" fill="#DC2626"/>
-                        <rect x="70" y="12" width="18" height="18" rx="2" fill="#ffffff"/>
-                        <rect x="74" y="16" width="10" height="10" rx="1" fill="#DC2626"/>
-
-                        <rect x="8" y="66" width="26" height="26" rx="4" fill="#DC2626"/>
-                        <rect x="12" y="70" width="18" height="18" rx="2" fill="#ffffff"/>
-                        <rect x="16" y="74" width="10" height="10" rx="1" fill="#DC2626"/>
-
-                        <rect x="40" y="12" width="4" height="8" />
-                        <rect x="48" y="16" width="8" height="4" />
-                        <rect x="58" y="12" width="4" height="6" />
-                        <rect x="40" y="24" width="8" height="6" />
-
-                        <rect x="12" y="40" width="8" height="6" />
-                        <rect x="24" y="44" width="6" height="4" />
-                        <rect x="40" y="38" width="16" height="16" rx="3" fill="#DC2626" />
-                        <rect x="62" y="40" width="8" height="4" />
-                        <rect x="76" y="42" width="10" height="8" />
-
-                        <rect x="12" y="52" width="6" height="6" />
-                        <rect x="26" y="54" width="6" height="6" />
-                        <rect x="60" y="54" width="6" height="6" />
-                        <rect x="72" y="52" width="8" height="4" />
-                        <rect x="84" y="54" width="4" height="6" />
-
-                        <rect x="40" y="68" width="6" height="8" />
-                        <rect x="50" y="72" width="8" height="4" />
-                        <rect x="62" y="68" width="6" height="12" />
-                        <rect x="74" y="72" width="10" height="6" />
-                    </svg>
+                <a href="{{ route('members.self_checkin', $token) }}" target="_blank" rel="noopener" title="Open the student check-in page" class="inline-block p-4 bg-slate-50 border-2 border-dashed border-[#DC2626]/40 rounded-3xl hover:scale-105 transition group cursor-pointer shadow-inner">
+                    <x-qr-code :value="route('members.self_checkin', $token)" size="240" label="Attendance check-in QR code" class="mx-auto" />
                 </a>
             </div>
 
@@ -109,7 +74,7 @@
             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Live Check-in Feed</span>
             @forelse($attendeesToday as $att)
                 <div class="flex items-center justify-between py-1.5 border-b border-slate-200/60 last:border-0">
-                    <span class="font-semibold text-slate-900">{{ $att->member->full_name }}</span>
+                    <span class="font-semibold text-slate-900">{{ $att->member?->full_name }}</span>
                     <span class="text-[10px] text-slate-400 font-mono">{{ $att->updated_at->timezone('Africa/Harare')->format('H:i') }} CAT</span>
                 </div>
             @empty

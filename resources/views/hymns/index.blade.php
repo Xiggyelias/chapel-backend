@@ -12,13 +12,13 @@
             <div class="space-y-2.5 max-w-2xl">
                 <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-black/25 border border-white/20 text-rose-200 text-xs font-semibold uppercase tracking-wider font-mono">
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span>Complete Hymnals 1 to 734 (UMH) &bull; 1 to 984 (MHB) &bull; 1 to 311 (Shona)</span>
+                    <span>{{ number_format($totalHymns - $missingByHymnal->sum()) }} of {{ number_format($totalHymns) }} hymn texts entered</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-cinzel text-white">
                     The United Methodist Hymnal
                 </h1>
                 <p class="text-sm sm:text-base text-rose-100/90 leading-relaxed">
-                    Digital liturgy repository and complete hymnody index. All hymns are fully cataloged from number one to the final number. Enter any hymn number to look up stanzas, or search themes and tunes for Sunday and Midweek services.
+                    Every hymn is catalogued by number, title, author and tune. Look up any number, or search themes and tunes for Sunday and Midweek services. Hymns marked "lyrics not yet entered" can be completed by the Chaplaincy Office from the chapel's licensed printed hymnals.
                 </p>
                 <div class="flex flex-wrap items-center gap-2 pt-1 text-xs text-rose-200">
                     <span class="font-bold uppercase tracking-wider text-[11px] text-white">Chapel Classics:</span>
@@ -51,7 +51,7 @@
     <!-- Search & Filter Controls -->
     <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 card-elevation space-y-4">
         <form method="GET" action="{{ route('hymns.index') }}" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
-            <div class="sm:col-span-7 relative">
+            <div class="sm:col-span-5 relative">
                 <label for="hymnSearch" class="sr-only">Search hymns</label>
                 <input type="text" id="hymnSearch" name="search" value="{{ $search }}" placeholder="Search by hymn number (e.g. 1, 57, 140, 378, 734, 984) or title / lyric..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] font-medium">
                 <div class="absolute left-3.5 top-3 text-slate-400">
@@ -69,11 +69,20 @@
                 </select>
             </div>
 
+            <div class="sm:col-span-2">
+                <label for="lyricsFilter" class="sr-only">Lyrics status</label>
+                <select id="lyricsFilter" name="lyrics" onchange="this.form.submit()" class="w-full py-2.5 px-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] bg-white text-slate-800 font-medium">
+                    <option value="">Any lyrics status</option>
+                    <option value="available" @selected($lyricsFilter === 'available')>Lyrics entered</option>
+                    <option value="missing" @selected($lyricsFilter === 'missing')>Lyrics not yet entered ({{ $missingByHymnal->sum() }})</option>
+                </select>
+            </div>
+
             <div class="sm:col-span-2 flex items-center space-x-2">
                 <button type="submit" class="w-full py-2.5 px-4 bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold rounded-xl transition cursor-pointer shadow-xs">
                     Search
                 </button>
-                @if($search || $hymnal)
+                @if($search || $hymnal || $lyricsFilter)
                     <a href="{{ route('hymns.index') }}" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition" title="Clear Filters" aria-label="Clear filters">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </a>
@@ -117,9 +126,13 @@
                     </div>
 
                     <!-- Lyrics Preview -->
-                    <div class="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200/70 font-mono text-xs text-slate-700 leading-relaxed whitespace-pre-line line-clamp-4">
-                        {{ $hymn->lyrics }}
-                    </div>
+                    @if($hymn->hasLyrics())
+                        <div class="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-200/70 font-mono text-xs text-slate-700 leading-relaxed whitespace-pre-line line-clamp-4">{{ $hymn->lyrics }}</div>
+                    @else
+                        <div class="mt-3 p-3 rounded-xl border border-dashed border-amber-300 bg-amber-50/60 text-xs text-amber-900">
+                            Lyrics not yet entered. Please sing from the printed hymnal{{ $canEdit ? ', or enter the text from the chapel\'s licensed copy.' : '.' }}
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Action Toolbar -->
@@ -129,10 +142,21 @@
                         'title' => $hymn->title,
                         'author' => $hymn->author ?: 'Traditional',
                         'tune' => $hymn->tune,
-                        'lyrics' => $hymn->lyrics,
+                        'lyrics' => $hymn->hasLyrics() ? $hymn->lyrics : '',
                     ];
                 @endphp
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs" data-hymn="{{ json_encode($hymnPayload) }}">
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-xs" data-hymn="{{ json_encode($hymnPayload) }}">
+                    @if($canEdit)
+                        <button type="button" onclick="openHymnEditor(this)"
+                            data-update-url="{{ route('hymns.update', $hymn->id) }}"
+                            data-title="{{ $hymn->title }}" data-author="{{ $hymn->author }}" data-tune="{{ $hymn->tune }}"
+                            data-lyrics="{{ $hymn->hasLyrics() ? $hymn->lyrics : '' }}" data-source="{{ $hymn->lyrics_source }}"
+                            data-label="{{ $hymn->hymnal_code }} {{ $hymn->number }}"
+                            class="px-2.5 py-1 rounded-lg font-semibold {{ $hymn->hasLyrics() ? 'bg-slate-100 hover:bg-slate-200 text-slate-700' : 'bg-amber-500 hover:bg-amber-600 text-white' }}">
+                            {{ $hymn->hasLyrics() ? 'Edit' : 'Enter lyrics' }}
+                        </button>
+                    @endif
+                    @if($hymn->hasLyrics())
                     <button type="button" onclick="openHymnLyricsModal(this)" class="font-bold text-[#DC2626] hover:underline flex items-center space-x-1 cursor-pointer">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         <span>View All Stanzas</span>
@@ -141,6 +165,7 @@
                     <button type="button" onclick="copyHymnLyrics(this)" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer" title="Copy Stanzas" aria-label="Copy lyrics of {{ $hymn->title }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                     </button>
+                    @endif
                 </div>
             </div>
         @empty
@@ -253,4 +278,62 @@
         }
     });
 </script>
+@if($canEdit)
+<!-- Office hymn text editor -->
+<div id="hymnEditorModal" role="dialog" aria-modal="true" aria-labelledby="hymnEditorTitle" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/60 flex items-center justify-center p-4" onclick="if (event.target === this) this.classList.add('hidden')">
+    <form id="hymnEditorForm" method="POST" class="bg-white rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl border border-slate-200 text-xs">
+        @csrf
+        @method('PUT')
+        <div class="flex items-start justify-between gap-3">
+            <div>
+                <h3 id="hymnEditorTitle" class="text-lg font-bold text-slate-900">Edit hymn</h3>
+                <p class="text-slate-500 mt-0.5">Enter the text exactly as printed in the chapel's licensed hymnal. Lyrics appear in the hymn picker and projection slides.</p>
+            </div>
+            <button type="button" onclick="document.getElementById('hymnEditorModal').classList.add('hidden')" aria-label="Close editor" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100">&times;</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sm:col-span-3">
+                <label for="editorTitle" class="block font-semibold text-slate-700 mb-1">Title</label>
+                <input id="editorTitle" name="title" required maxlength="255" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            </div>
+            <div class="sm:col-span-2">
+                <label for="editorAuthor" class="block font-semibold text-slate-700 mb-1">Author / translator</label>
+                <input id="editorAuthor" name="author" maxlength="255" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            </div>
+            <div>
+                <label for="editorTune" class="block font-semibold text-slate-700 mb-1">Tune</label>
+                <input id="editorTune" name="tune" maxlength="100" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            </div>
+        </div>
+        <div>
+            <label for="editorLyrics" class="block font-semibold text-slate-700 mb-1">Lyrics <span class="font-normal text-slate-500">(separate stanzas with a blank line)</span></label>
+            <textarea id="editorLyrics" name="lyrics" rows="12" class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono leading-relaxed"></textarea>
+        </div>
+        <div>
+            <label for="editorSource" class="block font-semibold text-slate-700 mb-1">Source &amp; licence</label>
+            <input id="editorSource" name="lyrics_source" maxlength="255" placeholder="e.g. Printed UMH (1989), CCLI licence 123456" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+            <p class="text-slate-500 mt-1">Required when lyrics are entered. Copyrighted texts may only be stored under the chapel's reprint licence.</p>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+            <button type="button" onclick="document.getElementById('hymnEditorModal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 font-semibold">Cancel</button>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold">Save hymn</button>
+        </div>
+    </form>
+</div>
+<script>
+    function openHymnEditor(button) {
+        const d = button.dataset;
+        const form = document.getElementById('hymnEditorForm');
+        form.action = d.updateUrl;
+        document.getElementById('hymnEditorTitle').textContent = 'Edit ' + d.label;
+        document.getElementById('editorTitle').value = d.title || '';
+        document.getElementById('editorAuthor').value = d.author || '';
+        document.getElementById('editorTune').value = d.tune || '';
+        document.getElementById('editorLyrics').value = d.lyrics || '';
+        document.getElementById('editorSource').value = d.source || '';
+        document.getElementById('hymnEditorModal').classList.remove('hidden');
+        document.getElementById('editorLyrics').focus();
+    }
+</script>
+@endif
 @endsection

@@ -9,6 +9,7 @@ use App\Models\Request as ChapelRequest;
 use App\Services\PrivateFileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\PortalNotifier;
 
 class ReportController extends Controller
 {
@@ -92,7 +93,7 @@ class ReportController extends Controller
             }
         }
 
-        Report::create([
+        $report = Report::create([
             'event_id' => $event?->id,
             'request_id' => $event?->request_id,
             'club_id' => $clubId,
@@ -104,6 +105,12 @@ class ReportController extends Controller
             'photos' => $photoPaths,
             'status' => 'submitted',
         ]);
+
+        PortalNotifier::office(
+            "New activity report: {$report->title}",
+            ($report->club?->name ?? 'Club') . " • {$report->attendance} attended",
+            route('reports.show', $report->id)
+        );
 
         return redirect()->route('reports.index')->with('success', 'Post-activity report submitted per Chapel Manual §7.1.2.');
     }
@@ -147,6 +154,14 @@ class ReportController extends Controller
             'status' => 'reviewed',
             'chaplaincy_remarks' => $request->chaplaincy_remarks,
         ]);
+
+        PortalNotifier::clubLeaders(
+            $report->club_id,
+            "Chaplaincy reviewed your report: {$report->title}",
+            \Illuminate\Support\Str::limit($request->chaplaincy_remarks, 140),
+            route('reports.show', $report->id),
+            'success'
+        );
 
         return redirect()->route('reports.show', $report->id)->with('success', 'Chaplaincy review remarks saved.');
     }

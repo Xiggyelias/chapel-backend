@@ -147,7 +147,7 @@
                     @if($user->club)
                         <div>
                             <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Assigned Fellowship</span>
-                            <span class="text-slate-800 font-medium">{{ $user->club->name }} ({{ $user->club->code }})</span>
+                            <span class="text-slate-800 font-medium">{{ $user->club?->name }} ({{ $user->club?->code }})</span>
                         </div>
                     @endif
 

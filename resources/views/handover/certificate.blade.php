@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Handover Certificate - {{ $handover->club->name }} ({{ $handover->academic_year }}) - Africa University Chaplaincy</title>
+    <title>Handover Certificate - {{ $handover->club?->name }} ({{ $handover->academic_year }}) - Africa University Chaplaincy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
@@ -124,7 +124,7 @@
                 </p>
 
                 <div class="font-cinzel text-2xl sm:text-3xl font-black text-[#DC2626] py-1 tracking-wider border-b border-dashed border-[#DC2626] max-w-lg mx-auto">
-                    {{ $handover->club->name }}
+                    {{ $handover->club?->name }}
                 </div>
 
                 <p class="text-sm sm:text-base leading-relaxed text-slate-700">
@@ -157,7 +157,7 @@
                         {{ $handover->outgoing_president_name }}
                     </div>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Outgoing President</span>
-                    <span class="text-[10px] text-slate-500">{{ $handover->club->name }}</span>
+                    <span class="text-[10px] text-slate-500">{{ $handover->club?->name }}</span>
                 </div>
 
                 <div class="text-center space-y-1 flex flex-col items-center justify-center">
@@ -173,7 +173,7 @@
 
                 <div class="text-center space-y-2">
                     <div class="h-10 border-b border-slate-400 flex items-end justify-center font-cinzel font-bold text-sm text-[#DC2626] pb-1">
-                        {{ $handover->completer ? $handover->completer->name : 'Rev. Supt. Eunice Marima' }}
+                        {{ $handover->completer ? $handover->completer?->name : 'Rev. Supt. Eunice Marima' }}
                     </div>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">University Chaplain</span>
                     <span class="text-[10px] text-slate-500">Africa University</span>

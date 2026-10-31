@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Handover: ' . $handover->club->name)
+@section('title', 'Handover: ' . $handover->club?->name)
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
@@ -10,12 +10,12 @@
         <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
             <a href="{{ route('handover.index') }}" class="hover:underline text-[#DC2626] font-bold">Leadership Handover</a>
             <span>/</span>
-            <span class="font-mono text-slate-700">{{ $handover->club->code }}</span>
+            <span class="font-mono text-slate-700">{{ $handover->club?->code }}</span>
         </div>
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-xl sm:text-2xl font-bold font-cinzel text-slate-900 tracking-tight">
-                    {{ $handover->club->name }} Transition
+                    {{ $handover->club?->name }} Transition
                 </h2>
                 <p class="text-xs text-slate-500 mt-0.5">
                     Academic Year {{ $handover->academic_year }} &bull; {{ $handover->outgoing_president_name }} to {{ $handover->incoming_president_name }}
@@ -143,7 +143,7 @@
                     The Chaplaincy Office must verify that all 9 required Vault folders contain the latest documents (Constitution, Executive roster, Minutes, Financials, Reports).
                 </p>
                 <div class="text-[11px] text-slate-500">
-                    Current active records in {{ $handover->club->name }} Vault: <strong class="text-slate-900 font-mono">{{ $vaultCount }} files</strong>
+                    Current active records in {{ $handover->club?->name }} Vault: <strong class="text-slate-900 font-mono">{{ $vaultCount }} files</strong>
                 </div>
 
                 @php
@@ -154,7 +154,7 @@
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block font-cinzel">Vault Sentinel Health Score</span>
                         <span class="text-xs font-bold text-[#DC2626]">{{ $vaultHealth['score'] }}% &bull; {{ $vaultHealth['grade'] }}</span>
                     </div>
-                    <a href="{{ route('vault.index', ['club_id' => $handover->club->id]) }}" target="_blank" class="text-[11px] text-[#DC2626] font-bold hover:underline">
+                    <a href="{{ route('vault.index', ['club_id' => $handover->club?->id]) }}" target="_blank" class="text-[11px] text-[#DC2626] font-bold hover:underline">
                         Inspect Club Vault &rarr;
                     </a>
                 </div>
@@ -216,7 +216,7 @@
                 <span>Step 5: Executive Credential & Email Access Transfer</span>
             </h3>
             <p class="text-xs text-amber-900 leading-relaxed">
-                Clicking the button below will officially transfer club executive permissions to <strong>{{ $handover->incoming_president_name }}</strong> ({{ $handover->incoming_president_email }}), bind the official email <strong>{{ $handover->club->official_email }}</strong> to the new term, and archive previous leadership into the permanent university history.
+                Clicking the button below will officially transfer club executive permissions to <strong>{{ $handover->incoming_president_name }}</strong> ({{ $handover->incoming_president_email }}), bind the official email <strong>{{ $handover->club?->official_email }}</strong> to the new term, and archive previous leadership into the permanent university history.
             </p>
             <form method="POST" action="{{ route('handover.transfer', $handover->id) }}" onsubmit="return confirm('Confirm transfer of leadership access to {{ $handover->incoming_president_name }}?');">
                 @csrf

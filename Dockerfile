@@ -61,6 +61,8 @@ RUN apk add --no-cache \
     sqlite \
     sqlite-dev \
     libpq-dev \
+    postgresql-client \
+    mariadb-client \
     tzdata
 
 # Configure & install PHP extensions

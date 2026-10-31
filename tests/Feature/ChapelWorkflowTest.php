@@ -657,32 +657,32 @@ class ChapelWorkflowTest extends TestCase
         // 1. Chaplain dashboard
         $resChaplain = $this->actingAs($this->chaplain)->get(route('dashboard'));
         $resChaplain->assertStatus(200);
-        $resChaplain->assertSee('VC Concurrence Needed');
-        $resChaplain->assertSee('Executive Review Queue');
+        $resChaplain->assertSee('Need VC go-ahead');
+        $resChaplain->assertSee('Worship readiness');
 
         // 2. Chapel Assistant dashboard
         $resAssistant = $this->actingAs($assistant)->get(route('dashboard'));
         $resAssistant->assertStatus(200);
-        $resAssistant->assertSee('Operational Reviews');
-        $resAssistant->assertSee('Live Venue Operations');
+        $resAssistant->assertSee('Equipment to action');
+        $resAssistant->assertSee('Venue week ahead');
 
         // 3. Chapel Secretary dashboard
         $resSecretary = $this->actingAs($secretary)->get(route('dashboard'));
         $resSecretary->assertStatus(200);
-        $resSecretary->assertSee('Vault Documents');
-        $resSecretary->assertSee('Vault Compliance');
+        $resSecretary->assertSee('Charter applications');
+        $resSecretary->assertSee('Vault compliance');
 
         // 4. Club Executive dashboard
         $resClub = $this->actingAs($this->focusExec)->get(route('dashboard'));
         $resClub->assertStatus(200);
-        $resClub->assertSee('QR Kiosk');
-        $resClub->assertSee('Registered Members');
+        $resClub->assertSee('Open check-in kiosk');
+        $resClub->assertSee('Records vault health');
 
         // 5. Campus Life dashboard
         $resCampus = $this->actingAs($this->campusLife)->get(route('dashboard'));
         $resCampus->assertStatus(200);
-        $resCampus->assertSee('Campus Life &amp; SRC Observer Mode', false);
-        $resCampus->assertSee('Live Calendar Feed');
+        $resCampus->assertSee('Logistics watch');
+        $resCampus->assertSee('Subscribe to the chapel calendar');
     }
 
     /**

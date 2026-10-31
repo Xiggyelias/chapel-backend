@@ -11,6 +11,7 @@ use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HandoverController;
 use App\Http\Controllers\HymnController;
+use App\Http\Controllers\InboxController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReportController;
@@ -68,6 +69,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.index');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+
+    // Personal inbox (in-portal notifications)
+    Route::get('/inbox', [InboxController::class, 'index'])->name('inbox.index');
+    Route::get('/inbox/{id}', [InboxController::class, 'open'])->whereUuid('id')->name('inbox.open');
+    Route::post('/inbox/read-all', [InboxController::class, 'markAllRead'])->name('inbox.read_all');
 
     // Dashboard & guidelines
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -177,5 +183,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
         Route::post('/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset_password');
         Route::post('/users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle_status');
+
+        Route::put('/hymns/{id}', [HymnController::class, 'update'])->name('hymns.update');
     });
 });

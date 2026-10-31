@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Services\PortalNotifier;
 
 class ClubController extends Controller
 {
@@ -137,6 +138,13 @@ class ClubController extends Controller
             $credentials = $this->provisionLeaderAccount($club);
             return redirect()->route('clubs.index')->with('success', "Fellowship '{$club->name}' has been officially registered and chartered under Chaplaincy oversight. {$credentials}");
         }
+
+        PortalNotifier::office(
+            "Charter application: {$club->name}",
+            "{$club->code} • {$club->founding_president_name} • tracking {$trackingCode}",
+            route('clubs.index', ['status' => 'pending']),
+            'warning'
+        );
 
         // For public/student applications: NEVER redirect to dashboard or grant internal access!
         // Show secure tracking receipt page

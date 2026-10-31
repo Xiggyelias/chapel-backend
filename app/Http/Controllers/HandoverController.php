@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Services\PortalNotifier;
 
 class HandoverController extends Controller
 {
@@ -82,6 +83,14 @@ class HandoverController extends Controller
             'status' => 'initiated',
         ]);
 
+        PortalNotifier::clubLeaders(
+            $club->id,
+            'Leadership handover started',
+            "Please complete the handover checklist for {$handover->academic_year}.",
+            route('handover.show', $handover->id),
+            'warning'
+        );
+
         AuditLog::record('handover_initiated', "Initiated {$validated['academic_year']} leadership handover for {$club->name} to {$handover->incoming_president_name}.");
 
         return redirect()->route('handover.show', $handover->id)->with('success', "Handover process initiated for {$club->name}. Outgoing executive must now complete checklist.");
@@ -121,6 +130,12 @@ class HandoverController extends Controller
         $handover->update(array_merge($validated, [
             'status' => 'checklist_completed',
         ]));
+
+        PortalNotifier::office(
+            'Handover checklist completed: ' . ($handover->club?->name ?? 'club'),
+            'Vault folders are ready for verification.',
+            route('handover.show', $handover->id)
+        );
 
         return redirect()->route('handover.show', $handover->id)->with('success', 'Handover checklist and status notes recorded successfully.');
     }

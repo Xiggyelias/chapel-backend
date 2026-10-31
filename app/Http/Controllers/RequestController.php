@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Services\PortalNotifier;
 
 class RequestController extends Controller
 {
@@ -141,6 +142,13 @@ class RequestController extends Controller
             'submitted'
         );
 
+        PortalNotifier::approvers(
+            "New proposal: {$chapelRequest->title}",
+            "{$chapelRequest->club?->name} • {$chapelRequest->event_date->format('M j, Y')}" . ($isLate ? ' • late notice' : ''),
+            route('requests.show', $chapelRequest->id),
+            $isLate ? 'warning' : 'info'
+        );
+
         $notice = $isLate
             ? "Request {$chapelRequest->reference_no} submitted successfully. NOTE: Flagged as late submission (< 14 days before activity per Chapel Manual §4.1)."
             : "Request {$chapelRequest->reference_no} submitted successfully.";
@@ -229,6 +237,12 @@ class RequestController extends Controller
             'submitted'
         );
 
+        PortalNotifier::approvers(
+            ($oldStatus === 'needs_changes' ? 'Proposal resubmitted: ' : 'Proposal updated: ') . $chapelRequest->title,
+            "{$chapelRequest->club?->name} • {$chapelRequest->event_date->format('M j, Y')}",
+            route('requests.show', $chapelRequest->id)
+        );
+
         return redirect()->route('requests.show', $chapelRequest->id)->with('success', "Request {$chapelRequest->reference_no} updated and submitted for review.");
     }
 
@@ -307,6 +321,14 @@ class RequestController extends Controller
         $auditNotes = $clashes->isNotEmpty() ? "{$notes} (Venue clash overridden by approver.)" : $notes;
         AuditLog::record('approved', $auditNotes, $chapelRequest, $oldStatus, 'approved');
 
+        PortalNotifier::clubLeaders(
+            $chapelRequest->club_id,
+            "Approved: {$chapelRequest->title}",
+            'It is now on the Master Calendar. Print your clearance pass for the venue gate.',
+            route('requests.show', $chapelRequest->id),
+            'success'
+        );
+
         return redirect()->route('requests.show', $chapelRequest->id)->with('success', 'Request approved successfully. Master Calendar event generated.');
     }
 
@@ -343,6 +365,14 @@ class RequestController extends Controller
 
         AuditLog::record('needs_changes', $request->notes, $chapelRequest, $oldStatus, 'needs_changes');
 
+        PortalNotifier::clubLeaders(
+            $chapelRequest->club_id,
+            "Changes requested: {$chapelRequest->title}",
+            \Illuminate\Support\Str::limit($request->notes, 140),
+            route('requests.edit', $chapelRequest->id),
+            'warning'
+        );
+
         return redirect()->route('requests.show', $chapelRequest->id)->with('info', 'Request flagged as Needs Changes. The club can now revise and resubmit it.');
     }
 
@@ -377,6 +407,14 @@ class RequestController extends Controller
         $chapelRequest->event?->update(['status' => 'cancelled']);
 
         AuditLog::record('declined', "Declined with mandatory reason: {$request->reason}", $chapelRequest, $oldStatus, 'declined');
+
+        PortalNotifier::clubLeaders(
+            $chapelRequest->club_id,
+            "Declined: {$chapelRequest->title}",
+            \Illuminate\Support\Str::limit($request->reason, 140),
+            route('requests.show', $chapelRequest->id),
+            'critical'
+        );
 
         return redirect()->route('requests.show', $chapelRequest->id)->with('info', 'Request declined. Reason recorded in official audit log.');
     }

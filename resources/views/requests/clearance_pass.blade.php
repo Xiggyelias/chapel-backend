@@ -67,8 +67,8 @@
                 </div>
                 <div class="text-right">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block font-cinzel">Authorized Club</span>
-                    <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $requestItem->club->color_hex ?? '#DC2626' }}">
-                        {{ $requestItem->club->name }}
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $requestItem->club?->color_hex ?? '#DC2626' }}">
+                        {{ $requestItem->club?->name }}
                     </span>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                 <div class="col-span-2 pt-2 border-t border-slate-200/80">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Cleared Venue</span>
                     <span class="font-bold text-[#DC2626] text-xs">
-                        📍 {{ $requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other }}
+                        📍 {{ $requestItem->venue ? $requestItem->venue?->name : $requestItem->venue_other }}
                     </span>
                     <div class="text-[10px] text-slate-500 mt-0.5">Approved Attendance Limit: {{ $requestItem->expected_attendance ?: 'Standard' }} persons</div>
                 </div>
@@ -101,49 +101,7 @@
             <!-- Scannable Verification QR Code Representation -->
             <div class="text-center p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
                 <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" title="Click to test Gatekeeper Verification Screen" class="inline-block p-2.5 bg-white rounded-2xl shadow-xs border border-slate-300 hover:border-[#DC2626] hover:scale-105 transition-all duration-200 group">
-                    <!-- SVG Procedural QR Code Mockup with authentic pattern -->
-                    <svg class="w-32 h-32 group-hover:opacity-90" viewBox="0 0 100 100" fill="#DC2626">
-                        <!-- Corner Markers -->
-                        <rect x="10" y="10" width="24" height="24" rx="3" fill="#DC2626"/>
-                        <rect x="14" y="14" width="16" height="16" rx="2" fill="#ffffff"/>
-                        <rect x="18" y="18" width="8" height="8" rx="1" fill="#DC2626"/>
-
-                        <rect x="66" y="10" width="24" height="24" rx="3" fill="#DC2626"/>
-                        <rect x="70" y="14" width="16" height="16" rx="2" fill="#ffffff"/>
-                        <rect x="74" y="18" width="8" height="8" rx="1" fill="#DC2626"/>
-
-                        <rect x="10" y="66" width="24" height="24" rx="3" fill="#DC2626"/>
-                        <rect x="14" y="70" width="16" height="16" rx="2" fill="#ffffff"/>
-                        <rect x="18" y="74" width="8" height="8" rx="1" fill="#DC2626"/>
-
-                        <!-- Data Modules Pattern -->
-                        <rect x="38" y="14" width="4" height="8" />
-                        <rect x="46" y="18" width="8" height="4" />
-                        <rect x="58" y="14" width="4" height="4" />
-                        <rect x="38" y="26" width="6" height="4" />
-                        <rect x="50" y="26" width="8" height="6" />
-
-                        <rect x="14" y="38" width="6" height="6" />
-                        <rect x="24" y="42" width="6" height="4" />
-                        <rect x="38" y="38" width="12" height="12" rx="2" fill="#DC2626" />
-                        <rect x="54" y="38" width="8" height="4" />
-                        <rect x="66" y="42" width="8" height="8" />
-                        <rect x="80" y="38" width="6" height="8" />
-
-                        <rect x="14" y="52" width="8" height="4" />
-                        <rect x="28" y="52" width="4" height="8" />
-                        <rect x="38" y="54" width="8" height="6" />
-                        <rect x="50" y="54" width="6" height="6" />
-                        <rect x="62" y="54" width="6" height="6" />
-                        <rect x="74" y="54" width="12" height="4" />
-
-                        <rect x="38" y="68" width="6" height="8" />
-                        <rect x="48" y="72" width="8" height="4" />
-                        <rect x="60" y="68" width="4" height="12" />
-                        <rect x="70" y="72" width="8" height="8" />
-                        <rect x="82" y="68" width="4" height="12" />
-                        <rect x="46" y="82" width="10" height="4" />
-                    </svg>
+                    <x-qr-code :value="$verifyUrl" size="160" label="Gatekeeper verification QR code for {{ $requestItem->reference_no }}" />
                 </a>
                 <div class="font-mono text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                     VERIFY CODE: {{ $verifyToken }}
@@ -157,7 +115,7 @@
             <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-[11px]">
                 <div>
                     <span class="text-[9px] font-bold uppercase text-slate-400 block font-cinzel">Approved By Authority</span>
-                    <span class="font-bold text-[#DC2626]">{{ $requestItem->decidedBy ? $requestItem->decidedBy->name : 'University Chaplaincy Office' }}</span>
+                    <span class="font-bold text-[#DC2626]">{{ $requestItem->decidedBy ? $requestItem->decidedBy?->name : 'University Chaplaincy Office' }}</span>
                     <span class="text-[10px] text-slate-500 block font-mono">{{ $requestItem->decided_at ? $requestItem->decided_at->format('M d, Y H:i') : now()->format('M d, Y') }}</span>
                 </div>
                 <div class="text-right">
@@ -185,7 +143,7 @@
             const pass = {{ Js::from([
                 'title' => $requestItem->title,
                 'club' => $requestItem->club?->name,
-                'venue' => $requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other,
+                'venue' => $requestItem->venue ? $requestItem->venue?->name : $requestItem->venue_other,
                 'date' => $requestItem->event_date->format('l, M d, Y'),
                 'hours' => substr($requestItem->start_time, 0, 5) . ' - ' . substr($requestItem->end_time, 0, 5),
                 'reference' => $requestItem->reference_no,

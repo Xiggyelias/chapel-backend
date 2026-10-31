@@ -181,6 +181,14 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </button>
 
+                    <!-- Personal inbox (decisions, reviews, requests for action) -->
+                    <a href="{{ route('inbox.index') }}" class="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition" title="Inbox" aria-label="Inbox{{ $unreadInboxCount ? ' (' . $unreadInboxCount . ' unread)' : '' }}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        @if($unreadInboxCount)
+                            <span class="absolute -top-0.5 -right-0.5 min-w-[1.1rem] h-[1.1rem] px-1 rounded-full bg-[#DC2626] text-white text-[10px] font-bold leading-[1.1rem] text-center" aria-hidden="true">{{ $unreadInboxCount > 9 ? '9+' : $unreadInboxCount }}</span>
+                        @endif
+                    </a>
+
                     <!-- Notifications Bell with Red Indicator Dot -->
                     <div class="relative">
                         <button id="notificationButton" type="button" onclick="toggleNotificationDrawer(event)" aria-haspopup="true" aria-expanded="false" aria-controls="notificationDrawer" class="relative p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer" title="Chapel Notices & Announcements" aria-label="Chapel notices ({{ $activeAnnouncements->count() }})">

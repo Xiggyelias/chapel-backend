@@ -69,8 +69,8 @@
 
                         <div class="space-y-1">
                             <div class="flex items-center space-x-2">
-                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $event->club->color_hex ?? '#DC2626' }}">
-                                    {{ $event->club->name }}
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $event->club?->color_hex ?? '#DC2626' }}">
+                                    {{ $event->club?->name }}
                                 </span>
                                 <span class="text-xs font-bold text-slate-600 font-mono">
                                     ⏰ {{ substr($event->start_time, 0, 5) }} - {{ substr($event->end_time, 0, 5) }}
@@ -78,7 +78,7 @@
                             </div>
                             <h3 class="text-sm font-bold text-slate-900">{{ $event->title }}</h3>
                             <div class="text-xs text-slate-500">
-                                📍 Venue: <strong>{{ $event->venue ? $event->venue->name : $event->venue_name }}</strong>
+                                📍 Venue: <strong>{{ $event->venue ? $event->venue?->name : $event->venue_name }}</strong>
                                 @if($event->expected_attendance)
                                     &bull; Expected: <strong>{{ $event->expected_attendance }}</strong>
                                 @endif

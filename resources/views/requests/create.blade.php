@@ -70,7 +70,7 @@
                         <input type="hidden" name="club_id" value="{{ auth()->user()->club_id }}">
                         <div class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-[#DC2626] flex items-center space-x-2">
                             <span class="w-2 h-2 rounded-full bg-[#DC2626]"></span>
-                            <span>{{ auth()->user()->club->name ?? 'Chapel Club' }} ({{ auth()->user()->club->code ?? 'AU' }})</span>
+                            <span>{{ auth()->user()->club?->name ?? 'Chapel Club' }} ({{ auth()->user()->club?->code ?? 'AU' }})</span>
                         </div>
                     @endif
                 </div>

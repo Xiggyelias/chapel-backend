@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Process\Process;
 use ZipArchive;
 
 class ChapelRestoreCommand extends Command
@@ -42,11 +43,12 @@ class ChapelRestoreCommand extends Command
         $zip->extractTo($extractDir);
         $zip->close();
 
-        // 1. Restore Database
-        $restoredDb = "{$extractDir}/database/database.sqlite";
-        if (File::exists($restoredDb)) {
-            File::copy($restoredDb, database_path('database.sqlite'));
-            $this->line('✓ Database successfully restored.');
+        // 1. Restore Database (SQLite file, PostgreSQL custom dump or MySQL SQL dump)
+        $dump = collect(File::glob("{$extractDir}/database/*"))->first();
+        if ($dump && !$this->restoreDatabase($dump)) {
+            File::deleteDirectory($extractDir);
+            $this->error('Database restore failed; vault files were not touched.');
+            return 1;
         }
 
         // 2. Restore Vault Files (private records and legacy public uploads)
@@ -66,5 +68,45 @@ class ChapelRestoreCommand extends Command
 
         $this->info('✓ Kwang-Lim Chapel Restoration successfully verified and completed.');
         return 0;
+    }
+
+    private function restoreDatabase(string $dump): bool
+    {
+        $db = config('database.connections.' . config('database.default'));
+        $extension = pathinfo($dump, PATHINFO_EXTENSION);
+
+        if ($db['driver'] === 'sqlite' && $extension === 'sqlite') {
+            File::copy($dump, $db['database']);
+            $this->line('✓ SQLite database restored.');
+            return true;
+        }
+
+        $process = match (true) {
+            $db['driver'] === 'pgsql' && $extension === 'pgdump' => new Process(
+                ['pg_restore', '--host=' . $db['host'], '--port=' . $db['port'], '--username=' . $db['username'], '--dbname=' . $db['database'], '--clean', '--if-exists', '--no-owner', $dump],
+                null,
+                ['PGPASSWORD' => (string) $db['password']]
+            ),
+            in_array($db['driver'], ['mysql', 'mariadb'], true) && $extension === 'sql' => Process::fromShellCommandline(
+                'mysql --host="$DB_HOST" --port="$DB_PORT" --user="$DB_USER" "$DB_NAME" < "$DUMP"',
+                null,
+                ['DB_HOST' => $db['host'], 'DB_PORT' => (string) $db['port'], 'DB_USER' => $db['username'], 'DB_NAME' => $db['database'], 'DUMP' => $dump, 'MYSQL_PWD' => (string) $db['password']]
+            ),
+            default => null,
+        };
+
+        if ($process === null) {
+            $this->error("This backup's database file ({$extension}) does not match the configured {$db['driver']} connection.");
+            return false;
+        }
+
+        $process->setTimeout(1800)->run();
+        if (!$process->isSuccessful()) {
+            $this->error(trim($process->getErrorOutput()));
+            return false;
+        }
+
+        $this->line("✓ {$db['driver']} database restored.");
+        return true;
     }
 }

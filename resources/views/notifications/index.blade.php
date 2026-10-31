@@ -109,7 +109,7 @@
                             </span>
                         </div>
                         <div class="text-[11px] text-slate-500 flex items-center justify-between">
-                            <span>{{ $req->club->name }}</span>
+                            <span>{{ $req->club?->name }}</span>
                             <span class="font-mono">{{ $req->event_date->format('M d') }}</span>
                         </div>
                         <div class="pt-1 flex items-center justify-between">
@@ -193,7 +193,7 @@
                             <span class="text-[10px] text-slate-500 font-mono">{{ $ev->event_date->format('M d') }}</span>
                         </div>
                         <div class="text-[11px] text-slate-500">
-                            Sponsoring: <span class="font-semibold text-slate-800">{{ $ev->club->name }}</span>
+                            Sponsoring: <span class="font-semibold text-slate-800">{{ $ev->club?->name }}</span>
                         </div>
                         <div class="pt-1 flex items-center justify-between text-[10px]">
                             <span class="text-rose-600 font-semibold">Report Due Within 7 Days</span>

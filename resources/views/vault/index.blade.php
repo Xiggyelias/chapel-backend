@@ -162,7 +162,7 @@
                             </td>
 
                             <td class="p-4 whitespace-nowrap text-slate-700">
-                                {{ $doc->uploader->name ?? 'Chaplaincy Archive' }}
+                                {{ $doc->uploader?->name ?? 'Chaplaincy Archive' }}
                             </td>
 
                             <td class="p-4 whitespace-nowrap text-slate-500 font-mono text-[11px]">
@@ -237,7 +237,7 @@
                 @else
                     <input type="hidden" name="club_id" value="{{ auth()->user()->club_id }}">
                     <div class="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-[#DC2626]">
-                        {{ auth()->user()->club->name }} ({{ auth()->user()->club->code }})
+                        {{ auth()->user()->club?->name }} ({{ auth()->user()->club?->code }})
                     </div>
                 @endif
             </div>

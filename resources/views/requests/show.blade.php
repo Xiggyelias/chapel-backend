@@ -89,7 +89,7 @@
                 <p>The selected venue has overlapping activity bookings on the Master Calendar:</p>
                 <ul class="list-disc list-inside space-y-0.5 font-semibold text-amber-950">
                     @foreach($clashes as $clash)
-                        <li>{{ $clash->title }} ({{ $clash->club->name }}) &bull; {{ substr($clash->start_time, 0, 5) }} - {{ substr($clash->end_time, 0, 5) }}</li>
+                        <li>{{ $clash->title }} ({{ $clash->club?->name }}) &bull; {{ substr($clash->start_time, 0, 5) }} - {{ substr($clash->end_time, 0, 5) }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -105,8 +105,8 @@
             <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 p-6 sm:p-7 space-y-5">
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <span class="text-xs font-bold uppercase tracking-wider text-[#DC2626]">Activity Dossier</span>
-                    <span class="text-xs font-bold px-3 py-1 rounded-full text-white shadow-sm" style="background-color: {{ $requestItem->club->color_hex ?? '#DC2626' }}">
-                        {{ $requestItem->club->name }} ({{ $requestItem->club->code }})
+                    <span class="text-xs font-bold px-3 py-1 rounded-full text-white shadow-sm" style="background-color: {{ $requestItem->club?->color_hex ?? '#DC2626' }}">
+                        {{ $requestItem->club?->name }} ({{ $requestItem->club?->code }})
                     </span>
                 </div>
 
@@ -129,7 +129,7 @@
                         </div>
                         <div class="p-3 bg-slate-50/50 rounded-xl border border-slate-200/60">
                             <strong class="text-slate-500 uppercase tracking-wider text-[10px] block">Venue</strong>
-                            <span class="font-bold text-slate-900 text-sm mt-0.5 block">{{ $requestItem->venue ? $requestItem->venue->name : ($requestItem->venue_other ?: 'TBA') }}</span>
+                            <span class="font-bold text-slate-900 text-sm mt-0.5 block">{{ $requestItem->venue ? $requestItem->venue?->name : ($requestItem->venue_other ?: 'TBA') }}</span>
                         </div>
                         <div class="p-3 bg-slate-50/50 rounded-xl border border-slate-200/60">
                             <strong class="text-slate-500 uppercase tracking-wider text-[10px] block">Expected Attendance</strong>
@@ -141,7 +141,7 @@
                         </div>
                         <div class="p-3 bg-slate-50/50 rounded-xl border border-slate-200/60">
                             <strong class="text-slate-500 uppercase tracking-wider text-[10px] block">Submitted By</strong>
-                            <span class="font-bold text-slate-900 text-sm mt-0.5 block">{{ $requestItem->requester->name }}</span>
+                            <span class="font-bold text-slate-900 text-sm mt-0.5 block">{{ $requestItem->requester?->name }}</span>
                         </div>
                     </div>
 
@@ -236,7 +236,7 @@
                     </p>
                     @if($requestItem->decidedBy)
                         <div class="text-[10px] text-slate-500 pt-1 font-mono">
-                            Recorded by {{ $requestItem->decidedBy->name }} &bull; {{ $requestItem->decided_at?->format('M d, Y H:i') }}
+                            Recorded by {{ $requestItem->decidedBy?->name }} &bull; {{ $requestItem->decided_at?->format('M d, Y H:i') }}
                         </div>
                     @endif
                 </div>
@@ -359,7 +359,7 @@
         const pass = {{ Js::from([
             'title' => $requestItem->title,
             'club' => $requestItem->club?->name,
-            'venue' => $requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other,
+            'venue' => $requestItem->venue ? $requestItem->venue?->name : $requestItem->venue_other,
             'date' => $requestItem->event_date->format('l, M d, Y'),
             'hours' => substr($requestItem->start_time, 0, 5) . ' - ' . substr($requestItem->end_time, 0, 5),
             'reference' => $requestItem->reference_no,

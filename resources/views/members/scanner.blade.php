@@ -78,7 +78,7 @@
             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">1-Tap Fast Check-In:</span>
             <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto">
                 @foreach($members as $m)
-                    <button type="button" onclick="quickCheckin('{{ $m->full_name }}')" class="px-3 py-1.5 bg-white/10 hover:bg-[#DC2626] hover:text-white rounded-xl text-[11px] text-slate-200 transition font-medium border border-white/10">
+                    <button type="button" data-name="{{ $m->full_name }}" onclick="quickCheckin(this.dataset.name)" class="px-3 py-1.5 bg-white/10 hover:bg-[#DC2626] hover:text-white rounded-xl text-[11px] text-slate-200 transition font-medium border border-white/10">
                         + {{ $m->full_name }}
                     </button>
                 @endforeach

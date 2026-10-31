@@ -21,7 +21,7 @@
             </span>
         </div>
         <div class="text-xs text-slate-500 mt-0.5">
-            Submitted by {{ $report->submitter->name }} ({{ $report->club->name }}) on {{ $report->created_at->format('M d, Y') }}
+            Submitted by {{ $report->submitter?->name }} ({{ $report->club?->name }}) on {{ $report->created_at->format('M d, Y') }}
         </div>
     </div>
 
@@ -37,7 +37,7 @@
         </div>
         <div class="bg-white p-5 rounded-3xl card-elevation border border-slate-200/80 col-span-2 sm:col-span-1">
             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-cinzel">Sponsoring Club</span>
-            <span class="text-sm font-bold text-slate-900 mt-0.5 block">{{ $report->club->name }}</span>
+            <span class="text-sm font-bold text-slate-900 mt-0.5 block">{{ $report->club?->name }}</span>
         </div>
     </div>
 

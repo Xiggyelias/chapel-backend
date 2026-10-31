@@ -69,8 +69,8 @@
             <div class="p-5 sm:p-6 hover:bg-slate-50/70 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div class="space-y-1.5">
                     <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $h->club->color_hex ?? '#DC2626' }}">
-                            {{ $h->club->name }} ({{ $h->club->code }})
+                        <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $h->club?->color_hex ?? '#DC2626' }}">
+                            {{ $h->club?->name }} ({{ $h->club?->code }})
                         </span>
                         <span class="text-xs font-mono font-bold text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded">
                             {{ $h->academic_year }}
@@ -86,7 +86,7 @@
                     </h4>
 
                     <div class="text-xs text-slate-500 flex flex-wrap items-center gap-x-4">
-                        <span>Official Email: <strong class="text-[#DC2626] font-mono">{{ $h->club->official_email }}</strong></span>
+                        <span>Official Email: <strong class="text-[#DC2626] font-mono">{{ $h->club?->official_email }}</strong></span>
                         <span>Incoming Contact: <span class="font-mono text-slate-700">{{ $h->incoming_president_email }}</span></span>
                     </div>
                 </div>
@@ -116,6 +116,10 @@
             </div>
         @endforelse
     </div>
+
+    @if($handovers->hasPages())
+        <div>{{ $handovers->links() }}</div>
+    @endif
 
 </div>
 

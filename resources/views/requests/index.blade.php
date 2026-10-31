@@ -75,7 +75,7 @@
                 <div class="flex items-end">
                     <div class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-200 w-full flex items-center space-x-2">
                         <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                        <span class="truncate">Filtered: <strong>{{ auth()->user()->club->name ?? 'My Club' }}</strong></span>
+                        <span class="truncate">Filtered: <strong>{{ auth()->user()->club?->name ?? 'My Club' }}</strong></span>
                     </div>
                 </div>
             @endif
@@ -113,8 +113,8 @@
                             <td class="p-4 whitespace-nowrap">
                                 <div class="font-mono font-bold text-slate-900">{{ $req->reference_no }}</div>
                                 <div class="mt-1">
-                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white" style="background-color: {{ $req->club->color_hex ?? '#DC2626' }}">
-                                        {{ $req->club->code }}
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white" style="background-color: {{ $req->club?->color_hex ?? '#DC2626' }}">
+                                        {{ $req->club?->code }}
                                     </span>
                                 </div>
                             </td>
@@ -139,7 +139,7 @@
 
                             <td class="p-4">
                                 <div class="text-slate-900 font-medium">
-                                    {{ $req->venue ? $req->venue->name : ($req->venue_other ?: 'To be announced') }}
+                                    {{ $req->venue ? $req->venue?->name : ($req->venue_other ?: 'To be announced') }}
                                 </div>
                                 @if($req->expected_attendance)
                                     <div class="text-[11px] text-slate-500">Exp. Attendance: {{ $req->expected_attendance }}</div>

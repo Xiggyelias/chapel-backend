@@ -109,10 +109,10 @@
                             </td>
                             <td class="py-3.5 px-4">
                                 @if($log->request)
-                                    <a href="{{ route('requests.show', $log->request->id) }}" class="font-semibold text-[#DC2626] hover:underline">
-                                        {{ $log->request->title }}
+                                    <a href="{{ route('requests.show', $log->request?->id) }}" class="font-semibold text-[#DC2626] hover:underline">
+                                        {{ $log->request?->title }}
                                     </a>
-                                    <div class="text-[10px] text-slate-400">Ref: {{ $log->request->reference_no }} &bull; {{ $log->request->club?->name }}</div>
+                                    <div class="text-[10px] text-slate-400">Ref: {{ $log->request?->reference_no }} &bull; {{ $log->request?->club?->name }}</div>
                                 @else
                                     <span class="text-slate-400">&mdash;</span>
                                 @endif

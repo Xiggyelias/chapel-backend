@@ -30,7 +30,7 @@
                     <option value="">-- Standalone or Select Completed Event --</option>
                     @foreach($events as $ev)
                         <option value="{{ $ev->id }}" {{ $selectedEventId == $ev->id ? 'selected' : '' }}>
-                            {{ $ev->event_date->format('Y-m-d') }} &bull; {{ $ev->title }} ({{ $ev->club->code }})
+                            {{ $ev->event_date->format('Y-m-d') }} &bull; {{ $ev->title }} ({{ $ev->club?->code }})
                         </option>
                     @endforeach
                 </select>

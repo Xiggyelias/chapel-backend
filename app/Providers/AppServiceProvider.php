@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'liturgicalSeason' => LiturgicalCalendarService::getCurrentSeason(),
                 'liturgicalGuide' => LiturgicalCalendarService::getLiturgicalGuide(),
+                'unreadInboxCount' => auth()->user()?->unreadNotifications()->count() ?? 0,
             ]);
         });
     }

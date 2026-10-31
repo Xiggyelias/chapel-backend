@@ -140,8 +140,8 @@
 
                             <td class="px-6 py-4">
                                 @if($u->club)
-                                    <span class="font-semibold text-slate-800">{{ $u->club->name }}</span>
-                                    <span class="text-[10px] font-mono text-slate-400 block">{{ $u->club->code }}</span>
+                                    <span class="font-semibold text-slate-800">{{ $u->club?->name }}</span>
+                                    <span class="text-[10px] font-mono text-slate-400 block">{{ $u->club?->code }}</span>
                                 @else
                                     <span class="text-slate-400">Chapel Office</span>
                                 @endif

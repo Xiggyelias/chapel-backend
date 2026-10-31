@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Hymn;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,11 +16,18 @@ class HymnController extends Controller
     {
         $search = trim($request->input('search', ''));
         $hymnal = trim($request->input('hymnal', ''));
+        $lyricsFilter = $request->input('lyrics');
 
         $query = Hymn::query();
 
         if ($hymnal) {
             $query->where('hymnal_code', $hymnal);
+        }
+
+        if ($lyricsFilter === 'missing') {
+            $query->missingLyrics();
+        } elseif ($lyricsFilter === 'available') {
+            $query->where('lyrics_status', 'available');
         }
 
         if ($search) {
@@ -41,8 +49,44 @@ class HymnController extends Controller
             ->paginate(24)
             ->withQueryString();
         $totalHymns = Hymn::count();
+        $missingByHymnal = Hymn::missingLyrics()->selectRaw('hymnal_code, count(*) as total')->groupBy('hymnal_code')->pluck('total', 'hymnal_code');
+        $canEdit = (bool) $request->user()?->isOffice();
 
-        return view('hymns.index', compact('hymns', 'search', 'hymnal', 'totalHymns'));
+        return view('hymns.index', compact('hymns', 'search', 'hymnal', 'totalHymns', 'lyricsFilter', 'missingByHymnal', 'canEdit'));
+    }
+
+    /**
+     * Office: enter or correct a hymn's text from the chapel's licensed printed hymnal.
+     */
+    public function update(Request $request, $id)
+    {
+        $hymn = Hymn::findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'author' => ['nullable', 'string', 'max:255'],
+            'tune' => ['nullable', 'string', 'max:100'],
+            'lyrics' => ['nullable', 'string', 'max:20000'],
+            'lyrics_source' => ['required_with:lyrics', 'nullable', 'string', 'max:255'],
+        ], [
+            'lyrics_source.required_with' => 'Record where the text came from (e.g. "Printed UMH 1989, CCLI licence 123456").',
+        ]);
+
+        $lyrics = trim(str_replace("\r\n", "\n", $validated['lyrics'] ?? ''));
+
+        $hymn->update([
+            'title' => $validated['title'],
+            'author' => ($validated['author'] ?? null) ?: $hymn->author,
+            'tune' => ($validated['tune'] ?? null) ?: $hymn->tune,
+            'lyrics' => $lyrics,
+            'lyrics_status' => $lyrics === '' ? 'not_entered' : 'available',
+            'lyrics_source' => $lyrics === '' ? null : $validated['lyrics_source'],
+            'lyrics_updated_by' => $request->user()->id,
+        ]);
+
+        AuditLog::record('hymn_lyrics_updated', "Updated {$hymn->hymnal_code} {$hymn->number} \"{$hymn->title}\" (" . ($lyrics === '' ? 'lyrics cleared' : 'source: ' . $validated['lyrics_source']) . ').');
+
+        return back()->with('success', "{$hymn->hymnal_code} {$hymn->number} \"{$hymn->title}\" saved.");
     }
 
     /**
@@ -135,7 +179,8 @@ class HymnController extends Controller
                 'meter' => $hymn->meter,
                 'scripture_ref' => $hymn->scripture_ref,
                 'category' => $hymn->category,
-                'lyrics' => $hymn->lyrics,
+                'lyrics' => $hymn->hasLyrics() ? $hymn->lyrics : '',
+                'lyrics_available' => $hymn->hasLyrics(),
             ],
             'alternates' => $alternates,
         ]);
@@ -183,7 +228,8 @@ class HymnController extends Controller
                     'title' => $h->title,
                     'full_title' => "{$h->hymnal_code} {$h->number}: {$h->title}",
                     'category' => $h->category,
-                    'lyrics_preview' => mb_substr($h->lyrics, 0, 100) . '...',
+                    'lyrics_available' => $h->hasLyrics(),
+                    'lyrics_preview' => $h->hasLyrics() ? mb_substr($h->lyrics, 0, 100) . '...' : 'Lyrics not yet entered',
                 ];
             }),
         ]);

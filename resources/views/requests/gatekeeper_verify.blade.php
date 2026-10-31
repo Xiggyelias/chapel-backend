@@ -58,12 +58,12 @@
                     <div class="grid grid-cols-2 gap-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
                         <div>
                             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Sponsoring Club</span>
-                            <span class="font-bold text-slate-900 text-xs block truncate">{{ $requestItem->club->name }}</span>
+                            <span class="font-bold text-slate-900 text-xs block truncate">{{ $requestItem->club?->name }}</span>
                         </div>
                         <div>
                             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Approved Venue</span>
                             <span class="font-bold text-[#DC2626] text-xs block truncate">
-                                📍 {{ $requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other }}
+                                📍 {{ $requestItem->venue ? $requestItem->venue?->name : $requestItem->venue_other }}
                             </span>
                         </div>
                         <div class="col-span-2 pt-2 border-t border-slate-200">
@@ -91,7 +91,7 @@
                     <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
                         <div>
                             <span>Approved by:</span>
-                            <strong class="text-slate-800 block">{{ $requestItem->decidedBy ? $requestItem->decidedBy->name : 'Chaplaincy Office' }}</strong>
+                            <strong class="text-slate-800 block">{{ $requestItem->decidedBy ? $requestItem->decidedBy?->name : 'Chaplaincy Office' }}</strong>
                         </div>
                         <div class="text-right">
                             <span>Expected Headcount:</span>
