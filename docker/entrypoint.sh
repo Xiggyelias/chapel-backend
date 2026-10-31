@@ -6,7 +6,7 @@ echo "  Africa University - Kwang-Lim Chapel Ministry Portal   "
 echo "  Production Container Bootstrapping on Dokploy          "
 echo "=========================================================="
 
-export ENABLE_QUEUE_WORKER=${ENABLE_QUEUE_WORKER:-false}
+export ENABLE_QUEUE_WORKER=${ENABLE_QUEUE_WORKER:-true}
 
 # 1. Ensure required storage and log directories exist
 echo "Step 1: Preparing directories..."
@@ -22,16 +22,17 @@ mkdir -p /var/log/supervisor \
 
 # 2. SQLite Database initialization (fallback mode)
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
+    # Keep the SQLite file on a persistent volume (e.g. storage/database), never over the code's database/ folder
     DB_PATH="${DB_DATABASE:-/var/www/html/database/database.sqlite}"
+    DB_DIR="$(dirname "$DB_PATH")"
+    mkdir -p "$DB_DIR"
     if [ ! -f "$DB_PATH" ]; then
         echo "Creating initial SQLite database file at $DB_PATH..."
         touch "$DB_PATH"
     fi
-    chown -R www-data:www-data /var/www/html/database
-    chmod -R 775 /var/www/html/database
-    if [ -f "$DB_PATH" ]; then
-        chmod 666 "$DB_PATH"
-    fi
+    chown -R www-data:www-data "$DB_DIR"
+    chmod 775 "$DB_DIR"
+    chmod 664 "$DB_PATH"
 fi
 
 # 3. Fix storage and bootstrap cache permissions

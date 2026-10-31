@@ -1,110 +1,106 @@
-# Kwang-Lim Chapel - Backend Service
+# Kwang-Lim Chapel Ministry Portal
 **Africa University Chaplaincy Office &bull; Mutare, Zimbabwe**
 
-Standalone backend API and management service for the Kwang-Lim Chapel Management Portal. Dokploy ready with multi-stage Docker build, PHP 8.3 FPM, Nginx, SQLite / MySQL support, and automated entrypoint migrations.
+The complete Kwang-Lim Chapel portal: activity proposals and approvals, the master calendar, worship planning and projection, the hymnal, club records vaults, attendance, equipment, reports, leadership handovers and an installable PWA. **This repository is the whole application and deploys as one service.**
 
 ---
 
-## 🚀 Features
-
-- **Multi-Role Access Control**: Built-in authorization boundaries for Chaplain, Assistant, Secretary, Club Executives, and Campus Life.
-- **Complete Chapel Hymnody (2,029 Hymns)**:
-  - UMH: #1 through #734 (100% complete)
-  - MHB: #1 through #984 (100% complete)
-  - Shona: #1 through #311 (100% complete)
-- **14-Day Advance Notice Rule (§4.1)**: Automated enforcement and Chaplaincy policy waiver routing.
-- **Smart Clash Radar**: Automated venue clash detection and time overlap resolver.
-- **Records Vault & Sentinel Compliance**: Immutable audit trails and document storage.
-- **Dokploy Ready**: Native `dokploy.json`, `Dockerfile`, `docker-compose.yml`, and `/up` healthcheck.
-
----
-
-## 📁 Directory Structure
+## Architecture: one service
 
 ```text
-backend/
-├── app/
-│   ├── Console/Commands/    # Scheduled backup & notification tasks
-│   ├── Http/Controllers/    # HTTP & REST API controllers
-│   ├── Models/              # Eloquent models (User, Request, Event, ServiceSheet, Hymn)
-│   ├── Providers/           # Service providers & authorization policies
-│   └── Services/            # Decoupled business logic (Clash detection, Hymns, Workflow)
-├── bootstrap/               # Application bootstrap & provider registration
-├── config/                  # App, database, auth, session configuration
-├── database/
-│   ├── database.sqlite      # Pre-seeded SQLite database with 2,029 hymns & users
-│   ├── migrations/          # Complete database migrations
-│   └── seeders/             # DatabaseSeeder, HymnSeeder, and JSON datasets
-├── docker/                  # Nginx, PHP-FPM, Supervisor, and entrypoint scripts
-├── public/                  # Public web root and entrypoint
-├── resources/               # Blade views, layouts, and components
-├── routes/                  # API, Web, and Console route definitions
-├── storage/                 # Framework cache, sessions, views, logs
-├── tests/                   # Automated feature & unit test suite (33 tests, 237 assertions)
-├── Dockerfile               # Production multi-stage Dockerfile
-├── docker-compose.yml       # Dokploy compose deployment specification
-├── dokploy.json             # Dokploy application configuration
-├── composer.json            # PHP dependencies & PSR-4 mapping
-└── composer.lock            # Exact locked PHP dependencies
+                 ┌──────────────────────── one container ────────────────────────┐
+Browser / PWA ──▶│ nginx :80 ──▶ PHP-FPM (Laravel 12)                            │
+                 │   • Blade pages, JSON endpoints, Vite assets, PWA (sw.js)     │
+                 │ scheduler   (php artisan schedule:work: reminders, backups)   │
+                 │ queue worker (php artisan queue:work: email delivery)         │
+                 └──────────────┬───────────────────────────────┬────────────────┘
+                                │                               │
+                   PostgreSQL / MySQL / SQLite        storage volume (uploads, backups,
+                                                      logs, sessions, SQLite file)
 ```
 
----
-
-## 🐳 Dokploy Deployment Guide
-
-### Option 1: Deploy via Dokploy GUI (GitHub Repository)
-1. In Dokploy, click **Create Application**.
-2. Select **GitHub** and connect your backend repository (`kwanglim-chapel-backend`).
-3. Set **Build Type**: `Dockerfile`.
-4. Set **Port**: `80`.
-5. Set **Health Check Path**: `/up`.
-6. Add Persistent Volumes in **Mounts**:
-   - Volume `chapel_backend_storage` -> `/var/www/html/storage`
-   - Volume `chapel_backend_database` -> `/var/www/html/database`
-7. Add Environment Variables:
-   ```env
-   APP_NAME="Kwang-Lim Chapel"
-   APP_ENV=production
-   APP_KEY=base64:X8p7F3gL1wK9mQ2vR5tY8uI1oP4sD7fG0hJ3kL6zX9c=
-   APP_DEBUG=false
-   APP_URL=https://your-domain.com
-   DB_CONNECTION=sqlite
-   DB_DATABASE=/var/www/html/database/database.sqlite
-   ```
-8. Click **Deploy**.
-
-### Option 2: Deploy via Docker Compose
-1. In Dokploy, click **Create Compose**.
-2. Paste the contents of `docker-compose.yml`.
-3. Set your environment variables and click **Deploy**.
+Pages are rendered on the server, so there is no separate frontend to deploy. The former `chapel-frontend` repository was only an nginx proxy in front of this service and has been retired.
 
 ---
 
-## 🛠️ Local Development & Testing
+## Deploy on Dokploy
+
+1. **Create Application** → source: GitHub `Xiggyelias/chapel-backend`, branch `main`.
+2. **Build type:** Dockerfile (`./Dockerfile`, context `.`). **Port:** `80`. **Health check:** `/up`.
+3. **Volume:** mount a named volume at **`/var/www/html/storage`** only.
+   Do **not** mount anything at `/var/www/html/database`: that would hide new migrations shipped in each release.
+4. **Environment** (see `.env.production.example`):
+
+   | Variable | Value |
+   |---|---|
+   | `APP_KEY` | output of `php artisan key:generate --show` (keep secret, keep stable) |
+   | `APP_ENV` / `APP_DEBUG` | `production` / `false` |
+   | `APP_URL` | your public https URL |
+   | `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` | PostgreSQL service details |
+   | `SESSION_SECURE_COOKIE` | `true` (HTTPS) |
+   | `QUEUE_CONNECTION` | `database` |
+   | `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` | SMTP (e.g. Gmail + App Password) |
+   | `SEED_ON_DEPLOY` | `false` (an empty database is seeded automatically on first boot) |
+
+5. **Domain:** attach your domain to this application with HTTPS.
+6. Deploy. On every start the container waits for the database, runs migrations, moves any legacy public uploads into private storage, caches config/routes/views, then starts nginx, PHP-FPM, the scheduler and the queue worker.
+
+After the first deploy, verify email with:
+```bash
+php artisan chapel:mail-test you@example.com
+```
+
+### Migrating from the old two-application setup
+If Dokploy still runs a `chapel-frontend` application in front of this one:
+1. Move the public domain from the frontend application to this application.
+2. Confirm the site works, then stop and delete the frontend application in Dokploy.
+3. Archive or delete the `chapel-frontend` repository on GitHub.
+
+---
+
+## Local development
 
 ```bash
-# Run automated test suite (33 tests, 237 assertions)
+composer install && npm install
+cp .env.example .env && php artisan key:generate
+php artisan migrate --seed
+npm run build            # or: npm run dev
+php artisan serve        # http://127.0.0.1:8000
+php artisan queue:work   # optional: deliver queued emails locally
+```
+Demo accounts use `Chapel@2026!`. The one-click role switcher (`/demo-switch/{id}`) works only with `APP_ENV=local` and `DEMO_LOGIN_ENABLED=true`.
+
+Run the tests (62 tests, including a walkthrough that opens every page as every role):
+```bash
 php artisan test
+```
 
-# Run database migrations and hymn seeders
-php artisan migrate --force
-php artisan db:seed --class=HymnSeeder
-
-# Start local server
-php artisan serve --port=8000
+Or run the production image locally:
+```bash
+APP_KEY=base64:... docker compose up -d --build   # http://localhost:8000
 ```
 
 ---
 
-## 📦 GitHub Repository Setup
+## Operations
 
-To push this backend service to GitHub:
+| Command | Purpose |
+|---|---|
+| `php artisan chapel:backup` | Database (SQLite / `pg_dump` / `mysqldump`) + vault files → `storage/app/backups`, keeps `CHAPEL_BACKUP_KEEP` (default 14). Scheduled daily 02:00. |
+| `php artisan chapel:restore <zip> --force` | Restore a backup into the configured database and storage. |
+| `php artisan chapel:reminders` | Worship deadlines, 14-day decisions, report prompts; emails the Office a digest. Scheduled daily 06:00. |
+| `php artisan chapel:secure-uploads` | Move uploads left on the public disk into private storage (runs at every start). |
+| `php artisan chapel:mail-test <address>` | Send a test email immediately. |
 
-```bash
-cd backend
-git init -b main
-git add .
-git commit -m "feat: complete Dokploy-ready backend service for Kwang-Lim Chapel"
-git remote add origin https://github.com/<YOUR-GITHUB-USERNAME>/kwanglim-chapel-backend.git
-git push -u origin main
-```
+Copy backups off the server regularly (`CHAPEL_BACKUP_SECONDARY_DIR` or your provider's volume snapshots).
+
+---
+
+## Feature overview
+
+- **Role dashboards:** each role opens on an action inbox built from live data (Chaplain, Assistant Chaplain, Chapel Secretary, Club President/Executive, Campus Life & SRC).
+- **Notifications:** in-portal inbox plus email for proposal decisions, new and resubmitted proposals, equipment updates, report reviews, charter applications, handovers, sign-in details and the daily digest.
+- **Proposals:** 14-day rule, VC go-ahead, venue clash detection with override, revise & resubmit, signed clearance passes with scannable QR codes and public gatekeeper verification.
+- **Records vault:** private, club-isolated document storage with health scoring.
+- **Hymnal:** UMH, MHB and Shona catalogues. Hymns without verified texts show "Lyrics not yet entered"; the Office enters texts from licensed printed hymnals (source required).
+- **Security:** one-time passwords with forced change, login throttling, suspension takes effect immediately, private file downloads, security headers, no caching of signed-in pages.

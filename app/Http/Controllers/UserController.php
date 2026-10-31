@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Services\PortalNotifier;
 
 class UserController extends Controller
 {
@@ -106,7 +107,11 @@ class UserController extends Controller
 
         AuditLog::record('user_registered', "Registered new {$user->getRoleDisplayName()} account for {$user->name} ({$user->email}).");
 
-        return redirect()->route('users.index')->with('success', "Account registered for {$user->name} ({$user->getRoleDisplayName()}). Sign-in: {$user->email} / initial password {$rawPassword} (must be changed at first sign-in; share it privately).");
+        $delivery = PortalNotifier::credentials($user, $rawPassword)
+            ? "Sign-in details were emailed to {$user->email}."
+            : 'Share these sign-in details privately.';
+
+        return redirect()->route('users.index')->with('success', "Account registered for {$user->name} ({$user->getRoleDisplayName()}). Sign-in: {$user->email} / initial password {$rawPassword} (must be changed at first sign-in). {$delivery}");
     }
 
     /**
@@ -129,7 +134,11 @@ class UserController extends Controller
 
         AuditLog::record('user_password_reset', "Issued a temporary portal password for {$user->name} ({$user->email}).");
 
-        return redirect()->back()->with('success', "Temporary password for {$user->name}: {$temporaryPassword} (must be changed at next sign-in; share it privately).");
+        $delivery = PortalNotifier::credentials($user, $temporaryPassword, 'reset')
+            ? "It was emailed to {$user->email}."
+            : 'Share it privately.';
+
+        return redirect()->back()->with('success', "Temporary password for {$user->name}: {$temporaryPassword} (must be changed at next sign-in). {$delivery}");
     }
 
     /**

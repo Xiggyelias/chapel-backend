@@ -139,6 +139,8 @@ class ClubController extends Controller
             return redirect()->route('clubs.index')->with('success', "Fellowship '{$club->name}' has been officially registered and chartered under Chaplaincy oversight. {$credentials}");
         }
 
+        PortalNotifier::charterReceived($club);
+
         PortalNotifier::office(
             "Charter application: {$club->name}",
             "{$club->code} • {$club->founding_president_name} • tracking {$trackingCode}",
@@ -259,6 +261,10 @@ class ClubController extends Controller
             'notes' => 'Founding President (Chartered ' . now()->format('Y') . ')',
         ]);
 
-        return "Leader account created for {$name}: {$email} / temporary password {$temporaryPassword} (must be changed at first sign-in; share it privately).";
+        $delivery = PortalNotifier::credentials($user, $temporaryPassword)
+            ? "Sign-in details were emailed to {$email}."
+            : 'Share it privately.';
+
+        return "Leader account created for {$name}: {$email} / temporary password {$temporaryPassword} (must be changed at first sign-in). {$delivery}";
     }
 }

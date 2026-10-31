@@ -18,3 +18,10 @@ storage/logs/*
 *.log
 .DS_Store
 Thumbs.db
+
+# Never bake local data into the image
+database/*.sqlite
+database/*.sqlite-journal
+storage/app/backups
+storage/app/private
+storage/app/public/*

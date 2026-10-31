@@ -1,43 +1,62 @@
-version: '3.8'
+# Kwang-Lim Chapel Portal - single-service deployment.
+# One container serves everything: nginx + PHP-FPM (Blade pages, API, PWA assets),
+# the scheduler (reminders, backups) and an optional queue worker, all under supervisor.
+#
+#   APP_KEY=base64:... docker compose up -d --build
+#
+# Generate a key once with:  docker compose run --rm app php artisan key:generate --show
 
 services:
-  backend:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: kwanglim_chapel_backend
+    image: kwanglim-chapel:latest
     restart: unless-stopped
     ports:
-      - "${BACKEND_PORT:-8000}:80"
+      - "${APP_PORT:-8000}:80"
     environment:
-      - APP_NAME=KwangLimChapel
-      - APP_ENV=${APP_ENV:-production}
-      - APP_KEY=${APP_KEY:-base64:X8p7F3gL1wK9mQ2vR5tY8uI1oP4sD7fG0hJ3kL6zX9c=}
-      - APP_DEBUG=${APP_DEBUG:-false}
-      - APP_URL=${APP_URL:-http://localhost:8000}
-      - DB_CONNECTION=sqlite
-      - DB_DATABASE=/var/www/html/database/database.sqlite
-      - SESSION_DRIVER=file
-      - QUEUE_CONNECTION=sync
-      - SEED_ON_DEPLOY=${SEED_ON_DEPLOY:-false}
+      APP_NAME: "Kwang-Lim Chapel Portal"
+      APP_ENV: ${APP_ENV:-production}
+      APP_KEY: ${APP_KEY:?Set APP_KEY (php artisan key:generate --show)}
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_URL: ${APP_URL:-http://localhost:8000}
+      APP_TIMEZONE: Africa/Harare
+      # SQLite lives inside the persistent storage volume. For PostgreSQL set
+      # DB_CONNECTION=pgsql and DB_HOST/DB_PORT/DB_DATABASE/DB_USERNAME/DB_PASSWORD instead.
+      DB_CONNECTION: ${DB_CONNECTION:-sqlite}
+      DB_DATABASE: ${DB_DATABASE:-/var/www/html/storage/database/database.sqlite}
+      DB_HOST: ${DB_HOST:-}
+      DB_PORT: ${DB_PORT:-}
+      DB_USERNAME: ${DB_USERNAME:-}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+      SESSION_DRIVER: ${SESSION_DRIVER:-database}
+      SESSION_SECURE_COOKIE: ${SESSION_SECURE_COOKIE:-false}
+      CACHE_STORE: ${CACHE_STORE:-database}
+      QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+      ENABLE_QUEUE_WORKER: "true"
+      # Email (e.g. Gmail SMTP + App Password). Leave MAIL_MAILER=log to disable sending.
+      MAIL_MAILER: ${MAIL_MAILER:-log}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Kwang-Lim Chapel}
+      SEED_ON_DEPLOY: ${SEED_ON_DEPLOY:-false}
+      DEMO_LOGIN_ENABLED: "false"
+      CHAPEL_BACKUP_KEEP: ${CHAPEL_BACKUP_KEEP:-14}
     volumes:
+      # Uploads (private vault), backups, logs, sessions and the SQLite file.
+      # Never mount a volume over /var/www/html/database: it would hide new migrations.
       - chapel_backend_storage:/var/www/html/storage
-      - chapel_backend_database:/var/www/html/database
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:80/up"]
       interval: 30s
       timeout: 5s
       retries: 3
-    networks:
-      - chapel_network
+      start_period: 30s
 
 volumes:
   chapel_backend_storage:
     name: chapel_backend_storage
-  chapel_backend_database:
-    name: chapel_backend_database
-
-networks:
-  chapel_network:
-    name: chapel_network
-    driver: bridge

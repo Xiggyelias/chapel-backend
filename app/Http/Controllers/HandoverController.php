@@ -280,9 +280,15 @@ class HandoverController extends Controller
                 'completed_at' => now(),
             ]);
 
-            return $temporaryPassword
-                ? " Sign-in: {$incomingEmail} / temporary password {$temporaryPassword} (must be changed at first sign-in; share it privately)."
-                : " {$incomingEmail} keeps their existing password.";
+            if (!$temporaryPassword) {
+                return " {$incomingEmail} keeps their existing password.";
+            }
+
+            $delivery = PortalNotifier::credentials($newLeader, $temporaryPassword)
+                ? "Sign-in details were emailed to {$incomingEmail}."
+                : 'Share it privately.';
+
+            return " Sign-in: {$incomingEmail} / temporary password {$temporaryPassword} (must be changed at first sign-in). {$delivery}";
         });
 
         AuditLog::record('handover_completed', "Completed {$handover->academic_year} handover for {$club->name}; executive access transferred to {$handover->incoming_president_name}.");

@@ -124,6 +124,56 @@ class PortalFeaturesTest extends TestCase
             ->assertSee('aria-label="Attendance check-in QR code"', false);
     }
 
+    public function test_alerts_are_emailed_only_when_a_real_mailer_is_configured(): void
+    {
+        $note = new \App\Notifications\PortalNotification('Approved', 'msg', url('/'));
+
+        config(['mail.default' => 'log']);
+        $this->assertSame(['database'], $note->via($this->leader));
+
+        config(['mail.default' => 'smtp', 'chapel.email.enabled' => true]);
+        $this->assertSame(['database', 'mail'], $note->via($this->leader));
+
+        config(['chapel.email.enabled' => false]);
+        $this->assertSame(['database'], $note->via($this->leader));
+    }
+
+    public function test_decisions_new_accounts_and_charters_send_emails(): void
+    {
+        config(['mail.default' => 'smtp', 'chapel.email.enabled' => true]);
+        \Illuminate\Support\Facades\Notification::fake();
+
+        $request = ChapelRequest::create([
+            'reference_no' => 'REQ-2026-0099', 'club_id' => $this->club->id, 'user_id' => $this->leader->id,
+            'category' => 'event', 'title' => 'Gospel Night', 'purpose' => 'Worship',
+            'event_date' => Carbon::today()->addDays(20)->toDateString(), 'start_time' => '18:00', 'end_time' => '20:00',
+            'status' => 'submitted',
+        ]);
+        $this->actingAs($this->chaplain)->post(route('requests.approve', $request->id));
+        \Illuminate\Support\Facades\Notification::assertSentTo(
+            $this->leader,
+            \App\Notifications\PortalNotification::class,
+            fn ($n, $channels) => in_array('mail', $channels, true) && str_contains($n->title, 'Approved')
+        );
+
+        $this->actingAs($this->chaplain)->post(route('users.store'), [
+            'name' => 'New Secretary', 'email' => 'new.sec@africau.edu', 'role' => 'chapel_secretary',
+        ])->assertSessionHas('success', fn ($msg) => str_contains($msg, 'emailed to new.sec@africau.edu'));
+        \Illuminate\Support\Facades\Notification::assertSentTo(User::where('email', 'new.sec@africau.edu')->first(), \App\Notifications\AccountCredentialsNotification::class);
+
+        auth()->logout();
+        $this->post(route('clubs.store'), [
+            'name' => 'Bethel Praise', 'code' => 'BPF', 'type' => 'fellowship',
+            'description' => 'A student-led worship and praise fellowship.', 'meeting_schedule' => 'Thursdays 17:00',
+            'venue' => 'Lower Hall', 'official_email' => 'bethel@africau.edu', 'contact_phone' => '+263 77 000 0000',
+            'founding_president_name' => 'Anesu', 'founding_president_email' => 'anesu@africau.edu',
+        ])->assertRedirect();
+        \Illuminate\Support\Facades\Notification::assertSentOnDemand(
+            \App\Notifications\CharterReceivedNotification::class,
+            fn ($n, $channels, $notifiable) => $notifiable->routes['mail'] === 'anesu@africau.edu'
+        );
+    }
+
     public function test_signed_in_pages_are_not_cached_and_carry_security_headers(): void
     {
         $response = $this->actingAs($this->chaplain)->get(route('dashboard'));
