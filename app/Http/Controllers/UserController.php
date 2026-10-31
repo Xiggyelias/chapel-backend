@@ -19,10 +19,6 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $currentUser = Auth::user();
-        if (!$currentUser->isOffice()) {
-            abort(403, 'Unauthorized access to the Chaplaincy User Registry.');
-        }
-
         $query = User::with('club');
 
         if ($request->filled('role')) {
@@ -38,7 +34,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->orderBy('role')->orderBy('name')->paginate(15);
+        $users = $query->orderBy('role')->orderBy('name')->paginate(15)->withQueryString();
         $clubs = Club::where('status', 'active')->orderBy('name')->get();
 
         $stats = [
@@ -57,7 +53,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $currentUser = Auth::user();
-        if (!$currentUser->isChapelSecretary() && !$currentUser->isChaplain()) {
+        if (!$currentUser->canManageUsers()) {
             abort(403, 'Only the Chapel Secretary or Chaplain can register and provision official portal accounts.');
         }
 
@@ -65,18 +61,20 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'role' => ['required', 'in:chaplain,chapel_assistant,chapel_secretary,club_president,club_executive,campus_life_src'],
-            'club_id' => ['nullable', 'required_if:role,club_president,club_executive', 'exists:clubs,id'],
+            'club_id' => ['nullable', 'required_if:role,club_president,club_executive', Rule::exists('clubs', 'id')->where('status', 'active')],
             'position' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
-            'password' => ['nullable', 'string', 'min:6'],
+            'password' => ['nullable', 'string', 'min:8', 'max:255'],
         ]);
 
-        $rawPassword = (!empty($validated['password'])) ? $validated['password'] : 'Chapel@2026!';
+        // Whatever the Office chooses is only an initial password: the holder must replace it on first sign-in
+        $rawPassword = !empty($validated['password']) ? $validated['password'] : User::generateTemporaryPassword();
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => strtolower(trim($validated['email'])),
             'password' => Hash::make($rawPassword),
+            'must_change_password' => true,
             'role' => $validated['role'],
             'club_id' => in_array($validated['role'], ['club_president', 'club_executive']) ? $validated['club_id'] : null,
             'position' => $validated['position'] ?? $this->defaultPosition($validated['role']),
@@ -106,39 +104,32 @@ class UserController extends Controller
             }
         }
 
-        AuditLog::create([
-            'user_id' => $currentUser->id,
-            'user_name' => $currentUser->name,
-            'action' => 'user_registered',
-            'notes' => "Registered new {$user->getRoleDisplayName()} account for {$user->name} ({$user->email}).",
-        ]);
+        AuditLog::record('user_registered', "Registered new {$user->getRoleDisplayName()} account for {$user->name} ({$user->email}).");
 
-        return redirect()->route('users.index')->with('success', "Account successfully registered for <strong>{$user->name}</strong> ({$user->getRoleDisplayName()})! Credentials: Email <code>{$user->email}</code>, Password <code>{$rawPassword}</code>.");
+        return redirect()->route('users.index')->with('success', "Account registered for {$user->name} ({$user->getRoleDisplayName()}). Sign-in: {$user->email} / initial password {$rawPassword} (must be changed at first sign-in; share it privately).");
     }
 
     /**
-     * Reset user password to default.
+     * Issue a one-time temporary password.
      */
     public function resetPassword(Request $request, $id)
     {
         $currentUser = Auth::user();
-        if (!$currentUser->isChapelSecretary() && !$currentUser->isChaplain()) {
+        if (!$currentUser->canManageUsers()) {
             abort(403, 'Unauthorized.');
         }
 
         $user = User::findOrFail($id);
+        $temporaryPassword = User::generateTemporaryPassword();
+
         $user->update([
-            'password' => Hash::make('Chapel@2026!'),
+            'password' => Hash::make($temporaryPassword),
+            'must_change_password' => true,
         ]);
 
-        AuditLog::create([
-            'user_id' => $currentUser->id,
-            'user_name' => $currentUser->name,
-            'action' => 'user_password_reset',
-            'notes' => "Reset portal password for {$user->name} ({$user->email}) to default.",
-        ]);
+        AuditLog::record('user_password_reset', "Issued a temporary portal password for {$user->name} ({$user->email}).");
 
-        return redirect()->back()->with('success', "Password for {$user->name} was reset to default: <code>Chapel@2026!</code>.");
+        return redirect()->back()->with('success', "Temporary password for {$user->name}: {$temporaryPassword} (must be changed at next sign-in; share it privately).");
     }
 
     /**
@@ -147,7 +138,7 @@ class UserController extends Controller
     public function toggleStatus(Request $request, $id)
     {
         $currentUser = Auth::user();
-        if (!$currentUser->isChapelSecretary() && !$currentUser->isChaplain()) {
+        if (!$currentUser->canManageUsers()) {
             abort(403, 'Unauthorized.');
         }
 
@@ -159,12 +150,7 @@ class UserController extends Controller
         $newStatus = ($user->status === 'active') ? 'suspended' : 'active';
         $user->update(['status' => $newStatus]);
 
-        AuditLog::create([
-            'user_id' => $currentUser->id,
-            'user_name' => $currentUser->name,
-            'action' => 'user_status_changed',
-            'notes' => "Updated status of {$user->name} to {$newStatus}.",
-        ]);
+        AuditLog::record('user_status_changed', "Updated status of {$user->name} to {$newStatus}.");
 
         return redirect()->back()->with('info', "Account status for {$user->name} changed to {$newStatus}.");
     }

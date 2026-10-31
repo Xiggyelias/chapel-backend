@@ -18,9 +18,13 @@ class ExportController extends Controller
     public function exportRequests(Request $request): StreamedResponse
     {
         $user = Auth::user();
+        if (!$user->isOffice() && !$user->isClubLeader()) {
+            abort(403, 'Campus Life & SRC roles have access to the Master Calendar only.');
+        }
+
         $query = ChapelRequest::with(['club', 'requester', 'venue']);
 
-        if ($user->isClubExecutive() || $user->isClubPresident()) {
+        if (!$user->isOffice()) {
             $query->where('club_id', $user->club_id);
         }
 
@@ -34,7 +38,7 @@ class ExportController extends Controller
             foreach ($requests as $r) {
                 fputcsv($handle, [
                     $r->reference_no,
-                    $r->club->name,
+                    $r->club?->name,
                     $r->category,
                     $r->title,
                     $r->purpose,
@@ -58,7 +62,7 @@ class ExportController extends Controller
      */
     public function exportCalendar(Request $request): StreamedResponse
     {
-        $events = Event::with(['club', 'venue'])->orderBy('event_date', 'asc')->get();
+        $events = Event::with(['club', 'venue'])->where('status', '!=', 'cancelled')->orderBy('event_date', 'asc')->get();
         $filename = 'Chapel_Master_Calendar_' . date('Y-m-d') . '.csv';
 
         return response()->streamDownload(function () use ($events) {
@@ -68,7 +72,7 @@ class ExportController extends Controller
             foreach ($events as $ev) {
                 fputcsv($handle, [
                     $ev->id,
-                    $ev->club->name,
+                    $ev->club?->name,
                     $ev->title,
                     $ev->event_date->toDateString(),
                     $ev->start_time,
@@ -88,11 +92,6 @@ class ExportController extends Controller
      */
     public function exportClubs(): StreamedResponse
     {
-        $user = Auth::user();
-        if (!$user || !$user->isOffice()) {
-            abort(403, 'Unauthorized access. Africa University Fellowship Directory Export is restricted to the Office of the Chaplain.');
-        }
-
         $clubs = Club::with(['leadershipTerms' => function ($q) {
             $q->where('is_active', true);
         }])->get();

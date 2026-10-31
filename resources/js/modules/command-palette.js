@@ -34,6 +34,24 @@ export const defaultQuickActionsHtml = `
 
 let searchTimeout = null;
 
+export function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function safeUrl(value) {
+    try {
+        const u = new URL(String(value ?? ''), window.location.origin);
+        return u.origin === window.location.origin ? u.href : '#';
+    } catch (e) {
+        return '#';
+    }
+}
+
 export function openCommandPalette() {
     const modal = document.getElementById('commandPaletteModal');
     if (!modal) return;
@@ -69,13 +87,14 @@ export function handleCommandSearch(val) {
                 }
                 let html = '';
                 data.results.forEach(item => {
+                    // Search results contain user-supplied text: always escape before inserting
                     html += `
-                        <a href="${item.url}" class="block p-2.5 rounded-xl hover:bg-slate-100 transition border border-transparent hover:border-slate-200">
+                        <a href="${escapeHtml(safeUrl(item.url))}" class="block p-2.5 rounded-xl hover:bg-slate-100 transition border border-transparent hover:border-slate-200">
                             <div class="flex items-center justify-between">
-                                <div class="font-bold text-slate-900">${item.title}</div>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-100 text-[#DC2626] font-bold uppercase">${item.category}</span>
+                                <div class="font-bold text-slate-900">${escapeHtml(item.title)}</div>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-100 text-[#B91C1C] font-bold uppercase">${escapeHtml(item.category)}</span>
                             </div>
-                            <div class="text-[11px] text-slate-500 mt-0.5">${item.subtitle}</div>
+                            <div class="text-[11px] text-slate-600 mt-0.5">${escapeHtml(item.subtitle)}</div>
                         </a>
                     `;
                 });

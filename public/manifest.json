@@ -3,20 +3,17 @@
   "short_name": "AU Chapel",
   "description": "Africa University Kwang-Lim Chapel Fellowship and Ministry Management System",
   "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#002147",
-  "theme_color": "#002147",
+  "background_color": "#000000",
+  "theme_color": "#DC2626",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icons/icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/icons/icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
     }
   ]
 }

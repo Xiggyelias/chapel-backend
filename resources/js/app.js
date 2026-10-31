@@ -23,31 +23,42 @@ import {
     initAccessibility
 } from './modules/accessibility';
 
-// Expose functions to window for Blade onclick handlers and keyboard interactions
-window.toggleMobileDrawer = toggleMobileDrawer;
-window.toggleMoreNav = toggleMoreNav;
-window.toggleNotificationDrawer = toggleNotificationDrawer;
-window.togglePersonaDropdown = togglePersonaDropdown;
+// layouts/app.blade.php ships its own role-aware handlers (and sets window.__chapelLayoutUi).
+// Only expose the module versions where the page has not already defined them, so the
+// module never silently overrides the layout's handlers or double-binds listeners.
+const expose = (name, fn) => {
+    if (typeof window[name] !== 'function') window[name] = fn;
+};
 
-window.openCommandPalette = openCommandPalette;
-window.handleCommandSearch = handleCommandSearch;
+expose('toggleMobileDrawer', toggleMobileDrawer);
+expose('toggleMoreNav', toggleMoreNav);
+expose('toggleNotificationDrawer', toggleNotificationDrawer);
+expose('togglePersonaDropdown', togglePersonaDropdown);
 
-window.toggleHighContrast = toggleHighContrast;
-window.setLanguage = setLanguage;
-window.applyLanguage = applyLanguage;
-window.updateA11yUI = updateA11yUI;
-window.resetAccessibility = resetAccessibility;
+expose('openCommandPalette', openCommandPalette);
+expose('handleCommandSearch', handleCommandSearch);
 
-// Initialize listeners on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-    initNavigationListeners();
-    initCommandPaletteShortcuts();
-    initAccessibility();
+expose('toggleHighContrast', toggleHighContrast);
+expose('setLanguage', setLanguage);
+expose('applyLanguage', applyLanguage);
+expose('updateA11yUI', updateA11yUI);
+expose('resetAccessibility', resetAccessibility);
 
-    // Register Service Worker for PWA
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch((err) => {
-            console.log('AU Chapel ServiceWorker notice:', err);
-        });
+const boot = () => {
+    if (!window.__chapelLayoutUi) {
+        initNavigationListeners();
+        initCommandPaletteShortcuts();
+        initAccessibility();
     }
-});
+
+    // Register Service Worker for PWA (single registration point for every page)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+} else {
+    boot();
+}

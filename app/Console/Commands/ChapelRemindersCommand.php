@@ -25,7 +25,7 @@ class ChapelRemindersCommand extends Command
             ->get();
 
         foreach ($upcomingServices as $service) {
-            $daysUntil = $today->diffInDays($service->service_date, false);
+            $daysUntil = (int) $today->diffInDays($service->service_date, false);
 
             if ($daysUntil === 3 && !$service->preacher_submitted_materials) {
                 $msg = "[Worship Reminder - 3 Days]: Preacher materials (scripture, theme, hymns) due today for {$service->service_type} on {$service->service_date->toDateString()}.";
@@ -52,7 +52,7 @@ class ChapelRemindersCommand extends Command
             ->get();
 
         foreach ($pendingRequests as $req) {
-            $daysUntil = $today->diffInDays($req->event_date, false);
+            $daysUntil = (int) $today->diffInDays($req->event_date, false);
             if ($daysUntil <= 14) {
                 $msg = "[14-Day Decision Urgent Alert]: Request {$req->reference_no} ('{$req->title}') is {$daysUntil} days away. Immediate decision required per Chapel Manual §4.1.";
                 $this->error($msg);
@@ -61,13 +61,14 @@ class ChapelRemindersCommand extends Command
         }
 
         // 3. Post-Activity Report Prompts
-        $yesterdayEvents = Event::where('event_date', $today->copy()->subDays(1))
+        $yesterdayEvents = Event::whereDate('event_date', $today->copy()->subDays(1))
+            ->where('status', '!=', 'cancelled')
             ->whereDoesntHave('report')
             ->with('club')
             ->get();
 
         foreach ($yesterdayEvents as $ev) {
-            $msg = "[Post-Activity Report Prompt]: Event '{$ev->title}' concluded yesterday. Prompt {$ev->club->name} to submit report per Chapel Manual §7.1.2.";
+            $msg = "[Post-Activity Report Prompt]: Event '{$ev->title}' concluded yesterday. Prompt {$ev->club?->name} to submit report per Chapel Manual §7.1.2.";
             $this->info($msg);
             Log::info($msg);
         }

@@ -163,7 +163,17 @@
 
 <script>
     function dispatchWorshipDutyWhatsApp() {
-        const text = `⛪ *KWANG-LIM CHAPEL*\n*OFFICIAL WORSHIP LITURGY DUTY CALL*\n\n📅 *Service:* {{ $sheet->service_type }} &bull; {{ $sheet->service_date->format('l, F j, Y') }}\n📖 *Theme:* "{{ addslashes($sheet->theme ?: 'Chapel Assembly') }}"\n🎙️ *Preacher:* {{ addslashes($sheet->preacher ?: 'University Chaplain') }}\n✝️ *Liturgist:* {{ addslashes($sheet->liturgist ?: 'Assistant Chaplain') }}\n📖 *Bible Reader:* {{ addslashes($sheet->bible_reader ?: 'Student Representative') }}\n🎵 *Choir / Praise Team:* {{ addslashes($sheet->choir ?: ($sheet->praise_worship_team ?: 'Praise the Lord Choir')) }}\n📜 *Scripture Lesson:* {{ addslashes($sheet->scripture ?: 'As Announced') }}\n🎶 *Hymns of Praise:* {{ addslashes($sheet->hymns ?: 'UMH / Shona Hymnody') }}\n\n_Ministers, liturgists, and choir members are requested to report to the vestry 30 minutes prior for vestment and altar prayer._\n\nKwang-Lim Chapel Ministry Office`;
+        const sheet = {{ Js::from([
+            'service' => $sheet->service_type . ' • ' . $sheet->service_date->format('l, F j, Y'),
+            'theme' => $sheet->theme ?: 'Chapel Assembly',
+            'preacher' => $sheet->preacher ?: 'University Chaplain',
+            'liturgist' => $sheet->liturgist ?: 'Assistant Chaplain',
+            'reader' => $sheet->bible_reader ?: 'Student Representative',
+            'choir' => $sheet->choir ?: ($sheet->praise_worship_team ?: 'Praise the Lord Choir'),
+            'scripture' => $sheet->scripture ?: 'As Announced',
+            'hymns' => $sheet->hymns ?: 'UMH / Shona Hymnody',
+        ]) }};
+        const text = `⛪ *KWANG-LIM CHAPEL*\n*OFFICIAL WORSHIP LITURGY DUTY CALL*\n\n📅 *Service:* ${sheet.service}\n📖 *Theme:* "${sheet.theme}"\n🎙️ *Preacher:* ${sheet.preacher}\n✝️ *Liturgist:* ${sheet.liturgist}\n📖 *Bible Reader:* ${sheet.reader}\n🎵 *Choir / Praise Team:* ${sheet.choir}\n📜 *Scripture Lesson:* ${sheet.scripture}\n🎶 *Hymns of Praise:* ${sheet.hymns}\n\n_Ministers, liturgists, and choir members are requested to report to the vestry 30 minutes prior for vestment and altar prayer._\n\nKwang-Lim Chapel Ministry Office`;
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 </script>

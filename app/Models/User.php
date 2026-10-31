@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -25,6 +26,11 @@ class User extends Authenticatable
         'email_verified_at',
     ];
 
+    // Mirrors the column default so freshly created models report the same status as stored rows
+    protected $attributes = [
+        'status' => 'active',
+    ];
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -41,7 +47,21 @@ class User extends Authenticatable
 
     public function mustChangePassword(): bool
     {
-        return (bool) $this->must_change_password || \Illuminate\Support\Facades\Hash::check('Chapel@2026!', $this->password);
+        return (bool) $this->must_change_password;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    /**
+     * One-time password for newly provisioned or reset accounts.
+     * The holder is forced to replace it on first sign-in.
+     */
+    public static function generateTemporaryPassword(): string
+    {
+        return 'AU-' . Str::upper(Str::random(4)) . '-' . random_int(1000, 9999) . '-' . Str::lower(Str::random(4));
     }
 
     public function club(): BelongsTo
@@ -103,6 +123,28 @@ class User extends Authenticatable
     public function isCampusLifeSrc(): bool
     {
         return $this->role === 'campus_life_src';
+    }
+
+    public function isClubLeader(): bool
+    {
+        return $this->isClubExecutive() || $this->isClubPresident();
+    }
+
+    public function canManageUsers(): bool
+    {
+        return $this->isChaplain() || $this->isChapelSecretary();
+    }
+
+    /**
+     * Club data isolation: the Office sees every club, club leaders only their own, observers none.
+     */
+    public function canAccessClub(?int $clubId): bool
+    {
+        if ($this->isOffice()) {
+            return true;
+        }
+
+        return $this->isClubLeader() && $clubId !== null && (int) $this->club_id === (int) $clubId;
     }
 
     public function getRoleDisplayName(): string

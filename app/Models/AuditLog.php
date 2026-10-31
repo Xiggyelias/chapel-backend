@@ -21,6 +21,25 @@ class AuditLog extends Model
         'ip_address',
     ];
 
+    /**
+     * Append an entry to the institutional audit ledger on behalf of the signed-in user.
+     */
+    public static function record(string $action, string $notes, ?Request $chapelRequest = null, ?string $oldStatus = null, ?string $newStatus = null): self
+    {
+        $user = auth()->user();
+
+        return static::create([
+            'request_id' => $chapelRequest?->id,
+            'user_id' => $user?->id,
+            'user_name' => $user?->name ?? 'System',
+            'action' => $action,
+            'old_status' => $oldStatus,
+            'new_status' => $newStatus,
+            'notes' => $notes,
+            'ip_address' => request()?->ip(),
+        ]);
+    }
+
     public function request(): BelongsTo
     {
         return $this->belongsTo(Request::class);

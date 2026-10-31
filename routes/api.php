@@ -1,35 +1,25 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\ClashCheckController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HymnController;
-use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes - Kwang-Lim Chapel Ministry Portal
+| Public API Routes - Kwang-Lim Chapel Ministry Portal
 |--------------------------------------------------------------------------
 |
-| These routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. These endpoints serve JSON data
-| to dynamic frontend components, QR scanners, and mobile integrations.
+| Stateless, read-only endpoints that expose public information only.
+| Endpoints that depend on the signed-in user (search, clash checks,
+| attendance check-in) live in routes/web.php behind the auth middleware.
 |
 */
 
-// Master Calendar JSON Feed
-Route::get('/calendar/feed', [CalendarController::class, 'jsonFeed'])->name('api.calendar.feed');
+Route::middleware('throttle:60,1')->group(function () {
+    // Master Calendar JSON feed (same data as the public calendar page)
+    Route::get('/calendar/feed', [CalendarController::class, 'jsonFeed'])->name('api.calendar.feed');
 
-// Smart Venue Clash Detection & Alternative Suggestion Engine
-Route::get('/requests/check-clash', [ClashCheckController::class, 'check'])->name('api.requests.check_clash');
-
-// Member QR Fast Check-in Processing
-Route::post('/members/qr-checkin', [MemberController::class, 'processQrCheckin'])->name('api.members.qr_checkin');
-
-// The United Methodist Hymnal Lookup & Search APIs
-Route::get('/hymns/lookup', [HymnController::class, 'lookup'])->name('api.hymns.lookup');
-Route::get('/hymns/search', [HymnController::class, 'search'])->name('api.hymns.search');
-
-// Universal Command Palette Search API (Ctrl + K)
-Route::get('/search', [DashboardController::class, 'search'])->name('api.search');
+    // The United Methodist Hymnal lookup & search
+    Route::get('/hymns/lookup', [HymnController::class, 'lookup'])->name('api.hymns.lookup');
+    Route::get('/hymns/search', [HymnController::class, 'search'])->name('api.hymns.search');
+});

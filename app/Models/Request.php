@@ -105,21 +105,36 @@ class Request extends Model
             return collect();
         }
 
-        // Find existing approved events on the same date and overlapping time
+        // Live calendar bookings at the same venue whose hours overlap (excluding this request's own event)
         return Event::where('venue_id', $this->venue_id)
-            ->where('event_date', $this->event_date)
-            ->where(function ($query) {
-                $query->whereBetween('start_time', [$this->start_time, $this->end_time])
-                      ->orWhereBetween('end_time', [$this->start_time, $this->end_time])
-                      ->orWhere(function ($q) {
-                          $q->where('start_time', '<=', $this->start_time)
-                            ->where('end_time', '>=', $this->end_time);
-                      });
-            })
-            ->when($this->event, function ($q) {
-                $q->where('id', '!=', $this->event->id);
+            ->overlapping($this->event_date->toDateString(), $this->start_time, $this->end_time)
+            ->where(function ($q) {
+                $q->whereNull('request_id')->orWhere('request_id', '!=', $this->id);
             })
             ->with(['club', 'venue'])
             ->get();
+    }
+
+    /**
+     * Unforgeable pass token: an HMAC keyed with the application secret, so it cannot be derived from the reference number.
+     */
+    public function clearanceToken(): string
+    {
+        return strtoupper(substr(hash_hmac('sha256', "{$this->id}|{$this->reference_no}", (string) config('app.key')), 0, 16));
+    }
+
+    public function clearanceVerificationUrl(): string
+    {
+        return route('pass.verify', ['code' => $this->reference_no, 't' => $this->clearanceToken()]);
+    }
+
+    public function isPendingDecision(): bool
+    {
+        return in_array($this->status, ['submitted', 'under_review'], true);
+    }
+
+    public function isEditableByClub(): bool
+    {
+        return in_array($this->status, ['submitted', 'needs_changes'], true);
     }
 }

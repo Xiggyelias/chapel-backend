@@ -38,10 +38,12 @@
                         <span>New Service Sheet</span>
                     </a>
                 @endif
+                @if(!auth()->user() || !auth()->user()->isCampusLifeSrc())
                 <a href="{{ route('worship.index') }}" class="px-5 py-3 rounded-2xl bg-black/25 hover:bg-black/40 text-white border border-white/20 font-bold text-xs uppercase tracking-wider transition flex items-center justify-center space-x-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                     <span>Worship Sheets</span>
                 </a>
+                @endif
             </div>
         </div>
     </div>
@@ -50,14 +52,16 @@
     <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 card-elevation space-y-4">
         <form method="GET" action="{{ route('hymns.index') }}" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
             <div class="sm:col-span-7 relative">
-                <input type="text" name="search" value="{{ $search }}" placeholder="Search by hymn number (e.g. 1, 57, 140, 378, 734, 984) or title / lyric..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] font-medium">
+                <label for="hymnSearch" class="sr-only">Search hymns</label>
+                <input type="text" id="hymnSearch" name="search" value="{{ $search }}" placeholder="Search by hymn number (e.g. 1, 57, 140, 378, 734, 984) or title / lyric..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] font-medium">
                 <div class="absolute left-3.5 top-3 text-slate-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
             </div>
 
             <div class="sm:col-span-3">
-                <select name="hymnal" onchange="this.form.submit()" class="w-full py-2.5 px-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] bg-white text-slate-800 font-medium">
+                <label for="hymnalFilter" class="sr-only">Hymnal collection</label>
+                <select id="hymnalFilter" name="hymnal" onchange="this.form.submit()" class="w-full py-2.5 px-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] bg-white text-slate-800 font-medium">
                     <option value="">All Hymnal Collections ({{ $totalHymns }})</option>
                     <option value="UMH" {{ $hymnal === 'UMH' ? 'selected' : '' }}>The United Methodist Hymnal (1–734)</option>
                     <option value="MHB" {{ $hymnal === 'MHB' ? 'selected' : '' }}>The Methodist Hymn Book (1–984)</option>
@@ -70,7 +74,7 @@
                     Search
                 </button>
                 @if($search || $hymnal)
-                    <a href="{{ route('hymns.index') }}" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition" title="Clear Filters">
+                    <a href="{{ route('hymns.index') }}" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition" title="Clear Filters" aria-label="Clear filters">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </a>
                 @endif
@@ -119,13 +123,22 @@
                 </div>
 
                 <!-- Action Toolbar -->
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <button type="button" onclick="openHymnLyricsModal({{ $hymn->id }}, '{{ addslashes($hymn->full_title) }}', '{{ addslashes($hymn->author) }}', '{{ addslashes($hymn->tune) }}', {{ json_encode($hymn->lyrics) }})" class="font-bold text-[#DC2626] hover:underline flex items-center space-x-1 cursor-pointer">
+                @php
+                    $hymnPayload = [
+                        'badge' => trim(($hymn->hymnal_code ?? '') . ' ' . $hymn->number),
+                        'title' => $hymn->title,
+                        'author' => $hymn->author ?: 'Traditional',
+                        'tune' => $hymn->tune,
+                        'lyrics' => $hymn->lyrics,
+                    ];
+                @endphp
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs" data-hymn="{{ json_encode($hymnPayload) }}">
+                    <button type="button" onclick="openHymnLyricsModal(this)" class="font-bold text-[#DC2626] hover:underline flex items-center space-x-1 cursor-pointer">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         <span>View All Stanzas</span>
                     </button>
 
-                    <button type="button" onclick="navigator.clipboard.writeText({{ json_encode($hymn->lyrics) }}); alert('Copied lyrics of {{ addslashes($hymn->full_title) }} to clipboard!');" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer" title="Copy Stanzas">
+                    <button type="button" onclick="copyHymnLyrics(this)" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer" title="Copy Stanzas" aria-label="Copy lyrics of {{ $hymn->title }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                     </button>
                 </div>
@@ -151,9 +164,9 @@
 </div>
 
 <!-- Full Hymn Lyrics Modal -->
-<div id="hymnDetailModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="hymnDetailModal" role="dialog" aria-modal="true" aria-labelledby="modalHymnTitle" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4" onclick="if (event.target === this) closeHymnDetailModal()">
     <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 space-y-5 shadow-2xl border border-slate-200 relative animate-fade-in">
-        <button type="button" onclick="closeHymnDetailModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer">
+        <button type="button" onclick="closeHymnDetailModal()" aria-label="Close hymn" class="absolute top-5 right-5 p-2 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
 
@@ -164,7 +177,7 @@
         </div>
 
         <div class="border-t border-slate-100 pt-4">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2 font-cinzel">Hymn Lyrics & Stanzas</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2 font-cinzel">Hymn Lyrics &amp; Stanzas</span>
             <div id="modalHymnLyrics" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 font-serif text-sm sm:text-base text-slate-900 leading-relaxed whitespace-pre-wrap max-h-96 overflow-y-auto select-all"></div>
         </div>
 
@@ -181,22 +194,63 @@
 </div>
 
 <script>
-    function openHymnLyricsModal(id, title, author, tune, lyrics) {
-        document.getElementById('modalHymnBadge').textContent = title.split(':')[0];
-        document.getElementById('modalHymnTitle').textContent = title.split(':')[1] ? title.split(':')[1].trim() : title;
-        document.getElementById('modalHymnMeta').innerHTML = `<span>${author}</span>${tune ? ' &bull; <span class="font-mono">Tune: ' + tune + '</span>' : ''}`;
-        document.getElementById('modalHymnLyrics').textContent = lyrics;
-        
+    function readHymn(el) {
+        const holder = el.closest('[data-hymn]');
+        try { return JSON.parse(holder ? holder.dataset.hymn : '{}'); } catch (e) { return {}; }
+    }
+
+    function copyToClipboard(text, okMessage) {
+        if (!navigator.clipboard) {
+            alert('Clipboard is not available in this browser. Please select and copy the lyrics manually.');
+            return;
+        }
+        navigator.clipboard.writeText(text || '')
+            .then(() => alert(okMessage))
+            .catch(() => alert('Could not copy to clipboard. Please select and copy the lyrics manually.'));
+    }
+
+    function copyHymnLyrics(btn) {
+        const hymn = readHymn(btn);
+        copyToClipboard(hymn.lyrics, 'Copied lyrics of ' + (hymn.badge || '') + ' ' + (hymn.title || '') + ' to clipboard!');
+    }
+
+    let hymnModalOpener = null;
+    function openHymnLyricsModal(btn) {
+        const hymn = readHymn(btn);
+        hymnModalOpener = btn;
+        document.getElementById('modalHymnBadge').textContent = hymn.badge || '';
+        document.getElementById('modalHymnTitle').textContent = hymn.title || '';
+
+        const meta = document.getElementById('modalHymnMeta');
+        meta.replaceChildren();
+        const author = document.createElement('span');
+        author.textContent = hymn.author || 'Traditional';
+        meta.appendChild(author);
+        if (hymn.tune) {
+            const tune = document.createElement('span');
+            tune.className = 'font-mono';
+            tune.textContent = '\u2022 Tune: ' + hymn.tune;
+            meta.appendChild(tune);
+        }
+
+        document.getElementById('modalHymnLyrics').textContent = hymn.lyrics || '';
         document.getElementById('modalCopyBtn').onclick = function() {
-            navigator.clipboard.writeText(lyrics);
-            alert('Copied all stanzas to clipboard!');
+            copyToClipboard(hymn.lyrics, 'Copied all stanzas to clipboard!');
         };
 
         document.getElementById('hymnDetailModal').classList.remove('hidden');
+        document.querySelector('#hymnDetailModal button').focus();
     }
 
     function closeHymnDetailModal() {
         document.getElementById('hymnDetailModal').classList.add('hidden');
+        if (hymnModalOpener) hymnModalOpener.focus();
     }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !document.getElementById('hymnDetailModal').classList.contains('hidden')) {
+            closeHymnDetailModal();
+        }
+    });
 </script>
 @endsection

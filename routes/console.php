@@ -1,8 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+/*
+|--------------------------------------------------------------------------
+| Chaplaincy Scheduled Tasks
+|--------------------------------------------------------------------------
+| Requires the server cron entry: * * * * * php artisan schedule:run
+*/
+
+Schedule::command('chapel:reminders')->dailyAt('06:00')->timezone('Africa/Harare')->withoutOverlapping();
+Schedule::command('chapel:backup')->dailyAt('02:00')->timezone('Africa/Harare')->withoutOverlapping();

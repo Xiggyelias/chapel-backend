@@ -29,22 +29,30 @@ class ChapelBackupCommand extends Command
             return 1;
         }
 
-        // 1. Back up Database
-        $dbPath = database_path('database.sqlite');
-        if (File::exists($dbPath)) {
+        // 1. Back up Database (file copy is only possible for SQLite)
+        $dbPath = config('database.connections.sqlite.database') ?: database_path('database.sqlite');
+        if (config('database.default') === 'sqlite' && File::exists($dbPath)) {
             $zip->addFile($dbPath, 'database/database.sqlite');
             $this->line('✓ Database included in backup.');
+        } else {
+            $this->warn('! Database NOT included: ' . config('database.default') . ' must be backed up with pg_dump/mysqldump or your provider\'s snapshots.');
         }
 
-        // 2. Back up Vault and Attachments
-        $storagePublic = storage_path('app/public');
-        if (File::exists($storagePublic)) {
-            $files = File::allFiles($storagePublic);
-            foreach ($files as $file) {
-                $relative = substr($file->getPathname(), strlen($storagePublic) + 1);
-                $zip->addFile($file->getPathname(), "vault_files/{$relative}");
+        // 2. Back up Vault records and attachments (private) plus any legacy public uploads
+        $sources = [
+            storage_path('app/private') => 'private_files',
+            storage_path('app/public') => 'vault_files',
+        ];
+        foreach ($sources as $directory => $prefix) {
+            if (!File::exists($directory)) {
+                continue;
             }
-            $this->line("✓ Included " . count($files) . " Vault and attachment files.");
+            $files = File::allFiles($directory);
+            foreach ($files as $file) {
+                $relative = str_replace('\\', '/', substr($file->getPathname(), strlen($directory) + 1));
+                $zip->addFile($file->getPathname(), "{$prefix}/{$relative}");
+            }
+            $this->line("✓ Included " . count($files) . " files from {$prefix}.");
         }
 
         $zip->close();

@@ -13,7 +13,7 @@
                 </div>
                 <div>
                     <h3 class="text-xs font-bold text-amber-950">Security Action Required: Update Initial Default Password</h3>
-                    <p class="text-[11px] text-amber-800 mt-0.5">You are currently signed in with the system default password (<code class="bg-amber-100/80 px-1 py-0.5 rounded font-mono text-amber-900">Chapel@2026!</code>). For official compliance, please set your private password.</p>
+                    <p class="text-[11px] text-amber-800 mt-0.5">You are signed in with a temporary password issued by the Chaplaincy Office. Please set your own private password.</p>
                 </div>
             </div>
             <a href="{{ route('profile.index') }}" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-amber-900 hover:bg-black text-white text-xs font-semibold shrink-0 transition active:scale-95 shadow-xs">

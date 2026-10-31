@@ -95,7 +95,7 @@
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 hover:border-slate-300 transition space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div class="flex items-start space-x-3.5">
-                        <span class="w-4 h-4 rounded-full mt-1 shrink-0 ring-2 ring-white shadow-sm" style="background-color: {{ $club->color_hex ?? '#DC2626' }}"></span>
+                        <span class="w-4 h-4 rounded-full mt-1 shrink-0 ring-2 ring-white shadow-sm" style="background-color: {{ $club->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                         <div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="text-base font-bold text-slate-900 font-cinzel">{{ $club->name }}</h3>
@@ -127,11 +127,11 @@
                             <div class="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-500 mt-2.5">
                                 <span class="flex items-center space-x-1.5">
                                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                    <span>Schedule: <strong class="text-slate-700">{{ $club->meeting_schedule }}</strong></span>
+                                    <span>Schedule: <strong class="text-slate-700">{{ $club->meeting_schedule ?: 'Not set' }}</strong></span>
                                 </span>
                                 <span class="flex items-center space-x-1.5">
                                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
-                                    <span>Venue: <strong class="text-slate-700">{{ $club->venue }}</strong></span>
+                                    <span>Venue: <strong class="text-slate-700">{{ $club->venue ?: 'Not set' }}</strong></span>
                                 </span>
                                 <span class="flex items-center space-x-1.5">
                                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
@@ -139,7 +139,7 @@
                                 </span>
                                 <span class="flex items-center space-x-1.5">
                                     <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                    <span>President: <strong class="text-slate-800">{{ $club->current_president ?: $club->founding_president_name }}</strong></span>
+                                    <span>President: <strong class="text-slate-800">{{ $club->current_president ?: ($club->founding_president_name ?: 'Vacant') }}</strong></span>
                                 </span>
                             </div>
                         </div>
@@ -149,17 +149,17 @@
                     <div class="flex items-center space-x-3 shrink-0 self-start sm:self-auto bg-slate-50 px-3 py-2 rounded-xl border border-slate-200/60 text-xs">
                         <div class="text-center px-1">
                             <span class="block font-bold text-slate-800 font-cinzel">{{ $club->members_count ?? 0 }}</span>
-                            <span class="text-[9px] uppercase font-bold text-slate-400">Members</span>
+                            <span class="text-[9px] uppercase font-bold text-slate-500">Members</span>
                         </div>
                         <div class="h-6 w-px bg-slate-200"></div>
                         <div class="text-center px-1">
                             <span class="block font-bold text-slate-800 font-cinzel">{{ $club->requests_count ?? 0 }}</span>
-                            <span class="text-[9px] uppercase font-bold text-slate-400">Proposals</span>
+                            <span class="text-[9px] uppercase font-bold text-slate-500">Proposals</span>
                         </div>
                         <div class="h-6 w-px bg-slate-200"></div>
                         <div class="text-center px-1">
                             <span class="block font-bold text-slate-800 font-cinzel">{{ $club->documents_count ?? 0 }}</span>
-                            <span class="text-[9px] uppercase font-bold text-slate-400">Vault Docs</span>
+                            <span class="text-[9px] uppercase font-bold text-slate-500">Vault Docs</span>
                         </div>
                     </div>
                 </div>
@@ -177,13 +177,13 @@
                             <span>Members</span>
                         </a>
 
-                        <a href="{{ route('requests.index', ['club' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-[#DC2626] font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                        <a href="{{ route('requests.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-[#DC2626] font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                             <span>Requests</span>
                         </a>
 
                         @if($club->constitution_path)
-                            <a href="{{ asset('storage/' . $club->constitution_path) }}" target="_blank" class="inline-flex items-center space-x-1 text-[#DC2626] hover:text-[#B91C1C] font-semibold bg-rose-50 hover:bg-rose-100 px-2.5 py-1.5 rounded-lg border border-rose-200 transition">
+                            <a href="{{ route('clubs.constitution', $club->id) }}" target="_blank" rel="noopener" class="inline-flex items-center space-x-1 text-[#DC2626] hover:text-[#B91C1C] font-semibold bg-rose-50 hover:bg-rose-100 px-2.5 py-1.5 rounded-lg border border-rose-200 transition">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <span>Constitution (PDF)</span>
                             </a>
@@ -194,7 +194,7 @@
                     @if(auth()->user()->isOffice())
                         <div class="flex items-center space-x-2">
                             @if($club->status === 'pending_approval')
-                                <form method="POST" action="{{ route('clubs.approve', $club->id) }}" onsubmit="return confirm('Officially charter and activate {{ addslashes($club->name) }} under Chaplaincy oversight? Executive account will be provisioned.')">
+                                <form method="POST" action="{{ route('clubs.approve', $club->id) }}" data-confirm="Officially charter and activate {{ $club->name }} under Chaplaincy oversight? Executive account will be provisioned.">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-sm transition active:scale-95">
                                         <svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -202,9 +202,9 @@
                                     </button>
                                 </form>
                             @elseif($club->status === 'active')
-                                <form method="POST" action="{{ route('clubs.archive', $club->id) }}" onsubmit="return confirm('Archive fellowship records for {{ addslashes($club->name) }}? Historical records will be retained in the Vault.')">
+                                <form method="POST" action="{{ route('clubs.archive', $club->id) }}" data-confirm="Archive fellowship records for {{ $club->name }}? Historical records will be retained in the Vault.">
                                     @csrf
-                                    <button type="submit" class="inline-flex items-center space-x-1 text-slate-400 hover:text-rose-700 font-semibold px-2 py-1 rounded text-xs transition">
+                                    <button type="submit" class="inline-flex items-center space-x-1 text-slate-500 hover:text-rose-700 font-semibold px-2 py-1 rounded text-xs transition">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         <span>Archive</span>
                                     </button>

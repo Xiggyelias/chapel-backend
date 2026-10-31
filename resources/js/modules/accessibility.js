@@ -74,11 +74,8 @@ export function resetAccessibility() {
 
 export function initAccessibility() {
     try {
-        localStorage.removeItem('au_large_text');
-        document.documentElement.classList.remove('large-text');
-        if (localStorage.getItem('au_high_contrast') === 'true') {
-            document.documentElement.classList.add('high-contrast');
-        }
+        document.documentElement.classList.toggle('large-text', localStorage.getItem('au_large_text') === 'true');
+        document.documentElement.classList.toggle('high-contrast', localStorage.getItem('au_high_contrast') === 'true');
     } catch (e) {}
 
     let lang = 'en';

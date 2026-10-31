@@ -25,6 +25,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Demo data is only for an empty database: re-running would duplicate venues and clubs or collide on unique emails
+        if (User::exists()) {
+            $this->command?->warn('Database already contains users - skipping demo data seeding (hymnal refreshed only).');
+            $this->call(HymnSeeder::class);
+            return;
+        }
+
         // 1. Venues
         $sanctuary = Venue::create([
             'name' => 'Kwang-Lim Chapel Main Sanctuary',
@@ -772,5 +779,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(HymnSeeder::class);
+
+        // Outside local evaluation, demo accounts share a published password and must replace it at first sign-in
+        if (!app()->environment('local', 'testing')) {
+            User::query()->update(['must_change_password' => true]);
+        }
     }
 }

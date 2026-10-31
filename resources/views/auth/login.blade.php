@@ -85,7 +85,7 @@
                         <input type="checkbox" name="remember" checked class="rounded text-[#DC2626] focus:ring-[#DC2626]">
                         <span>Remember me</span>
                     </label>
-                    <span class="text-[11px] text-slate-400">Default initial: <code class="font-mono bg-slate-100 px-1 py-0.5 rounded text-[#DC2626]">Chapel@2026!</code></span>
+
                 </div>
 
                 <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] active:scale-[0.99] text-white text-xs font-bold transition shadow-xs mt-2 cursor-pointer">

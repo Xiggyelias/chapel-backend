@@ -19,8 +19,12 @@ class CalendarController extends Controller
         $user = Auth::user();
 
         // Month and Year navigation
-        $month = $request->input('month', Carbon::now()->month);
-        $year = $request->input('year', Carbon::now()->year);
+        $month = (int) $request->input('month', Carbon::now()->month);
+        $year = (int) $request->input('year', Carbon::now()->year);
+        if ($month < 1 || $month > 12 || $year < 2000 || $year > 2100) {
+            $month = Carbon::now()->month;
+            $year = Carbon::now()->year;
+        }
 
         $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
@@ -113,8 +117,12 @@ class CalendarController extends Controller
      */
     public function jsonFeed(Request $request)
     {
-        $start = $request->input('start', Carbon::now()->startOfMonth()->toDateString());
-        $end = $request->input('end', Carbon::now()->addMonths(2)->endOfMonth()->toDateString());
+        try {
+            $start = Carbon::parse($request->input('start', Carbon::now()->startOfMonth()->toDateString()))->toDateString();
+            $end = Carbon::parse($request->input('end', Carbon::now()->addMonths(2)->endOfMonth()->toDateString()))->toDateString();
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'Invalid date range.'], 422);
+        }
 
         $events = Event::with(['club', 'venue'])
             ->whereBetween('event_date', [$start, $end])
@@ -124,9 +132,9 @@ class CalendarController extends Controller
                 return [
                     'id' => $event->id,
                     'title' => $event->title,
-                    'club' => $event->club->name,
-                    'club_code' => $event->club->code,
-                    'color' => $event->club->color_hex ?? '#002147',
+                    'club' => $event->club?->name,
+                    'club_code' => $event->club?->code,
+                    'color' => $event->club?->color_hex ?? '#002147',
                     'venue' => $event->venue ? $event->venue->name : $event->venue_name,
                     'start' => $event->event_date->toDateString() . 'T' . $event->start_time,
                     'end' => $event->event_date->toDateString() . 'T' . $event->end_time,
@@ -170,9 +178,10 @@ class CalendarController extends Controller
             $dtStamp = gmdate('Ymd\THis\Z');
             $uid = "chapel-event-{$event->id}@africau.edu";
 
-            $summary = str_replace([',', ';'], ['\,', '\;'], "{$event->title} ({$event->club->name})");
-            $location = str_replace([',', ';'], ['\,', '\;'], $event->venue ? $event->venue->name : ($event->venue_name ?: 'Kwang-Lim Chapel'));
-            $desc = str_replace(["\r", "\n", ',', ';'], [' ', ' ', '\,', '\;'], "Fellowship Activity: {$event->title} by {$event->club->name}. Cleared by Africa University Chaplaincy Office.");
+            $clubName = $event->club?->name ?? 'Kwang-Lim Chapel';
+            $summary = self::icsEscape("{$event->title} ({$clubName})");
+            $location = self::icsEscape($event->venue ? $event->venue->name : ($event->venue_name ?: 'Kwang-Lim Chapel'));
+            $desc = self::icsEscape("Fellowship Activity: {$event->title} by {$clubName}. Cleared by Africa University Chaplaincy Office.");
 
             $lines[] = 'BEGIN:VEVENT';
             $lines[] = "UID:{$uid}";
@@ -195,5 +204,13 @@ class CalendarController extends Controller
             'Content-Disposition' => 'inline; filename="kwang-lim-chapel.ics"',
             'Cache-Control' => 'no-cache, no-store, must-revalidate',
         ]);
+    }
+
+    /**
+     * RFC 5545 text escaping (backslash, comma, semicolon, newlines).
+     */
+    private static function icsEscape(string $text): string
+    {
+        return str_replace(['\\', ',', ';', "\r\n", "\n", "\r"], ['\\\\', '\,', '\;', '\n', '\n', ''], $text);
     }
 }

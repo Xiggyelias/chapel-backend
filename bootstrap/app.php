@@ -15,11 +15,20 @@ return Application::configure(basePath: dirname(__DIR__))
         // Trust all upstream proxies (Dokploy Traefik / Docker ingress) for proper HTTPS & IP resolution
         $middleware->trustProxies(at: '*');
 
+        // Login stays exempt so stale tabs never hit a 419 on sign-in; the demo switcher only exists in local evaluation mode.
         $middleware->validateCsrfTokens(except: [
             'login',
             'demo-switch',
             'demo-switch/*',
-            'api/*',
+        ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\EnsureAccountIsActive::class,
+            \App\Http\Middleware\EnsurePasswordIsChanged::class,
+        ]);
+
+        $middleware->alias([
+            'office' => \App\Http\Middleware\EnsureOfficeStaff::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

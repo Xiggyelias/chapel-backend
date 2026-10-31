@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use App\Services\LiturgicalCalendarService;
 
@@ -21,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Record identifiers are always numeric, so literal segments like /reports/annual-report never collide with /reports/{id}
+        Route::pattern('id', '[0-9]+');
+        Route::pattern('clubId', '[0-9]+');
+
         View::composer('layouts.app', function ($view) {
             $view->with([
                 'liturgicalSeason' => LiturgicalCalendarService::getCurrentSeason(),

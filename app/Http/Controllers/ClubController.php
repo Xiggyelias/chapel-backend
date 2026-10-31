@@ -7,6 +7,7 @@ use App\Models\Club;
 use App\Models\LeadershipTerm;
 use App\Models\User;
 use App\Models\Venue;
+use App\Services\PrivateFileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,10 +21,6 @@ class ClubController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        if (!$user || !$user->isOffice()) {
-            abort(403, 'Unauthorized access. Africa University Fellowship Registry & Charter Directory is restricted to the Office of the Chaplain.');
-        }
-
         $statusFilter = $request->input('status', 'all');
 
         $clubsQuery = Club::withCount(['members', 'requests', 'documents', 'events']);
@@ -71,9 +68,9 @@ class ClubController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:clubs,name'],
-            'code' => ['required', 'string', 'max:15', 'unique:clubs,code'],
+            'code' => ['required', 'alpha_dash', 'max:15', 'unique:clubs,code'],
             'type' => ['required', 'in:fellowship,prayer group,choir or worship team,service'],
-            'description' => ['required', 'string', 'min:20'],
+            'description' => ['required', 'string', 'min:20', 'max:5000'],
             'meeting_schedule' => ['required', 'string', 'max:255'],
             'venue' => ['required', 'string', 'max:255'],
             'official_email' => ['required', 'email', 'unique:clubs,official_email'],
@@ -88,7 +85,7 @@ class ClubController extends Controller
 
         $constitutionPath = null;
         if ($request->hasFile('constitution')) {
-            $constitutionPath = $request->file('constitution')->store('charters', 'public');
+            $constitutionPath = PrivateFileService::store($request->file('constitution'), 'charters');
         }
 
         // Palette selector based on type
@@ -137,8 +134,8 @@ class ClubController extends Controller
 
         if ($initialStatus === 'active') {
             // If office chartered directly, provision leader account
-            $this->provisionLeaderAccount($club);
-            return redirect()->route('clubs.index')->with('success', "Fellowship '{$club->name}' has been officially registered and chartered under Chaplaincy oversight.");
+            $credentials = $this->provisionLeaderAccount($club);
+            return redirect()->route('clubs.index')->with('success', "Fellowship '{$club->name}' has been officially registered and chartered under Chaplaincy oversight. {$credentials}");
         }
 
         // For public/student applications: NEVER redirect to dashboard or grant internal access!
@@ -163,31 +160,39 @@ class ClubController extends Controller
     }
 
     /**
-     * Office action: Officially charter & activate a pending fellowship.
+     * Office action: open the constitution submitted with a charter application.
+     */
+    public function downloadConstitution($id)
+    {
+        $club = Club::findOrFail($id);
+
+        return PrivateFileService::download($club->constitution_path, "{$club->code}-Constitution");
+    }
+
+    /**
+     * Office action: Officially charter & activate a pending (or restore an archived) fellowship.
      */
     public function approve(Request $request, $id)
     {
         $user = Auth::user();
-        if (!$user->isOffice()) {
-            abort(403, 'Only the Chaplaincy Office can formally charter and activate a fellowship.');
+        $club = Club::findOrFail($id);
+
+        if ($club->status === 'active') {
+            return redirect()->back()->with('info', "Fellowship '{$club->name}' is already chartered and active.");
         }
 
-        $club = Club::findOrFail($id);
+        $request->validate(['charter_notes' => ['nullable', 'string', 'max:2000']]);
+
         $club->update([
             'status' => 'active',
             'charter_notes' => $request->input('charter_notes', 'Charter approved and ratified by Chaplaincy Office on ' . now()->toFormattedDateString()),
         ]);
 
-        $this->provisionLeaderAccount($club);
+        $credentials = $this->provisionLeaderAccount($club);
 
-        AuditLog::create([
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'action' => 'club_charter_approved',
-            'notes' => "Officially chartered and ratified '{$club->name}' ({$club->code}) under Africa University Chaplaincy oversight.",
-        ]);
+        AuditLog::record('club_charter_approved', "Officially chartered and ratified '{$club->name}' ({$club->code}) under Africa University Chaplaincy oversight.");
 
-        return redirect()->back()->with('success', "Fellowship '{$club->name}' has been chartered! Portal executive account provisioned for {$club->current_president}.");
+        return redirect()->back()->with('success', "Fellowship '{$club->name}' has been chartered! {$credentials}");
     }
 
     /**
@@ -195,56 +200,57 @@ class ClubController extends Controller
      */
     public function archive(Request $request, $id)
     {
-        $user = Auth::user();
-        if (!$user->isOffice()) {
-            abort(403, 'Only the Chaplaincy Office can archive club records.');
-        }
-
         $club = Club::findOrFail($id);
         $club->update(['status' => 'archived']);
 
-        AuditLog::create([
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'action' => 'club_archived',
-            'notes' => "Archived records for fellowship '{$club->name}'.",
-        ]);
+        AuditLog::record('club_archived', "Archived records for fellowship '{$club->name}'.");
 
         return redirect()->back()->with('info', "Fellowship '{$club->name}' records archived per university retention policy.");
     }
 
     /**
-     * Provision leader portal account for new club
+     * Provision leader portal account for new club and describe the outcome for the Office.
      */
-    private function provisionLeaderAccount(Club $club): void
+    private function provisionLeaderAccount(Club $club): string
     {
         $email = $club->founding_president_email ?: $club->official_email;
         $name = $club->current_president ?: $club->founding_president_name;
 
-        $existingUser = User::where('email', $email)->first();
-        if (!$existingUser) {
-            $user = User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make('Chapel@2026!'),
-                'role' => 'club_president',
-                'club_id' => $club->id,
-                'position' => 'President',
-                'status' => 'active',
-                'email_verified_at' => now(),
-            ]);
-
-            LeadershipTerm::create([
-                'club_id' => $club->id,
-                'user_id' => $user->id,
-                'person_name' => $name,
-                'position' => 'President',
-                'official_email' => $email,
-                'start_date' => now()->toDateString(),
-                'end_date' => now()->addYear()->toDateString(),
-                'is_active' => true,
-                'notes' => 'Founding President (Chartered ' . now()->format('Y') . ')',
-            ]);
+        if (!$email) {
+            return 'No leader email was supplied, so no portal account was created.';
         }
+
+        $existingUser = User::where('email', $email)->first();
+        if ($existingUser) {
+            return "An existing portal account ({$email}) was found, so no new account was created. Link it to this club from Users if appropriate.";
+        }
+
+        $temporaryPassword = User::generateTemporaryPassword();
+
+        $user = User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => Hash::make($temporaryPassword),
+            'must_change_password' => true,
+            'role' => 'club_president',
+            'club_id' => $club->id,
+            'position' => 'President',
+            'status' => 'active',
+            'email_verified_at' => now(),
+        ]);
+
+        LeadershipTerm::create([
+            'club_id' => $club->id,
+            'user_id' => $user->id,
+            'person_name' => $name,
+            'position' => 'President',
+            'official_email' => $email,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addYear()->toDateString(),
+            'is_active' => true,
+            'notes' => 'Founding President (Chartered ' . now()->format('Y') . ')',
+        ]);
+
+        return "Leader account created for {$name}: {$email} / temporary password {$temporaryPassword} (must be changed at first sign-in; share it privately).";
     }
 }

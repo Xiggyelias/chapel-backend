@@ -164,9 +164,9 @@
                             <td class="px-6 py-4 text-right">
                                 @if($currentUser->isChapelSecretary() || $currentUser->isChaplain())
                                     <div class="inline-flex items-center space-x-2">
-                                        <form method="POST" action="{{ route('users.reset_password', $u->id) }}" onsubmit="return confirm('Reset password for {{ $u->name }} to Chapel@2026!?');">
+                                        <form method="POST" action="{{ route('users.reset_password', $u->id) }}" onsubmit="return confirm('Issue a new temporary password for this account? Their current password will stop working.');">
                                             @csrf
-                                            <button type="submit" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition" title="Reset password to Chapel@2026!">
+                                            <button type="submit" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition" title="Issue a temporary password">
                                                 Reset Password
                                             </button>
                                         </form>
@@ -269,8 +269,8 @@
 
             <div>
                 <label class="block font-semibold text-slate-700 mb-1">Initial Password (Optional)</label>
-                <input type="text" name="password" placeholder="Default: Chapel@2026!" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626]">
-                <span class="text-[10px] text-slate-400 mt-0.5 block">Leave blank to use institutional default: <code>Chapel@2026!</code></span>
+                <input type="text" name="password" placeholder="Leave blank to generate a secure temporary password" minlength="8" autocomplete="new-password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626]">
+                <span class="text-[10px] text-slate-400 mt-0.5 block">The account holder must replace this password at first sign-in.</span>
             </div>
 
             <div class="pt-3 border-t border-slate-100 flex items-center justify-end space-x-2">

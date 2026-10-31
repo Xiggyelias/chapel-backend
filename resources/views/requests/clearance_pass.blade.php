@@ -100,7 +100,7 @@
 
             <!-- Scannable Verification QR Code Representation -->
             <div class="text-center p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
-                <a href="{{ route('pass.verify', $requestItem->reference_no) }}" target="_blank" title="Click to test Gatekeeper Verification Screen" class="inline-block p-2.5 bg-white rounded-2xl shadow-xs border border-slate-300 hover:border-[#DC2626] hover:scale-105 transition-all duration-200 group">
+                <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" title="Click to test Gatekeeper Verification Screen" class="inline-block p-2.5 bg-white rounded-2xl shadow-xs border border-slate-300 hover:border-[#DC2626] hover:scale-105 transition-all duration-200 group">
                     <!-- SVG Procedural QR Code Mockup with authentic pattern -->
                     <svg class="w-32 h-32 group-hover:opacity-90" viewBox="0 0 100 100" fill="#DC2626">
                         <!-- Corner Markers -->
@@ -149,7 +149,7 @@
                     VERIFY CODE: {{ $verifyToken }}
                 </div>
                 <div class="text-[10px] text-slate-400">
-                    Scan by Security / Campus Life or <a href="{{ route('pass.verify', $requestItem->reference_no) }}" target="_blank" class="text-[#DC2626] font-bold underline">click to simulate gate scan</a>
+                    Scan by Security / Campus Life or <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" class="text-[#DC2626] font-bold underline">click to simulate gate scan</a>
                 </div>
             </div>
 
@@ -182,7 +182,16 @@
 
     <script>
         function getMemoText() {
-            return `🏛️ *KWANG-LIM CHAPEL CLEARANCE PASS*\n\n📋 *Activity:* {{ addslashes($requestItem->title) }}\n👥 *Sponsoring Club:* {{ addslashes($requestItem->club->name) }}\n📍 *Venue:* {{ addslashes($requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other) }}\n📅 *Date:* {{ $requestItem->event_date->format('l, M d, Y') }}\n⏰ *Hours:* {{ substr($requestItem->start_time, 0, 5) }} - {{ substr($requestItem->end_time, 0, 5) }} CAT\n🛡️ *Reference:* {{ $requestItem->reference_no }}\n\n✅ *Gatekeeper Verification Link:*\n{{ route('pass.verify', $requestItem->reference_no) }}\n\n⚠️ *Directives:* Sound & amplification curfew strictly 22:00 CAT. Facility access authorized by Chaplaincy Office.`;
+            const pass = {{ Js::from([
+                'title' => $requestItem->title,
+                'club' => $requestItem->club?->name,
+                'venue' => $requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other,
+                'date' => $requestItem->event_date->format('l, M d, Y'),
+                'hours' => substr($requestItem->start_time, 0, 5) . ' - ' . substr($requestItem->end_time, 0, 5),
+                'reference' => $requestItem->reference_no,
+                'verifyUrl' => $verifyUrl,
+            ]) }};
+            return `🏛️ *KWANG-LIM CHAPEL CLEARANCE PASS*\n\n📋 *Activity:* ${pass.title}\n👥 *Sponsoring Club:* ${pass.club}\n📍 *Venue:* ${pass.venue}\n📅 *Date:* ${pass.date}\n⏰ *Hours:* ${pass.hours} CAT\n🛡️ *Reference:* ${pass.reference}\n\n✅ *Gatekeeper Verification Link:*\n${pass.verifyUrl}\n\n⚠️ *Directives:* Sound & amplification curfew strictly 22:00 CAT. Facility access authorized by Chaplaincy Office.`;
         }
 
         function dispatchWhatsApp() {

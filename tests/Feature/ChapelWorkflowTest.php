@@ -412,10 +412,18 @@ class ChapelWorkflowTest extends TestCase
         $responsePass->assertSee('Officially Approved');
 
         // Security / Gatekeeper scans the pass code via public endpoint (no login required)
-        $responseVerify = $this->get(route('pass.verify', 'REQ-2026-PASS01'));
+        $responseVerify = $this->get($req->clearanceVerificationUrl());
         $responseVerify->assertStatus(200);
         $responseVerify->assertSee('OFFICIALLY AUTHORIZED');
         $responseVerify->assertSee('Gospel Music Extravaganza');
+
+        // A copied reference number without the signed token cannot be used to forge a pass
+        $responseForged = $this->get(route('pass.verify', 'REQ-2026-PASS01'));
+        $responseForged->assertSee('UNAUTHORIZED / INVALID');
+        $responseForged->assertDontSee('Gospel Music Extravaganza');
+
+        // Another club cannot open this club's clearance pass
+        $this->actingAs($this->umsmExec)->get(route('requests.clearance_pass', $req->id))->assertStatus(403);
 
         // Security scans an invalid or unapproved code
         $responseInvalid = $this->get(route('pass.verify', 'REQ-FAKE-9999'));
@@ -443,7 +451,7 @@ class ChapelWorkflowTest extends TestCase
         ]);
 
         // Query clash API for conflicting time
-        $responseClash = $this->getJson(route('api.requests.check_clash', [
+        $responseClash = $this->actingAs($this->focusExec)->getJson(route('api.requests.check_clash', [
             'venue_id' => $this->sanctuary->id,
             'event_date' => $targetDate,
             'start_time' => '16:00',
@@ -550,7 +558,17 @@ class ChapelWorkflowTest extends TestCase
 
         $today = Carbon::today()->toDateString();
 
-        $response = $this->postJson(route('api.members.qr_checkin'), [
+        // Guests and other clubs' leaders cannot record this club's attendance
+        $this->postJson(route('api.members.qr_checkin'), [
+            'club_id' => $this->focusClub->id,
+            'student_id_or_email' => 'AU2024-8841',
+        ])->assertStatus(401);
+        $this->actingAs($this->umsmExec)->postJson(route('api.members.qr_checkin'), [
+            'club_id' => $this->focusClub->id,
+            'student_id_or_email' => 'AU2024-8841',
+        ])->assertStatus(403);
+
+        $response = $this->actingAs($this->focusExec)->postJson(route('api.members.qr_checkin'), [
             'club_id' => $this->focusClub->id,
             'student_id_or_email' => 'AU2024-8841',
             'meeting_date' => $today,
@@ -899,10 +917,9 @@ class ChapelWorkflowTest extends TestCase
 
         $this->assertTrue($user->mustChangePassword());
 
-        // View dashboard and observe alert
-        $dashRes = $this->actingAs($user)->get(route('dashboard'));
-        $dashRes->assertStatus(200);
-        $dashRes->assertSee('Security Action Required: Update Initial Default Password');
+        // Every other page redirects to the change-password screen until the password is replaced
+        $this->actingAs($user)->get(route('dashboard'))->assertRedirect(route('profile.index'));
+        $this->actingAs($user)->get(route('requests.index'))->assertRedirect(route('profile.index'));
 
         // View profile page
         $profRes = $this->actingAs($user)->get(route('profile.index'));

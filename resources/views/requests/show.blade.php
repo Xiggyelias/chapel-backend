@@ -22,6 +22,11 @@
 
         <!-- Status Badge & Action -->
         <div class="flex flex-wrap items-center gap-2">
+            @if($requestItem->isEditableByClub() && ($user->isOffice() || $user->club_id === $requestItem->club_id))
+                <a href="{{ route('requests.edit', $requestItem->id) }}" class="px-3.5 py-1.5 rounded-xl text-xs font-bold {{ $requestItem->status === 'needs_changes' ? 'bg-amber-500 hover:bg-amber-600 text-white' : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200' }} shadow-xs transition active:scale-95">
+                    {{ $requestItem->status === 'needs_changes' ? 'Revise & Resubmit' : 'Edit Proposal' }}
+                </a>
+            @endif
             @if($requestItem->status === 'approved')
                 <button type="button" onclick="dispatchWhatsApp()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs flex items-center space-x-1.5 transition active:scale-95">
                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.159.57 4.184 1.564 5.938l-1.564 5.714 5.86-1.537c1.7 1.011 3.684 1.595 5.803 1.595 6.627 0 12-5.373 12-12s-5.373-12-12-12z"/></svg>
@@ -158,7 +163,7 @@
                     @if($requestItem->attachment_path)
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
                             <span class="text-slate-500 font-medium">Supporting Attachment:</span>
-                            <a href="/storage/{{ $requestItem->attachment_path }}" target="_blank" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-[#DC2626] hover:text-white text-[#DC2626] font-bold transition shadow-sm active:scale-95">
+                            <a href="{{ route('requests.attachment', $requestItem->id) }}" target="_blank" rel="noopener" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-[#DC2626] hover:text-white text-[#DC2626] font-bold transition shadow-sm active:scale-95">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <span>{{ $requestItem->attachment_name ?: 'Download Document' }}</span>
                             </a>
@@ -190,7 +195,7 @@
                             <p class="text-purple-900 leading-relaxed">{{ $requestItem->vc_go_ahead_note }}</p>
                             @if($requestItem->vc_go_ahead_attachment)
                                 <div class="pt-2">
-                                    <a href="/storage/{{ $requestItem->vc_go_ahead_attachment }}" target="_blank" class="text-purple-700 font-bold underline text-[11px] hover:text-purple-900">
+                                    <a href="{{ route('requests.vc_attachment', $requestItem->id) }}" target="_blank" rel="noopener" class="text-purple-700 font-bold underline text-[11px] hover:text-purple-900">
                                         View Attached VC Clearance Memo &rarr;
                                     </a>
                                 </div>
@@ -255,13 +260,23 @@
 
                     <div class="space-y-2.5 pt-1">
                         <!-- Approve Form -->
-                        <form method="POST" action="{{ route('requests.approve', $requestItem->id) }}">
+                        @if($requestItem->status === 'needs_changes')
+                        <p class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-xl p-2.5">Returned to the club for changes. It can be approved once the club resubmits.</p>
+                        @else
+                        <form method="POST" action="{{ route('requests.approve', $requestItem->id) }}" class="space-y-2">
                             @csrf
+                            @if($clashes->isNotEmpty())
+                                <label class="flex items-start gap-2 text-[11px] text-rose-800 bg-rose-50 border border-rose-200 rounded-xl p-2.5 cursor-pointer">
+                                    <input type="checkbox" name="override_clash" value="1" class="mt-0.5 rounded text-[#DC2626] focus:ring-[#DC2626]">
+                                    <span>This venue is already booked at this time. Tick to double-book deliberately.</span>
+                                </label>
+                            @endif
                             <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center justify-center space-x-1.5 active:scale-95">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 <span>Approve & Schedule Event</span>
                             </button>
                         </form>
+                        @endif
 
                         <!-- Needs Changes Toggle -->
                         <button type="button" onclick="document.getElementById('needsChangesModal').classList.toggle('hidden')" class="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm active:scale-95">
@@ -341,8 +356,17 @@
 </div>
 <script>
     function dispatchWhatsApp() {
-        const text = `🏛️ *KWANG-LIM CHAPEL CLEARANCE PASS*\n\n📋 *Activity:* {{ addslashes($requestItem->title) }}\n👥 *Sponsoring Club:* {{ addslashes($requestItem->club->name) }}\n📍 *Venue:* {{ addslashes($requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other) }}\n📅 *Date:* {{ $requestItem->event_date->format('l, M d, Y') }}\n⏰ *Hours:* {{ substr($requestItem->start_time, 0, 5) }} - {{ substr($requestItem->end_time, 0, 5) }} CAT\n🛡️ *Reference:* {{ $requestItem->reference_no }}\n\n✅ *Gatekeeper Verification Link:*\n{{ route('pass.verify', $requestItem->reference_no) }}\n\n⚠️ *Directives:* Sound curfew 22:00 CAT strict. Facility access authorized by Chaplaincy Office.`;
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        const pass = {{ Js::from([
+            'title' => $requestItem->title,
+            'club' => $requestItem->club?->name,
+            'venue' => $requestItem->venue ? $requestItem->venue->name : $requestItem->venue_other,
+            'date' => $requestItem->event_date->format('l, M d, Y'),
+            'hours' => substr($requestItem->start_time, 0, 5) . ' - ' . substr($requestItem->end_time, 0, 5),
+            'reference' => $requestItem->reference_no,
+            'verifyUrl' => $requestItem->status === 'approved' ? $requestItem->clearanceVerificationUrl() : null,
+        ]) }};
+        const text = `🏛️ *KWANG-LIM CHAPEL CLEARANCE PASS*\n\n📋 *Activity:* ${pass.title}\n👥 *Sponsoring Club:* ${pass.club}\n📍 *Venue:* ${pass.venue}\n📅 *Date:* ${pass.date}\n⏰ *Hours:* ${pass.hours} CAT\n🛡️ *Reference:* ${pass.reference}\n\n✅ *Gatekeeper Verification Link:*\n${pass.verifyUrl}\n\n⚠️ *Directives:* Sound curfew 22:00 CAT strict. Facility access authorized by Chaplaincy Office.`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
     }
 </script>
 @endsection

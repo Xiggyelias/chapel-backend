@@ -54,9 +54,9 @@
         <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 p-6 sm:p-7 space-y-3">
             <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider font-cinzel">Activity Photo Gallery</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                @foreach($report->photos as $photo)
-                    <a href="/storage/{{ $photo }}" target="_blank" class="block rounded-2xl overflow-hidden border border-slate-200 aspect-video hover:opacity-90 shadow-sm transition">
-                        <img src="/storage/{{ $photo }}" alt="Event photo" class="w-full h-full object-cover">
+                @foreach($report->photos as $photoIndex => $photo)
+                    <a href="{{ route('reports.photo', [$report->id, $photoIndex]) }}" target="_blank" rel="noopener" class="block rounded-2xl overflow-hidden border border-slate-200 aspect-video hover:opacity-90 shadow-sm transition">
+                        <img src="{{ route('reports.photo', [$report->id, $photoIndex]) }}" alt="Event photo {{ $photoIndex + 1 }}" loading="lazy" class="w-full h-full object-cover">
                     </a>
                 @endforeach
             </div>

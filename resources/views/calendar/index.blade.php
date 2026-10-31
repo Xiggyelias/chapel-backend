@@ -47,13 +47,13 @@
     @endphp
     <div class="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs">
         <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
+            <div class="w-9 h-9 rounded-xl text-white flex items-center justify-center font-bold text-sm shrink-0" style="background-color: {{ $season['hex'] ?? '#15803D' }}" aria-hidden="true">
                 ✝
             </div>
             <div>
-                <div class="flex items-center space-x-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <span class="font-bold text-slate-900 text-xs">{{ $season['title'] }}</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">Parament: Green</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold border {{ $season['badge_class'] ?? 'bg-emerald-50 text-emerald-700 border-emerald-200' }}">{{ $season['color'] ?? 'Ordinary Time' }}</span>
                 </div>
                 <p class="text-slate-500 text-[11px] mt-0.5">{{ $season['verse'] }}</p>
             </div>
@@ -83,13 +83,13 @@
                 $prevMonth = $startDate->copy()->subMonth();
                 $nextMonth = $startDate->copy()->addMonth();
             @endphp
-            <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => $prevMonth->month, 'year' => $prevMonth->year])) }}" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition active:scale-95">
+            <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => $prevMonth->month, 'year' => $prevMonth->year])) }}" aria-label="Previous month" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </a>
             <h3 class="text-base sm:text-lg font-bold font-cinzel text-slate-900 tracking-wide">
                 {{ $startDate->format('F Y') }}
             </h3>
-            <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => $nextMonth->month, 'year' => $nextMonth->year])) }}" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition active:scale-95">
+            <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => $nextMonth->month, 'year' => $nextMonth->year])) }}" aria-label="Next month" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
             <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => now()->month, 'year' => now()->year])) }}" class="text-[11px] font-bold uppercase text-[#DC2626] bg-[#DC2626]/10 hover:bg-[#DC2626]/20 px-3 py-1.5 rounded-xl transition border border-[#DC2626]/20 active:scale-95">
@@ -103,14 +103,16 @@
             <input type="hidden" name="year" value="{{ $year }}">
             <input type="hidden" name="view" value="{{ $viewMode }}">
 
-            <select name="club_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50">
+            <label for="calClubFilter" class="sr-only">Filter by club</label>
+            <select id="calClubFilter" name="club_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50">
                 <option value="">All Clubs</option>
                 @foreach($clubs as $club)
                     <option value="{{ $club->id }}" {{ request('club_id') == $club->id ? 'selected' : '' }}>{{ $club->name }} ({{ $club->code }})</option>
                 @endforeach
             </select>
 
-            <select name="venue_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50">
+            <label for="calVenueFilter" class="sr-only">Filter by venue</label>
+            <select id="calVenueFilter" name="venue_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50">
                 <option value="">All Venues</option>
                 @foreach($venues as $venue)
                     <option value="{{ $venue->id }}" {{ request('venue_id') == $venue->id ? 'selected' : '' }}>{{ $venue->name }}</option>
@@ -146,7 +148,8 @@
             }
         @endphp
 
-        <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 overflow-hidden">
+        <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 overflow-x-auto">
+          <div class="min-w-[640px]">
             <!-- Day of Week Headers -->
             <div class="grid grid-cols-7 bg-[#DC2626] text-white text-center text-xs font-bold py-3 border-b border-white/10 tracking-wider">
                 <div>Sun</div>
@@ -182,12 +185,26 @@
                         <!-- Events for this day -->
                         <div class="space-y-1.5 overflow-y-auto max-h-[85px] flex-1">
                             @foreach($dayEvents as $item)
-                                <div onclick="openEventModal('{{ addslashes($item->title) }}', '{{ addslashes($item->club->name) }}', '{{ $item->event_date->format('M d, Y') }}', '{{ substr($item->start_time, 0, 5) }} - {{ substr($item->end_time, 0, 5) }}', '{{ addslashes($item->venue ? $item->venue->name : $item->venue_name) }}', '{{ addslashes($item->description) }}', '{{ $item->club->color_hex }}', '{{ $item->expected_attendance }}')" class="cursor-pointer p-1.5 rounded-lg text-[10px] font-semibold text-white truncate shadow-xs transition hover:brightness-110 flex items-center space-x-1" style="background-color: {{ $item->club->color_hex ?? '#DC2626' }}">
+                                @php
+                                    $evClubColor = $item->club?->color_hex ?: '#DC2626';
+                                    $evPayload = [
+                                        'title' => $item->title,
+                                        'club' => $item->club?->name ?? 'Chaplaincy Office',
+                                        'date' => $item->event_date->format('M d, Y'),
+                                        'time' => substr($item->start_time, 0, 5) . ' - ' . substr($item->end_time, 0, 5),
+                                        'venue' => $item->venue?->name ?? ($item->venue_name ?: 'Venue to be confirmed'),
+                                        'desc' => $item->description,
+                                        'color' => $evClubColor,
+                                        'attendance' => $item->expected_attendance,
+                                    ];
+                                @endphp
+                                <button type="button" data-event="{{ json_encode($evPayload) }}" onclick="openEventModal(this)" class="w-full text-left cursor-pointer p-1.5 rounded-lg text-[10px] font-semibold text-white truncate shadow-xs transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-slate-900 flex items-center space-x-1" style="background-color: {{ $evClubColor }}">
                                     @if(isset($item->is_clashing) && $item->is_clashing)
-                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-300 animate-ping"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-300 animate-ping" aria-hidden="true"></span>
+                                        <span class="sr-only">Clash:</span>
                                     @endif
                                     <span class="truncate">{{ substr($item->start_time, 0, 5) }} {{ $item->title }}</span>
-                                </div>
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -195,6 +212,7 @@
                     @php $currentDay->addDay(); @endphp
                 @endwhile
             </div>
+          </div>
         </div>
 
     @else
@@ -212,9 +230,9 @@
                             </div>
 
                             <div class="space-y-1">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-xs font-semibold px-2 py-0.5 rounded text-white" style="background-color: {{ $event->club->color_hex ?? '#DC2626' }}">
-                                        {{ $event->club->name }}
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-semibold px-2 py-0.5 rounded text-white" style="background-color: {{ $event->club?->color_hex ?: '#DC2626' }}">
+                                        {{ $event->club?->name ?? 'Chaplaincy Office' }}
                                     </span>
                                     <span class="text-xs font-bold text-slate-500 font-mono">
                                         ⏰ {{ substr($event->start_time, 0, 5) }} - {{ substr($event->end_time, 0, 5) }}
@@ -225,7 +243,7 @@
                                 </div>
                                 <h4 class="text-sm font-bold text-slate-900">{{ $event->title }}</h4>
                                 <div class="text-xs text-slate-500 flex items-center space-x-3">
-                                    <span>📍 {{ $event->venue ? $event->venue->name : $event->venue_name }}</span>
+                                    <span>📍 {{ $event->venue?->name ?? ($event->venue_name ?: 'Venue to be confirmed') }}</span>
                                     @if($event->expected_attendance)
                                         <span>&bull; Exp. {{ $event->expected_attendance }} attendees</span>
                                     @endif
@@ -233,7 +251,11 @@
                             </div>
                         </div>
 
-                        @if($event->request_id)
+                        @php
+                            $canOpenProposal = $event->request_id && auth()->user() && !auth()->user()->isCampusLifeSrc()
+                                && (auth()->user()->isOffice() || auth()->user()->club_id === $event->club_id);
+                        @endphp
+                        @if($canOpenProposal)
                             <a href="{{ route('requests.show', $event->request_id) }}" class="text-xs font-bold text-[#DC2626] hover:underline self-end sm:self-center">
                                 View Linked Proposal &rarr;
                             </a>
@@ -250,15 +272,45 @@
 
 </div>
 
+<!-- Liturgical Guide Modal -->
+<div id="liturgicalModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4" role="dialog" aria-modal="true" aria-labelledby="liturgicalModalTitle" onclick="if (event.target === this) this.classList.add('hidden')">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden card-elevation">
+        <div class="p-5 text-white flex items-center justify-between" style="background-color: {{ $season['hex'] ?? '#15803D' }}">
+            <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider block opacity-90">{{ $season['name'] ?? 'Liturgical Season' }}</span>
+                <h3 id="liturgicalModalTitle" class="text-base font-bold mt-0.5">{{ $season['title'] }}</h3>
+            </div>
+            <button type="button" onclick="document.getElementById('liturgicalModal').classList.add('hidden')" class="text-white/80 hover:text-white p-1" aria-label="Close liturgical guide">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="p-6 space-y-3.5 text-xs">
+            <div>
+                <span class="text-slate-600 uppercase tracking-wider text-[10px] font-bold block mb-0.5">Liturgical Colour</span>
+                <p class="font-bold text-slate-900">{{ $season['color'] ?? '—' }}</p>
+            </div>
+            <div>
+                <span class="text-slate-600 uppercase tracking-wider text-[10px] font-bold block mb-0.5">Altar Paraments</span>
+                <p class="text-slate-700 leading-relaxed">{{ $season['parament'] ?? '—' }}</p>
+            </div>
+            <div>
+                <span class="text-slate-600 uppercase tracking-wider text-[10px] font-bold block mb-0.5">Ministry Focus</span>
+                <p class="text-slate-700 leading-relaxed">{{ $season['focus'] ?? '—' }}</p>
+            </div>
+            <p class="text-slate-600 italic bg-slate-50 p-3 rounded-2xl border border-slate-200/80 leading-relaxed">{{ $season['verse'] }}</p>
+        </div>
+    </div>
+</div>
+
 <!-- Event Detail Modal -->
-<div id="calendarEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+<div id="calendarEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if (event.target === this) this.classList.add('hidden')">
     <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden card-elevation">
         <div id="modalHeader" class="p-5 text-white flex items-center justify-between" style="background-color: #DC2626">
             <div>
                 <span id="modalClub" class="text-[10px] font-bold uppercase tracking-wider block opacity-90 font-cinzel"></span>
                 <h3 id="modalTitle" class="text-base font-bold font-cinzel mt-0.5"></h3>
             </div>
-            <button type="button" onclick="document.getElementById('calendarEventModal').classList.add('hidden')" class="text-white/80 hover:text-white p-1">
+            <button type="button" onclick="document.getElementById('calendarEventModal').classList.add('hidden')" class="text-white/80 hover:text-white p-1" aria-label="Close event details">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
@@ -289,15 +341,23 @@
 </div>
 
 <script>
-    function openEventModal(title, club, date, time, venue, desc, color, attendance) {
-        document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalClub').innerText = club;
-        document.getElementById('modalTime').innerText = date + ' (' + time + ')';
-        document.getElementById('modalVenue').innerText = venue;
-        document.getElementById('modalAttendance').innerText = attendance ? (attendance + ' expected') : 'Not specified';
-        document.getElementById('modalDesc').innerText = desc || 'Official approved fellowship activity.';
-        document.getElementById('modalHeader').style.backgroundColor = color || '#DC2626';
+    function openEventModal(el) {
+        let ev = {};
+        try { ev = JSON.parse(el.dataset.event || '{}'); } catch (e) { return; }
+        document.getElementById('modalTitle').textContent = ev.title || '';
+        document.getElementById('modalClub').textContent = ev.club || '';
+        document.getElementById('modalTime').textContent = (ev.date || '') + ' (' + (ev.time || '') + ')';
+        document.getElementById('modalVenue').textContent = ev.venue || '';
+        document.getElementById('modalAttendance').textContent = ev.attendance ? (ev.attendance + ' expected') : 'Not specified';
+        document.getElementById('modalDesc').textContent = ev.desc || 'Official approved fellowship activity.';
+        document.getElementById('modalHeader').style.backgroundColor = /^#[0-9a-fA-F]{3,8}$/.test(ev.color || '') ? ev.color : '#DC2626';
         document.getElementById('calendarEventModal').classList.remove('hidden');
     }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            document.getElementById('calendarEventModal').classList.add('hidden');
+            document.getElementById('liturgicalModal').classList.add('hidden');
+        }
+    });
 </script>
 @endsection

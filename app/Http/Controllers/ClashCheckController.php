@@ -5,39 +5,48 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ClashCheckController extends Controller
 {
     /**
-     * Innovation: Smart Conflict & Capacity AI Resolver
-     * Detects clashes and automatically calculates free alternative venues and time slots.
+     * Smart Conflict & Capacity Resolver
+     * Detects clashes and calculates free alternative venues and time slots.
      */
     public function check(Request $request)
     {
-        $venueId = $request->input('venue_id');
+        $empty = ['has_clash' => false, 'clashes' => [], 'suggestions' => []];
+
+        $validator = Validator::make($request->all(), [
+            'venue_id' => ['required', 'integer'],
+            'event_date' => ['required', 'date'],
+            'start_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'end_time' => ['required', 'regex:/^\d{2}:\d{2}(:\d{2})?$/'],
+            'expected_attendance' => ['nullable', 'integer', 'min:0'],
+            'request_id' => ['nullable', 'integer'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($empty);
+        }
+
+        $venueId = (int) $request->input('venue_id');
         $date = $request->input('event_date');
-        $startTime = $request->input('start_time');
-        $endTime = $request->input('end_time');
+        $startTime = substr($request->input('start_time'), 0, 5);
+        $endTime = substr($request->input('end_time'), 0, 5);
         $expectedAttendance = (int) $request->input('expected_attendance', 50);
         $ignoreRequestId = $request->input('request_id');
 
-        if (!$venueId || !$date || !$startTime || !$endTime) {
-            return response()->json(['has_clash' => false, 'clashes' => [], 'suggestions' => []]);
+        if ($startTime >= $endTime) {
+            return response()->json($empty);
         }
 
         $clashes = Event::where('venue_id', $venueId)
-            ->whereDate('event_date', $date)
-            ->where('status', '!=', 'cancelled')
+            ->overlapping($date, $startTime, $endTime)
             ->when($ignoreRequestId, function ($q) use ($ignoreRequestId) {
-                $q->where('request_id', '!=', $ignoreRequestId);
-            })
-            ->where(function ($query) use ($startTime, $endTime) {
-                $query->whereBetween('start_time', [$startTime, $endTime])
-                      ->orWhereBetween('end_time', [$startTime, $endTime])
-                      ->orWhere(function ($q) use ($startTime, $endTime) {
-                          $q->where('start_time', '<=', $startTime)
-                            ->where('end_time', '>=', $endTime);
-                      });
+                $q->where(function ($inner) use ($ignoreRequestId) {
+                    $inner->whereNull('request_id')->orWhere('request_id', '!=', $ignoreRequestId);
+                });
             })
             ->with(['club', 'venue'])
             ->get();
@@ -45,17 +54,8 @@ class ClashCheckController extends Controller
         $suggestions = [];
 
         if ($clashes->isNotEmpty()) {
-            // 1. Find alternative venues free at that exact date and time window with sufficient capacity
-            $bookedVenueIds = Event::whereDate('event_date', $date)
-                ->where('status', '!=', 'cancelled')
-                ->where(function ($query) use ($startTime, $endTime) {
-                    $query->whereBetween('start_time', [$startTime, $endTime])
-                          ->orWhereBetween('end_time', [$startTime, $endTime])
-                          ->orWhere(function ($q) use ($startTime, $endTime) {
-                              $q->where('start_time', '<=', $startTime)
-                                ->where('end_time', '>=', $endTime);
-                          });
-                })
+            // 1. Alternative venues free in the same window with sufficient capacity
+            $bookedVenueIds = Event::overlapping($date, $startTime, $endTime)
                 ->pluck('venue_id')
                 ->filter();
 
@@ -78,24 +78,25 @@ class ClashCheckController extends Controller
                 ];
             }
 
-            // 2. Find alternate time slot at same venue (e.g. after the conflicting event)
+            // 2. Next slot at the same venue, starting 15 minutes after the last clashing booking
             $lastClash = $clashes->sortByDesc('end_time')->first();
-            if ($lastClash) {
-                $altStart = date('H:i', strtotime($lastClash->end_time . ' + 15 minutes'));
-                $durationMinutes = (strtotime($endTime) - strtotime($startTime)) / 60;
-                $altEnd = date('H:i', strtotime($altStart . " + {$durationMinutes} minutes"));
+            $altStart = date('H:i', strtotime($lastClash->end_time . ' + 15 minutes'));
+            $durationMinutes = (strtotime($endTime) - strtotime($startTime)) / 60;
+            $altEnd = date('H:i', strtotime($altStart . " + {$durationMinutes} minutes"));
 
-                // If before 22:00 curfew
-                if (strtotime($altEnd) <= strtotime('22:00')) {
-                    $suggestions[] = [
-                        'type' => 'alternative_time',
-                        'venue_id' => $venueId,
-                        'venue_name' => $clashes->first()->venue->name,
-                        'start_time' => $altStart,
-                        'end_time' => $altEnd,
-                        'message' => "Shift time slot to {$altStart} - {$altEnd} (immediately following {$lastClash->club->name}'s event)",
-                    ];
-                }
+            // Must still finish before the 22:00 curfew, on the same day, and be genuinely free
+            $slotIsFree = $altStart < $altEnd
+                && !Event::where('venue_id', $venueId)->overlapping($date, $altStart, $altEnd)->exists();
+
+            if ($altEnd <= '22:00' && $slotIsFree) {
+                $suggestions[] = [
+                    'type' => 'alternative_time',
+                    'venue_id' => $venueId,
+                    'venue_name' => $lastClash->venue?->name ?? 'Same venue',
+                    'start_time' => $altStart,
+                    'end_time' => $altEnd,
+                    'message' => "Shift time slot to {$altStart} - {$altEnd} (immediately following " . ($lastClash->club?->name ?? 'the existing booking') . "'s event)",
+                ];
             }
         }
 
@@ -104,12 +105,12 @@ class ClashCheckController extends Controller
             'clashes' => $clashes->map(function ($ev) {
                 return [
                     'title' => $ev->title,
-                    'club' => $ev->club->name,
-                    'start_time' => $ev->start_time,
-                    'end_time' => $ev->end_time,
-                    'venue' => $ev->venue->name,
+                    'club' => $ev->club?->name,
+                    'start_time' => substr($ev->start_time, 0, 5),
+                    'end_time' => substr($ev->end_time, 0, 5),
+                    'venue' => $ev->venue?->name ?? $ev->venue_name,
                 ];
-            }),
+            })->values(),
             'suggestions' => $suggestions,
         ]);
     }

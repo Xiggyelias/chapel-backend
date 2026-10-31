@@ -19,10 +19,6 @@ class NotificationController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if (!$user || !$user->isOffice()) {
-            abort(403, 'Unauthorized access. Africa University Chaplaincy Notification Outbox is restricted to the Office of the Chaplain.');
-        }
-
         $today = Carbon::today();
 
         // 1. Pending 14-day rule urgent notices
@@ -40,6 +36,7 @@ class NotificationController extends Controller
 
         // 3. Completed activities needing reports (Chapel Manual §7.1.2)
         $pendingReports = Event::where('event_date', '<=', $today)
+            ->where('status', '!=', 'cancelled')
             ->whereDoesntHave('report')
             ->with(['club', 'venue'])
             ->orderBy('event_date', 'desc')
@@ -67,10 +64,6 @@ class NotificationController extends Controller
     public function triggerReminders(Request $request)
     {
         $user = Auth::user();
-        if (!$user->isOffice()) {
-            abort(403, 'Only the Chaplaincy Office can execute automated reminder dispatches.');
-        }
-
         Artisan::call('chapel:reminders');
         $output = Artisan::output();
 

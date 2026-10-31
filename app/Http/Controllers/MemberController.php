@@ -8,6 +8,7 @@ use App\Models\ClubMember;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class MemberController extends Controller
 {
@@ -22,22 +23,19 @@ class MemberController extends Controller
             return redirect()->route('calendar.index')->with('warning', 'Unauthorized.');
         }
 
-        $clubId = $user->isOffice() 
-            ? ($request->input('club_id') ?? Club::active()->first()?->id)
-            : $user->club_id;
-
-        $selectedClub = Club::findOrFail($clubId);
+        $selectedClub = $this->resolveClub($user, $request->input('club_id'));
         $clubs = $user->isOffice() ? Club::active()->get() : collect([$selectedClub]);
 
-        $members = ClubMember::where('club_id', $clubId)
+        $members = ClubMember::where('club_id', $selectedClub->id)
             ->withCount(['attendances as present_count' => function ($q) {
                 $q->where('status', 'present');
             }])
             ->orderBy('full_name', 'asc')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         // Recent attendance meeting dates for this club
-        $recentMeetings = Attendance::where('club_id', $clubId)
+        $recentMeetings = Attendance::where('club_id', $selectedClub->id)
             ->select('meeting_date')
             ->distinct()
             ->orderBy('meeting_date', 'desc')
@@ -50,22 +48,17 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if ($user->isCampusLifeSrc()) {
-            abort(403, 'Unauthorized.');
-        }
 
         $validated = $request->validate([
             'club_id' => ['required', 'exists:clubs,id'],
             'full_name' => ['required', 'string', 'max:255'],
             'student_id' => ['nullable', 'string', 'max:50'],
-            'email' => ['nullable', 'email'],
-            'phone' => ['nullable', 'string'],
-            'role_in_club' => ['required', 'string'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'role_in_club' => ['required', 'string', 'max:100'],
         ]);
 
-        if (($user->isClubExecutive() || $user->isClubPresident()) && $validated['club_id'] != $user->club_id) {
-            abort(403, 'Unauthorized.');
-        }
+        $this->ensureCanManage($user, (int) $validated['club_id']);
 
         ClubMember::create(array_merge($validated, [
             'status' => 'active',
@@ -81,34 +74,35 @@ class MemberController extends Controller
     public function recordAttendance(Request $request)
     {
         $user = Auth::user();
-        if ($user->isCampusLifeSrc()) {
-            abort(403, 'Unauthorized.');
-        }
 
         $validated = $request->validate([
             'club_id' => ['required', 'exists:clubs,id'],
-            'meeting_date' => ['required', 'date'],
+            'meeting_date' => ['required', 'date', 'before_or_equal:today'],
             'attendance' => ['required', 'array'], // [member_id => 'present'|'absent'|'excused']
+            'attendance.*' => ['required', Rule::in(['present', 'absent', 'excused'])],
         ]);
 
-        if (($user->isClubExecutive() || $user->isClubPresident()) && $validated['club_id'] != $user->club_id) {
-            abort(403, 'Unauthorized.');
-        }
+        $clubId = (int) $validated['club_id'];
+        $this->ensureCanManage($user, $clubId);
 
-        $count = 0;
-        foreach ($validated['attendance'] as $memberId => $status) {
+        // Ignore any member ids that do not belong to this club's roster
+        $rosterIds = ClubMember::where('club_id', $clubId)
+            ->whereIn('id', array_keys($validated['attendance']))
+            ->pluck('id')
+            ->all();
+
+        foreach ($rosterIds as $memberId) {
             Attendance::updateOrCreate(
                 [
-                    'club_id' => $validated['club_id'],
+                    'club_id' => $clubId,
                     'club_member_id' => $memberId,
                     'meeting_date' => $validated['meeting_date'],
                 ],
-                [
-                    'status' => $status,
-                ]
+                ['status' => $validated['attendance'][$memberId]]
             );
-            $count++;
         }
+
+        $count = count($rosterIds);
 
         return back()->with('success', "Meeting attendance register recorded for {$count} members on {$validated['meeting_date']}.");
     }
@@ -119,19 +113,13 @@ class MemberController extends Controller
     public function qrKiosk(Request $request, $clubId = null)
     {
         $user = Auth::user();
-        if ($user && $user->isCampusLifeSrc()) {
+        if ($user->isCampusLifeSrc()) {
             return redirect()->route('calendar.index')->with('warning', 'Campus Life & SRC Observer Mode: Authorized to view University Master Calendar and public feeds only.');
         }
 
-        $targetClubId = ($user && ($user->isClubExecutive() || $user->isClubPresident()))
-            ? $user->club_id
-            : ($clubId ?: ($user?->club_id ?: Club::active()->first()?->id));
-
-        $club = Club::findOrFail($targetClubId);
+        $club = $this->resolveClub($user, $clubId);
         $today = Carbon::today()->toDateString();
-
-        // Generate attendance checkin token for today's meeting
-        $token = strtoupper(substr(hash('sha256', "AU_MEETING_{$club->id}_{$today}"), 0, 12));
+        $token = $club->checkinToken($today);
 
         $attendeesToday = Attendance::with('member')
             ->where('club_id', $club->id)
@@ -149,15 +137,11 @@ class MemberController extends Controller
     public function scanner(Request $request, $clubId = null)
     {
         $user = Auth::user();
-        if ($user && $user->isCampusLifeSrc()) {
+        if ($user->isCampusLifeSrc()) {
             return redirect()->route('calendar.index')->with('warning', 'Campus Life & SRC Observer Mode: Authorized to view University Master Calendar and public feeds only.');
         }
 
-        $targetClubId = ($user && ($user->isClubExecutive() || $user->isClubPresident()))
-            ? $user->club_id
-            : ($clubId ?: ($user?->club_id ?: Club::active()->first()?->id));
-
-        $club = Club::findOrFail($targetClubId);
+        $club = $this->resolveClub($user, $clubId);
         $members = ClubMember::where('club_id', $club->id)->get();
         $today = Carbon::today()->toDateString();
 
@@ -165,62 +149,24 @@ class MemberController extends Controller
     }
 
     /**
-     * API to record scanned QR check-in
+     * Leader scanner API: record a scanned student ID / email for the leader's club
      */
     public function processQrCheckin(Request $request)
     {
         $validated = $request->validate([
             'club_id' => ['required', 'exists:clubs,id'],
-            'student_id_or_email' => ['required', 'string'],
-            'meeting_date' => ['nullable', 'date'],
+            'student_id_or_email' => ['required', 'string', 'max:255'],
+            'meeting_date' => ['nullable', 'date', 'before_or_equal:today'],
         ]);
 
-        $meetingDate = $validated['meeting_date'] ?: Carbon::today()->toDateString();
-        $input = trim($validated['student_id_or_email']);
+        $clubId = (int) $validated['club_id'];
+        $this->ensureCanManage(Auth::user(), $clubId);
 
-        // Find member by student_id or email or full_name
-        $member = ClubMember::where('club_id', $validated['club_id'])
-            ->where(function ($q) use ($input) {
-                $q->where('student_id', $input)
-                  ->orWhere('email', $input)
-                  ->orWhere('full_name', 'like', "%{$input}%");
-            })
-            ->first();
-
-        if (!$member) {
-            // Auto-enroll attendee if not previously on roster
-            $member = ClubMember::create([
-                'club_id' => $validated['club_id'],
-                'full_name' => $input,
-                'email' => str_contains($input, '@') ? $input : null,
-                'student_id' => !str_contains($input, '@') ? $input : null,
-                'role_in_club' => 'Attendee / Visitor',
-                'status' => 'active',
-                'joined_date' => $meetingDate,
-            ]);
-        }
-
-        Attendance::updateOrCreate(
-            [
-                'club_id' => $validated['club_id'],
-                'club_member_id' => $member->id,
-                'meeting_date' => $meetingDate,
-            ],
-            ['status' => 'present']
-        );
-
-        $totalPresent = Attendance::where('club_id', $validated['club_id'])
-            ->where('meeting_date', $meetingDate)
-            ->where('status', 'present')
-            ->count();
-
-        return response()->json([
-            'success' => true,
-            'member_name' => $member->full_name,
-            'role' => $member->role_in_club,
-            'total_present' => $totalPresent,
-            'message' => "Checked in: {$member->full_name}",
-        ]);
+        return response()->json($this->checkIn(
+            $clubId,
+            trim($validated['student_id_or_email']),
+            $validated['meeting_date'] ?? Carbon::today()->toDateString()
+        ));
     }
 
     /**
@@ -229,20 +175,107 @@ class MemberController extends Controller
     public function selfCheckin(Request $request, $token)
     {
         $today = Carbon::today()->toDateString();
-        $clubs = Club::active()->get();
-        $matchingClub = null;
-        foreach ($clubs as $c) {
-            $expectedToken = strtoupper(substr(hash('sha256', "AU_MEETING_{$c->id}_{$today}"), 0, 12));
-            if ($expectedToken === $token) {
-                $matchingClub = $c;
-                break;
-            }
-        }
-
-        if (!$matchingClub) {
-            $matchingClub = Club::active()->first();
-        }
+        $matchingClub = Club::findByCheckinToken($token, $today);
 
         return view('members.self_checkin', compact('matchingClub', 'token', 'today'));
+    }
+
+    /**
+     * Public self check-in submission, valid only with today's kiosk token
+     */
+    public function processSelfCheckin(Request $request, $token)
+    {
+        $today = Carbon::today()->toDateString();
+        $club = Club::findByCheckinToken($token, $today);
+
+        if (!$club) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This check-in code has expired or is invalid. Please scan today\'s kiosk QR code.',
+            ], 422);
+        }
+
+        $validated = $request->validate([
+            'student_id_or_email' => ['required', 'string', 'min:3', 'max:255'],
+        ]);
+
+        return response()->json($this->checkIn($club->id, trim($validated['student_id_or_email']), $today));
+    }
+
+    /**
+     * Mark a person present, auto-enrolling first-time attendees as visitors.
+     */
+    private function checkIn(int $clubId, string $input, string $meetingDate): array
+    {
+        $isEmail = str_contains($input, '@');
+
+        $member = ClubMember::where('club_id', $clubId)
+            ->where(function ($q) use ($input, $isEmail) {
+                if ($isEmail) {
+                    $q->whereRaw('LOWER(email) = ?', [mb_strtolower($input)]);
+                } else {
+                    $q->where('student_id', $input)
+                      ->orWhereRaw('LOWER(full_name) = ?', [mb_strtolower($input)]);
+                }
+            })
+            ->first();
+
+        if (!$member) {
+            $member = ClubMember::create([
+                'club_id' => $clubId,
+                'full_name' => $input,
+                'email' => $isEmail ? $input : null,
+                'student_id' => $isEmail ? null : $input,
+                'role_in_club' => 'Attendee / Visitor',
+                'status' => 'active',
+                'joined_date' => $meetingDate,
+            ]);
+        }
+
+        Attendance::updateOrCreate(
+            [
+                'club_id' => $clubId,
+                'club_member_id' => $member->id,
+                'meeting_date' => $meetingDate,
+            ],
+            ['status' => 'present']
+        );
+
+        $totalPresent = Attendance::where('club_id', $clubId)
+            ->where('meeting_date', $meetingDate)
+            ->where('status', 'present')
+            ->count();
+
+        return [
+            'success' => true,
+            'member_name' => $member->full_name,
+            'role' => $member->role_in_club,
+            'total_present' => $totalPresent,
+            'message' => "Checked in: {$member->full_name}",
+        ];
+    }
+
+    /**
+     * Club leaders are locked to their own club; the Office may pick any club (defaulting to the first active one).
+     */
+    private function resolveClub($user, $requestedClubId): Club
+    {
+        if ($user->isOffice()) {
+            $clubId = $requestedClubId ?: Club::active()->orderBy('name')->value('id');
+            abort_if(!$clubId, 404, 'No active fellowships are registered yet.');
+
+            return Club::findOrFail($clubId);
+        }
+
+        abort_unless($user->isClubLeader() && $user->club_id, 403, 'Your account is not linked to a fellowship.');
+
+        return Club::findOrFail($user->club_id);
+    }
+
+    private function ensureCanManage($user, int $clubId): void
+    {
+        if (!$user->canAccessClub($clubId)) {
+            abort(403, 'Club Data Isolation: You may only manage your own club\'s roster.');
+        }
     }
 }

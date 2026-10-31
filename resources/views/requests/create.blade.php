@@ -63,7 +63,7 @@
                     @if(auth()->user()->isOffice())
                         <select name="club_id" id="club_id" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
                             @foreach($clubs as $club)
-                                <option value="{{ $club->id }}">{{ $club->name }} ({{ $club->code }})</option>
+                                <option value="{{ $club->id }}" @selected((string) old('club_id') === (string) $club->id)>{{ $club->name }} ({{ $club->code }})</option>
                             @endforeach
                         </select>
                     @else
@@ -80,11 +80,11 @@
                         Request Category <span class="text-rose-600">*</span>
                     </label>
                     <select name="category" id="category" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
-                        <option value="event">Campus Event / Fellowship Activity</option>
-                        <option value="venue">Venue Booking Only</option>
-                        <option value="poster">Poster & Media Clearance</option>
-                        <option value="equipment">Chapel Equipment Loan</option>
-                        <option value="outing">Off-Campus Outing / Mission Trip (Requires VC Go-Ahead)</option>
+                        <option value="event" @selected(old('category') === 'event')>Campus Event / Fellowship Activity</option>
+                        <option value="venue" @selected(old('category') === 'venue')>Venue Booking Only</option>
+                        <option value="poster" @selected(old('category') === 'poster')>Poster & Media Clearance</option>
+                        <option value="equipment" @selected(old('category') === 'equipment')>Chapel Equipment Loan</option>
+                        <option value="outing" @selected(old('category') === 'outing')>Off-Campus Outing / Mission Trip (Requires VC Go-Ahead)</option>
                     </select>
                 </div>
             </div>
@@ -139,7 +139,7 @@
                     <select name="venue_id" id="venue_id" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
                         <option value="">-- Select Chapel Venue --</option>
                         @foreach($venues as $venue)
-                            <option value="{{ $venue->id }}" data-capacity="{{ $venue->capacity }}">
+                            <option value="{{ $venue->id }}" data-capacity="{{ $venue->capacity }}" @selected((string) old('venue_id') === (string) $venue->id)>
                                 {{ $venue->name }} (Cap: {{ $venue->capacity }})
                             </option>
                         @endforeach
@@ -150,7 +150,7 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Other Venue / Off-Campus Location
                     </label>
-                    <input type="text" name="venue_other" id="venue_other" placeholder="e.g. Honde Valley, Student Union Hall" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <input type="text" name="venue_other" id="venue_other" value="{{ old('venue_other') }}" placeholder="e.g. Honde Valley, Student Union Hall" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
                 </div>
             </div>
 

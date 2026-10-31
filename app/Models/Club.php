@@ -82,6 +82,23 @@ class Club extends Model
         return $this->hasMany(Report::class);
     }
 
+    /**
+     * Daily kiosk check-in token, signed with the application secret so it cannot be guessed for other clubs or dates.
+     */
+    public function checkinToken(?string $date = null): string
+    {
+        $date ??= now()->toDateString();
+
+        return strtoupper(substr(hash_hmac('sha256', "checkin|{$this->id}|{$date}", (string) config('app.key')), 0, 16));
+    }
+
+    public static function findByCheckinToken(string $token, ?string $date = null): ?self
+    {
+        return static::active()->get()->first(
+            fn (Club $club) => hash_equals($club->checkinToken($date), strtoupper($token))
+        );
+    }
+
     public function scopeArchived($query)
     {
         return $query->where('status', 'archived');

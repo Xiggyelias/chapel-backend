@@ -6,6 +6,7 @@ use App\Models\Club;
 use App\Models\Event;
 use App\Models\Report;
 use App\Models\Request as ChapelRequest;
+use App\Services\PrivateFileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +21,7 @@ class ReportController extends Controller
 
         $query = Report::with(['club', 'submitter', 'event', 'request']);
 
-        if ($user->isClubExecutive() || $user->isClubPresident()) {
+        if (!$user->isOffice()) {
             $query->where('club_id', $user->club_id);
         }
 
@@ -37,8 +38,11 @@ class ReportController extends Controller
             return redirect()->route('calendar.index')->with('warning', 'Campus Life & SRC Observer Mode: Authorized to view University Master Calendar and public feeds only.');
         }
 
-        $eventsQuery = Event::where('status', '!=', 'cancelled');
-        if ($user->isClubExecutive() || $user->isClubPresident()) {
+        // Only events that have taken place and have no report yet
+        $eventsQuery = Event::where('status', '!=', 'cancelled')
+            ->where('event_date', '<=', now()->toDateString())
+            ->whereDoesntHave('report');
+        if (!$user->isOffice()) {
             $eventsQuery->where('club_id', $user->club_id);
         }
 
@@ -59,19 +63,32 @@ class ReportController extends Controller
             'event_id' => ['nullable', 'exists:events,id'],
             'title' => ['required', 'string', 'max:255'],
             'attendance' => ['required', 'integer', 'min:1'],
-            'outcome' => ['required', 'string'],
-            'spending' => ['required', 'numeric', 'min:0'],
+            'outcome' => ['required', 'string', 'max:10000'],
+            'spending' => ['required', 'numeric', 'min:0', 'max:10000000'],
+            'photos' => ['nullable', 'array', 'max:10'],
             'photos.*' => ['nullable', 'image', 'max:5120'],
         ]);
 
-        $event = $validated['event_id'] ? Event::find($validated['event_id']) : null;
+        $event = !empty($validated['event_id']) ? Event::find($validated['event_id']) : null;
         $clubId = $event ? $event->club_id : $user->club_id;
 
-        // Photo uploads
+        if (!$clubId) {
+            return back()->withInput()->withErrors(['event_id' => 'Select the activity this report belongs to.']);
+        }
+
+        if (!$user->canAccessClub($clubId)) {
+            abort(403, "Club Data Isolation: You may only report on your own club's activities.");
+        }
+
+        if ($event && Report::where('event_id', $event->id)->exists()) {
+            return back()->withInput()->withErrors(['event_id' => 'A post-activity report has already been filed for this activity.']);
+        }
+
+        // Photo uploads (private: served only through the authorised photo route)
         $photoPaths = [];
         if ($request->hasFile('photos')) {
             foreach ($request->file('photos') as $photo) {
-                $photoPaths[] = $photo->store('report_photos', 'public');
+                $photoPaths[] = PrivateFileService::store($photo, 'report_photos');
             }
         }
 
@@ -96,11 +113,24 @@ class ReportController extends Controller
         $user = Auth::user();
         $report = Report::with(['club', 'submitter', 'event'])->findOrFail($id);
 
-        if (($user->isClubExecutive() || $user->isClubPresident()) && $user->club_id !== $report->club_id) {
+        if (!$user->canAccessClub($report->club_id)) {
             abort(403, 'Unauthorized.');
         }
 
         return view('reports.show', compact('report', 'user'));
+    }
+
+    public function photo($id, $index)
+    {
+        $report = Report::findOrFail($id);
+
+        if (!Auth::user()->canAccessClub($report->club_id)) {
+            abort(403, 'Unauthorized.');
+        }
+
+        $path = $report->photos[(int) $index] ?? null;
+
+        return PrivateFileService::download($path);
     }
 
     public function addRemarks(Request $request, $id)
@@ -110,7 +140,7 @@ class ReportController extends Controller
             abort(403, 'Unauthorized.');
         }
 
-        $request->validate(['chaplaincy_remarks' => ['required', 'string']]);
+        $request->validate(['chaplaincy_remarks' => ['required', 'string', 'max:5000']]);
 
         $report = Report::findOrFail($id);
         $report->update([
@@ -131,9 +161,7 @@ class ReportController extends Controller
             return redirect()->route('calendar.index')->with('warning', 'Campus Life & SRC Observer Mode: Authorized to view University Master Calendar and public feeds only.');
         }
 
-        $clubId = ($user->isClubExecutive() || $user->isClubPresident())
-            ? $user->club_id
-            : $request->input('club_id');
+        $clubId = $user->isOffice() ? $request->input('club_id') : $user->club_id;
 
         $clubs = Club::active()->get();
 
@@ -150,7 +178,9 @@ class ReportController extends Controller
             ->when($clubId, fn($q) => $q->where('club_id', $clubId))
             ->sum('budget');
 
+        // Only spending reported against approved proposals is comparable with the approved budget
         $totalActualSpending = Report::when($clubId, fn($q) => $q->where('club_id', $clubId))
+            ->whereHas('request', fn($q) => $q->where('status', 'approved'))
             ->sum('spending');
 
         $variance = $totalApprovedBudget - $totalActualSpending;
@@ -172,18 +202,15 @@ class ReportController extends Controller
      */
     public function annualReport(Request $request)
     {
-        $user = Auth::user();
-        if (!$user || !$user->isOffice()) {
-            abort(403, 'Unauthorized access. Africa University Chaplaincy Annual Report is restricted to the Office of the Chaplain.');
+        $year = (int) $request->input('year', date('Y'));
+        if ($year < 2000 || $year > (int) date('Y') + 1) {
+            $year = (int) date('Y');
         }
-
-        $year = $request->input('year', date('Y'));
         $clubs = Club::active()->withCount(['events', 'reports', 'members'])->get();
 
         $totalEvents = Event::whereYear('event_date', $year)->where('status', '!=', 'cancelled')->count();
         $totalReports = Report::whereYear('created_at', $year)->count();
         $totalHeadcount = Report::whereYear('created_at', $year)->sum('attendance');
-        if ($totalHeadcount == 0) $totalHeadcount = 1850;
 
         $totalBudget = ChapelRequest::whereYear('event_date', $year)->where('status', 'approved')->sum('budget');
         $totalSpending = Report::whereYear('created_at', $year)->sum('spending');
@@ -209,11 +236,6 @@ class ReportController extends Controller
      */
     public function exportBudgetCsv(Request $request)
     {
-        $user = Auth::user();
-        if (!$user || !$user->isOffice()) {
-            abort(403, 'Unauthorized access. Budget exports are restricted to the Office of the Chaplain.');
-        }
-
         $items = ChapelRequest::with(['club', 'report'])
             ->where('status', 'approved')
             ->orderBy('event_date', 'asc')
@@ -245,7 +267,7 @@ class ReportController extends Controller
 
                 fputcsv($handle, [
                     $item->reference_no,
-                    $item->club->name,
+                    $item->club?->name,
                     $item->title,
                     strtoupper($item->category),
                     $item->event_date->toDateString(),

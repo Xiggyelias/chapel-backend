@@ -43,6 +43,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Evaluator Demo Login
+    |--------------------------------------------------------------------------
+    |
+    | One-click role switching for demonstrations. Only honoured when the
+    | environment is "local" AND this flag is explicitly enabled.
+    |
+    */
+
+    'demo_login' => (bool) env('DEMO_LOGIN_ENABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application URL
     |--------------------------------------------------------------------------
     |

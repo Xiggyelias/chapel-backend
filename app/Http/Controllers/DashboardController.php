@@ -81,7 +81,7 @@ class DashboardController extends Controller
             // 2. PASTOR MICAH DAVID - ASSISTANT CHAPLAIN (Master Operational Scheduler & Liturgy Coordinator)
             $roleData['operational_pending'] = ChapelRequest::whereIn('status', ['submitted', 'under_review'])->count();
             $roleData['todays_events_count'] = Event::where('event_date', $today)->count();
-            $roleData['pending_equipment_count'] = EquipmentRequest::where('status', 'pending')->count();
+            $roleData['pending_equipment_count'] = EquipmentRequest::where('status', 'requested')->count();
             $roleData['late_submissions_count'] = ChapelRequest::where('is_late_submission', true)
                 ->whereIn('status', ['submitted', 'under_review'])->count();
 
@@ -100,7 +100,7 @@ class DashboardController extends Controller
 
             // Equipment requests needing dispatch/approval
             $roleData['pendingEquipment'] = EquipmentRequest::with(['club', 'requester'])
-                ->where('status', 'pending')
+                ->where('status', 'requested')
                 ->take(4)
                 ->get();
 
@@ -238,10 +238,6 @@ class DashboardController extends Controller
     public function audit(Request $request)
     {
         $user = Auth::user();
-        if (!$user || !$user->isOffice()) {
-            abort(403, 'Unauthorized access. Africa University Chaplaincy Audit Ledger is restricted to the Office of the Chaplain.');
-        }
-
         $actionFilter = $request->input('action');
         $logs = AuditLog::with(['user', 'request.club'])
             ->when($actionFilter, fn($q) => $q->where('action', 'like', "%{$actionFilter}%"))
@@ -274,10 +270,10 @@ class DashboardController extends Controller
 
         $user = Auth::user();
 
-        // Requests matching title, purpose, reference_no
+        // Requests matching title, purpose, reference_no (club leaders: own club only; observers: none)
         $requests = ChapelRequest::with('club')
-            ->when($user && !$user->canApproveRequests() && !$user->isChapelSecretary() && !$user->isCampusLifeSrc(), function ($q) use ($user) {
-                $q->where('club_id', $user->club_id);
+            ->when(!$user->isOffice(), function ($q) use ($user) {
+                $user->isClubLeader() ? $q->where('club_id', $user->club_id) : $q->whereRaw('1 = 0');
             })
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
@@ -290,36 +286,41 @@ class DashboardController extends Controller
                 return [
                     'category' => 'Proposal',
                     'title' => $r->title,
-                    'subtitle' => "Ref: {$r->reference_no} • {$r->club->name} ({$r->status})",
+                    'subtitle' => "Ref: {$r->reference_no} • " . ($r->club?->name ?? 'Unknown club') . ' (' . str_replace('_', ' ', $r->status) . ')',
                     'url' => route('requests.show', $r->id),
                 ];
             });
 
-        // Clubs matching name or code
-        $clubs = Club::where('name', 'like', "%{$query}%")
-            ->orWhere('code', 'like', "%{$query}%")
+        // Active clubs matching name or code (vault link only where the user may open it)
+        $clubs = Club::active()
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")->orWhere('code', 'like', "%{$query}%");
+            })
             ->take(4)
             ->get()
-            ->map(function ($c) {
+            ->map(function ($c) use ($user) {
                 return [
                     'category' => 'Fellowship',
                     'title' => $c->name,
                     'subtitle' => "{$c->type} • {$c->meeting_schedule}",
-                    'url' => route('vault.index', ['club_id' => $c->id]),
+                    'url' => $user->canAccessClub($c->id)
+                        ? route('vault.index', ['club_id' => $c->id])
+                        : route('calendar.index', ['club_id' => $c->id]),
                 ];
             });
 
         // Events matching title
         $events = Event::with('venue')
             ->where('title', 'like', "%{$query}%")
+            ->where('status', '!=', 'cancelled')
             ->take(4)
             ->get()
             ->map(function ($e) {
                 return [
                     'category' => 'Calendar Event',
                     'title' => $e->title,
-                    'subtitle' => "{$e->event_date->format('M d, Y')} • {$e->venue->name}",
-                    'url' => route('calendar.index'),
+                    'subtitle' => $e->event_date->format('M d, Y') . ' • ' . ($e->venue?->name ?? $e->venue_name ?? 'Venue TBC'),
+                    'url' => route('calendar.index', ['month' => $e->event_date->month, 'year' => $e->event_date->year]),
                 ];
             });
 

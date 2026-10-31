@@ -25,6 +25,41 @@
     --color-au-muted: #64748B;
 }
 
+@theme {
+    --animate-scale-up: scale-up 0.15s ease-out;
+    --animate-fade-in: fade-in 0.2s ease-out;
+
+    @keyframes scale-up {
+        from { opacity: 0; transform: scale(0.97); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+}
+
+/* Visible keyboard focus everywhere (mouse clicks are unaffected) */
+@layer base {
+    :focus-visible {
+        outline: 2px solid #DC2626;
+        outline-offset: 2px;
+    }
+    .app-header-black :focus-visible,
+    .bg-black :focus-visible {
+        outline-color: #FFFFFF;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 .font-cinzel {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
     letter-spacing: -0.01em;

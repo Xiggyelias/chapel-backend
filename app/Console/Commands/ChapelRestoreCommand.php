@@ -49,11 +49,17 @@ class ChapelRestoreCommand extends Command
             $this->line('✓ Database successfully restored.');
         }
 
-        // 2. Restore Vault Files
+        // 2. Restore Vault Files (private records and legacy public uploads)
+        $restoredPrivate = "{$extractDir}/private_files";
+        if (File::exists($restoredPrivate)) {
+            File::copyDirectory($restoredPrivate, storage_path('app/private'));
+            $this->line('✓ Private Records Vault files restored.');
+        }
+
         $restoredVault = "{$extractDir}/vault_files";
         if (File::exists($restoredVault)) {
             File::copyDirectory($restoredVault, storage_path('app/public'));
-            $this->line('✓ Records Vault and document files restored.');
+            $this->line('✓ Legacy public document files restored.');
         }
 
         File::deleteDirectory($extractDir);
