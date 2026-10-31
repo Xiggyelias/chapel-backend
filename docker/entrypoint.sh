@@ -20,6 +20,18 @@ mkdir -p /var/log/supervisor \
          /var/www/html/bootstrap/cache \
          /var/www/html/database
 
+# 1b. Refresh migrations and seeders from the image. A volume mounted over
+#     /var/www/html/database would otherwise keep serving an old copy and new
+#     migrations would never run. Data files (e.g. database.sqlite) are untouched.
+if [ -d /opt/chapel-database-dist ]; then
+    for dir in migrations seeders factories; do
+        if [ -d "/opt/chapel-database-dist/$dir" ]; then
+            mkdir -p "/var/www/html/database/$dir"
+            cp -a "/opt/chapel-database-dist/$dir/." "/var/www/html/database/$dir/"
+        fi
+    done
+fi
+
 # 2. SQLite Database initialization (fallback mode)
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
     # Keep the SQLite file on a persistent volume (e.g. storage/database), never over the code's database/ folder

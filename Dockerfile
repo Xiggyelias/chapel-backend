@@ -95,6 +95,9 @@ WORKDIR /var/www/html
 COPY --from=composer-build /app /var/www/html
 COPY --from=frontend-build /app/public/build /var/www/html/public/build
 
+# Pristine copy of migrations/seeders: restored at start-up even if a volume is mounted over database/
+RUN cp -a /var/www/html/database /opt/chapel-database-dist
+
 # Copy entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
