@@ -8,7 +8,7 @@
     <!-- Top Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-[#DC2626] tracking-wider uppercase">
+            <div class="flex items-center space-x-2 text-xs font-semibold text-brand tracking-wider uppercase">
                 <a href="{{ route('reports.index') }}" class="hover:underline font-bold">Activity Reports</a>
                 <span>&bull;</span>
                 <span class="text-slate-400 font-bold">Financial Governance</span>
@@ -26,7 +26,7 @@
                 <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 <span>Export to Excel</span>
             </a>
-            <a href="{{ route('reports.annual_report') }}" target="_blank" class="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition shadow-sm active:scale-95">
+            <a href="{{ route('reports.annual_report') }}" target="_blank" class="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-sm active:scale-95">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 <span>Annual Ministry Report</span>
             </a>
@@ -36,7 +36,7 @@
     <!-- Summary KPI Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-white rounded-3xl p-5 card-elevation border border-slate-200/80 space-y-1 relative overflow-hidden">
-            <div class="absolute top-0 left-0 right-0 h-1 bg-[#DC2626]"></div>
+            <div class="absolute top-0 left-0 right-0 h-1 bg-brand"></div>
             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block font-cinzel">Total Approved Budgets</span>
             <div class="text-3xl font-extrabold font-cinzel text-slate-900">${{ number_format($totalApprovedBudget, 2) }}</div>
             <p class="text-[11px] text-slate-500">Allocated across approved activity proposals</p>
@@ -75,7 +75,7 @@
                     </select>
                 </div>
                 @if($clubId)
-                    <a href="{{ route('reports.budget_tracker') }}" class="text-xs text-[#DC2626] font-bold hover:underline">
+                    <a href="{{ route('reports.budget_tracker') }}" class="text-xs text-brand font-bold hover:underline">
                         Clear Filter
                     </a>
                 @endif
@@ -113,7 +113,7 @@
                         @endphp
                         <tr class="hover:bg-slate-50/70 transition">
                             <td class="py-4 px-4 font-mono">
-                                <a href="{{ route('requests.show', $item->id) }}" class="text-[#DC2626] font-bold hover:underline block">
+                                <a href="{{ route('requests.show', $item->id) }}" class="text-brand font-bold hover:underline block">
                                     {{ $item->reference_no }}
                                 </a>
                                 <span class="text-[10px] text-slate-400">{{ $item->event_date->format('M d, Y') }}</span>

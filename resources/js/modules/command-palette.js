@@ -6,11 +6,11 @@ export const defaultQuickActionsHtml = `
     <div class="space-y-1 py-1">
         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-2 mb-1.5">Quick Actions</span>
         <a href="/requests/create" class="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-slate-100 transition text-slate-700">
-            <span class="w-6 h-6 rounded-lg bg-red-100 text-[#DC2626] flex items-center justify-center font-bold text-xs">📝</span>
+            <span class="w-6 h-6 rounded-lg bg-red-100 text-brand flex items-center justify-center font-bold text-xs">📝</span>
             <span class="font-semibold text-xs text-slate-900">New Activity Proposal (14-Day Advance Form)</span>
         </a>
         <a href="/calendar" class="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-slate-100 transition text-slate-700">
-            <span class="w-6 h-6 rounded-lg bg-slate-100 text-[#DC2626] flex items-center justify-center font-bold text-xs">📅</span>
+            <span class="w-6 h-6 rounded-lg bg-slate-100 text-brand flex items-center justify-center font-bold text-xs">📅</span>
             <span class="font-semibold text-xs text-slate-900">Master Calendar (Sanctuary & Venues)</span>
         </a>
         <a href="/worship" class="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-slate-100 transition text-slate-700">
@@ -18,7 +18,7 @@ export const defaultQuickActionsHtml = `
             <span class="font-semibold text-xs text-slate-900">Call to Services & Projection Slides</span>
         </a>
         <a href="/hymns" class="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-slate-100 transition text-slate-700">
-            <span class="w-6 h-6 rounded-lg bg-red-100 text-[#DC2626] flex items-center justify-center font-bold text-xs">🎵</span>
+            <span class="w-6 h-6 rounded-lg bg-red-100 text-brand flex items-center justify-center font-bold text-xs">🎵</span>
             <span class="font-semibold text-xs text-slate-900">United Methodist Hymnal & Lyrics</span>
         </a>
         <a href="/vault" class="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-slate-100 transition text-slate-700">
@@ -26,7 +26,7 @@ export const defaultQuickActionsHtml = `
             <span class="font-semibold text-xs text-slate-900">Records Vault & Archival Documents</span>
         </a>
         <a href="/clubs" class="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-slate-100 transition text-slate-700">
-            <span class="w-6 h-6 rounded-lg bg-rose-100 text-[#DC2626] flex items-center justify-center font-bold text-xs">🏛️</span>
+            <span class="w-6 h-6 rounded-lg bg-rose-100 text-brand flex items-center justify-center font-bold text-xs">🏛️</span>
             <span class="font-semibold text-xs text-slate-900">Fellowships Registry & Charter Directory</span>
         </a>
     </div>
@@ -92,7 +92,7 @@ export function handleCommandSearch(val) {
                         <a href="${escapeHtml(safeUrl(item.url))}" class="block p-2.5 rounded-xl hover:bg-slate-100 transition border border-transparent hover:border-slate-200">
                             <div class="flex items-center justify-between">
                                 <div class="font-bold text-slate-900">${escapeHtml(item.title)}</div>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-100 text-[#B91C1C] font-bold uppercase">${escapeHtml(item.category)}</span>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-red-100 text-brand-dark font-bold uppercase">${escapeHtml(item.category)}</span>
                             </div>
                             <div class="text-[11px] text-slate-600 mt-0.5">${escapeHtml(item.subtitle)}</div>
                         </a>

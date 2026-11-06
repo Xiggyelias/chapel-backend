@@ -18,7 +18,7 @@
             max-width: 740px;
             margin: 0 auto;
             background: #ffffff;
-            border: 2px solid #DC2626;
+            border: 2px solid #A51C30;
             border-radius: 12px;
             padding: 48px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.06);
@@ -27,7 +27,7 @@
         .font-sans { font-family: 'Inter', sans-serif; }
         .text-center { text-align: center; }
         .header-rule {
-            border-top: 3px solid #DC2626;
+            border-top: 3px solid #A51C30;
             border-bottom: 1.5px solid #0B0F17;
             height: 4px;
             margin: 16px 0 24px 0;
@@ -37,7 +37,7 @@
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: #DC2626;
+            color: #A51C30;
             border-bottom: 1.5px solid #e2e8f0;
             padding-bottom: 4px;
             margin-top: 24px;
@@ -57,7 +57,7 @@
         }
         .liturgy-item strong {
             font-family: 'Cinzel', Georgia, serif;
-            color: #DC2626;
+            color: #A51C30;
             font-size: 14px;
         }
         .no-print {
@@ -67,7 +67,7 @@
         }
         .print-btn {
             font-family: 'Inter', sans-serif;
-            background: #DC2626;
+            background: #A51C30;
             color: #ffffff;
             padding: 10px 20px;
             border: 1px solid transparent;
@@ -79,7 +79,7 @@
             transition: all 0.2s ease;
         }
         .print-btn:hover {
-            background: #B91C1C;
+            background: #861527;
         }
         @media print {
             body { padding: 0; background: #ffffff; }
@@ -102,17 +102,17 @@
                     <x-umc-logo class="w-full h-full" variant="official" />
                 </div>
             </div>
-            <div class="font-cinzel" style="font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #DC2626; font-weight: 800;">
+            <div class="font-cinzel" style="font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #A51C30; font-weight: 800;">
                 Chaplaincy Office
             </div>
-            <h1 class="font-cinzel" style="font-size: 26px; color: #DC2626; margin: 6px 0; font-weight: 800; letter-spacing: 1px;">
+            <h1 class="font-cinzel" style="font-size: 26px; color: #A51C30; margin: 6px 0; font-weight: 800; letter-spacing: 1px;">
                 KWANG-LIM CHAPEL
             </h1>
             <div style="font-size: 13px; font-style: italic; color: #64748b;">
                 School of Dreams in the Valley of Hope
             </div>
             <div class="header-rule"></div>
-            <div class="font-cinzel" style="font-size: 17px; font-weight: bold; color: #DC2626;">
+            <div class="font-cinzel" style="font-size: 17px; font-weight: bold; color: #A51C30;">
                 {{ $sheet->service_type }}
             </div>
             <div style="font-size: 14px; color: #475569; margin-top: 4px;">
@@ -121,9 +121,9 @@
         </div>
 
         <!-- Theme & Scripture -->
-        <div style="background: #faf8f5; border: 1px solid #e7e5e4; border-left: 4px solid #DC2626; border-radius: 6px; padding: 18px; margin: 24px 0; text-align: center;">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #DC2626; font-family: 'Cinzel', serif; font-weight: 700;">Sermon Theme</div>
-            <div style="font-size: 22px; font-weight: bold; color: #DC2626; margin: 6px 0; font-family: 'Cinzel', serif;">
+        <div style="background: #faf8f5; border: 1px solid #e7e5e4; border-left: 4px solid #A51C30; border-radius: 6px; padding: 18px; margin: 24px 0; text-align: center;">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #A51C30; font-family: 'Cinzel', serif; font-weight: 700;">Sermon Theme</div>
+            <div style="font-size: 22px; font-weight: bold; color: #A51C30; margin: 6px 0; font-family: 'Cinzel', serif;">
                 "{{ $sheet->theme ?: 'Worship Service' }}"
             </div>
             <div style="font-size: 14px; font-style: italic; color: #475569;">

@@ -9,9 +9,9 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 pb-4">
         <div>
             <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                <a href="{{ route('dashboard') }}" class="hover:underline text-[#DC2626] font-semibold">Dashboard</a>
+                <a href="{{ route('dashboard') }}" class="hover:underline text-brand font-semibold">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('clubs.index') }}" class="hover:underline text-[#DC2626] font-semibold">Fellowships Registry</a>
+                <a href="{{ route('clubs.index') }}" class="hover:underline text-brand font-semibold">Fellowships Registry</a>
                 <span>/</span>
                 <span class="text-slate-700 font-bold">New Fellowship Charter</span>
             </div>
@@ -31,15 +31,15 @@
     <!-- Institutional Guidelines Protocol Card -->
     <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs relative overflow-hidden">
         <div class="flex items-start space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-[#DC2626] border border-white/20 flex items-center justify-center shrink-0 shadow-sm text-white">
+            <div class="w-10 h-10 rounded-xl bg-brand border border-white/20 flex items-center justify-center shrink-0 shadow-sm text-white">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             </div>
             <div class="space-y-1.5 flex-1">
                 <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-[#DC2626]">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-brand">
                         Fellowship Chartering Protocol
                     </h2>
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#DC2626]/10 text-[#DC2626] font-bold border border-[#DC2626]/20">
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand/10 text-brand font-bold border border-brand/20">
                         Chapel Manual §2.3
                     </span>
                 </div>
@@ -79,15 +79,15 @@
     @endif
 
     <!-- Registration Form -->
-    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 overflow-hidden relative border-t-4 border-t-[#DC2626]">
+    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 overflow-hidden relative border-t-4 border-t-brand">
         <form method="POST" action="{{ route('clubs.store') }}" enctype="multipart/form-data" class="space-y-6 text-xs">
             @csrf
 
             <!-- Section 1: Fellowship Identity -->
             <div class="space-y-4">
                 <div class="border-b border-slate-100 pb-2">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#DC2626] flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-[#DC2626]"></span>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-brand"></span>
                         <span>1. Fellowship Identity & Categorization</span>
                     </h3>
                     <p class="text-[11px] text-slate-500 mt-0.5">Official university name, classification, and ministry scope</p>
@@ -96,19 +96,19 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="sm:col-span-2 space-y-1">
                         <label class="block font-bold text-slate-700">Official Fellowship Name <span class="text-rose-500">*</span></label>
-                        <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. Anglican Student Society" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. Anglican Student Society" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                     </div>
 
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Acronym / Short Code <span class="text-rose-500">*</span></label>
-                        <input type="text" name="code" value="{{ old('code') }}" required placeholder="e.g. ANGLICAN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white font-mono uppercase text-xs transition">
+                        <input type="text" name="code" value="{{ old('code') }}" required placeholder="e.g. ANGLICAN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white font-mono uppercase text-xs transition">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Ministry Classification <span class="text-rose-500">*</span></label>
-                        <select name="type" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <select name="type" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                             <option value="">-- Select Category --</option>
                             <option value="fellowship" {{ old('type') == 'fellowship' ? 'selected' : '' }}>Campus Fellowship / Denominational Movement</option>
                             <option value="prayer group" {{ old('type') == 'prayer group' ? 'selected' : '' }}>Intercessory Prayer & Revival Group</option>
@@ -119,21 +119,21 @@
 
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Official Club Email <span class="text-rose-500">*</span></label>
-                        <input type="email" name="official_email" value="{{ old('official_email') }}" required placeholder="e.g. anglican@africau.edu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <input type="email" name="official_email" value="{{ old('official_email') }}" required placeholder="e.g. anglican@africau.edu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                     </div>
                 </div>
 
                 <div class="space-y-1">
                     <label class="block font-bold text-slate-700">Purpose & Statement of Ministry <span class="text-rose-500">*</span></label>
-                    <textarea name="description" rows="3" required placeholder="Detail the core biblical mission, aims, and anticipated impact of this fellowship within the Kwang-Lim Chapel community..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">{{ old('description') }}</textarea>
+                    <textarea name="description" rows="3" required placeholder="Detail the core biblical mission, aims, and anticipated impact of this fellowship within the Kwang-Lim Chapel community..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">{{ old('description') }}</textarea>
                 </div>
             </div>
 
             <!-- Section 2: Meeting Schedule & Venue -->
             <div class="space-y-4 pt-4 border-t border-slate-100">
                 <div class="border-b border-slate-100 pb-2">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#DC2626] flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-[#DC2626]"></span>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-brand"></span>
                         <span>2. Proposed Schedule & Preferred Campus Venue</span>
                     </h3>
                     <p class="text-[11px] text-slate-500 mt-0.5">Regular campus gathering hours subject to Assistant Chaplain coordination</p>
@@ -142,12 +142,12 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Proposed Meeting Schedule <span class="text-rose-500">*</span></label>
-                        <input type="text" name="meeting_schedule" value="{{ old('meeting_schedule') }}" required placeholder="e.g. Mondays 17:30 - 19:00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <input type="text" name="meeting_schedule" value="{{ old('meeting_schedule') }}" required placeholder="e.g. Mondays 17:30 - 19:00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                     </div>
 
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Preferred Campus Venue <span class="text-rose-500">*</span></label>
-                        <select name="venue" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <select name="venue" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                             <option value="">-- Select Preferred Venue --</option>
                             @foreach($venues as $v)
                                 <option value="{{ $v->name }}" {{ old('venue') == $v->name ? 'selected' : '' }}>
@@ -164,8 +164,8 @@
             <!-- Section 3: Executive Leadership & Governance -->
             <div class="space-y-4 pt-4 border-t border-slate-100">
                 <div class="border-b border-slate-100 pb-2">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-[#DC2626] flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-[#DC2626]"></span>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-brand"></span>
                         <span>3. Founding Executive Leadership & Constitution</span>
                     </h3>
                     <p class="text-[11px] text-slate-500 mt-0.5">Contact information for initial portal provision and permanent vault archive</p>
@@ -174,17 +174,17 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">Founding President Name <span class="text-rose-500">*</span></label>
-                        <input type="text" name="founding_president_name" value="{{ old('founding_president_name') }}" required placeholder="e.g. Farai Makoni" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <input type="text" name="founding_president_name" value="{{ old('founding_president_name') }}" required placeholder="e.g. Farai Makoni" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                     </div>
 
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">President Official Email <span class="text-rose-500">*</span></label>
-                        <input type="email" name="founding_president_email" value="{{ old('founding_president_email') }}" required placeholder="e.g. fmakoni@africau.edu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <input type="email" name="founding_president_email" value="{{ old('founding_president_email') }}" required placeholder="e.g. fmakoni@africau.edu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                     </div>
 
                     <div class="space-y-1">
                         <label class="block font-bold text-slate-700">WhatsApp / Phone Contact <span class="text-rose-500">*</span></label>
-                        <input type="text" name="contact_phone" value="{{ old('contact_phone') }}" required placeholder="e.g. +263 77 123 4567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                        <input type="text" name="contact_phone" value="{{ old('contact_phone') }}" required placeholder="e.g. +263 77 123 4567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
                     </div>
                 </div>
 
@@ -192,7 +192,7 @@
                     <label class="block font-bold text-slate-700">
                         Draft Constitution / Bye-Laws (PDF or DOC)
                     </label>
-                    <input type="file" name="constitution" accept=".pdf,.doc,.docx" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/15 focus:border-[#DC2626] text-slate-700 bg-slate-50 text-xs transition">
+                    <input type="file" name="constitution" accept=".pdf,.doc,.docx" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-700 bg-slate-50 text-xs transition">
                     <p class="text-[10px] text-slate-500">Optional during application. An approved constitution is required for complete Vault record compliance.</p>
                 </div>
             </div>
@@ -204,7 +204,7 @@
                 </span>
                 <div class="flex items-center space-x-2.5 w-full sm:w-auto">
                     <a href="{{ route('clubs.index') }}" class="w-1/2 sm:w-auto text-center px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition active:scale-95">Cancel</a>
-                    <button type="submit" class="w-1/2 sm:w-auto px-6 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] active:scale-95 text-white font-bold tracking-wide transition shadow-sm">
+                    <button type="submit" class="w-1/2 sm:w-auto px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark active:scale-95 text-white font-bold tracking-wide transition shadow-sm">
                         Submit Charter Application
                     </button>
                 </div>

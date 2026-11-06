@@ -18,10 +18,10 @@
         }
     </style>
 </head>
-<body class="p-4 sm:p-8 flex flex-col items-center justify-center min-h-screen text-slate-900 selection:bg-[#DC2626] selection:text-white">
+<body class="p-4 sm:p-8 flex flex-col items-center justify-center min-h-screen text-slate-900 selection:bg-brand selection:text-white">
 
     <div class="no-print max-w-md w-full mb-4 flex flex-wrap items-center justify-between gap-2">
-        <a href="{{ route('requests.show', $requestItem->id) }}" class="text-xs text-[#DC2626] font-bold hover:underline flex items-center space-x-1">
+        <a href="{{ route('requests.show', $requestItem->id) }}" class="text-xs text-brand font-bold hover:underline flex items-center space-x-1">
             <span>&larr; Back to Proposal</span>
         </a>
         <div class="flex items-center space-x-2">
@@ -32,17 +32,17 @@
             <button type="button" onclick="copyMemo()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition border border-slate-300 shadow-xs">
                 Copy Memo
             </button>
-            <button onclick="window.print()" class="px-3.5 py-2 bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold rounded-xl shadow-md transition active:scale-95">
+            <button onclick="window.print()" class="px-3.5 py-2 bg-brand hover:bg-brand-dark text-white text-xs font-bold rounded-xl shadow-md transition active:scale-95">
                 PDF / Print
             </button>
         </div>
     </div>
 
     <!-- Official Gatekeeper Clearance Badge -->
-    <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl border-2 border-[#DC2626] overflow-hidden card-elevation">
+    <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl border-2 border-brand overflow-hidden card-elevation">
         
         <!-- Badge Header -->
-        <div class="bg-[#DC2626] text-white p-6 text-center border-b border-white/10 relative">
+        <div class="bg-brand text-white p-6 text-center border-b border-white/10 relative">
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white/10 border border-white/20 p-2 mb-2 backdrop-blur-md">
                 <x-umc-logo class="w-full h-full" />
             </div>
@@ -63,11 +63,11 @@
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block font-cinzel">Pass Reference</span>
-                    <span class="font-mono font-bold text-sm text-[#DC2626]">{{ $requestItem->reference_no }}</span>
+                    <span class="font-mono font-bold text-sm text-brand">{{ $requestItem->reference_no }}</span>
                 </div>
                 <div class="text-right">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block font-cinzel">Authorized Club</span>
-                    <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $requestItem->club?->color_hex ?? '#DC2626' }}">
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $requestItem->club?->color_hex ?? '#A51C30' }}">
                         {{ $requestItem->club?->name }}
                     </span>
                 </div>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="col-span-2 pt-2 border-t border-slate-200/80">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Cleared Venue</span>
-                    <span class="font-bold text-[#DC2626] text-xs">
+                    <span class="font-bold text-brand text-xs">
                         📍 {{ $requestItem->venue ? $requestItem->venue?->name : $requestItem->venue_other }}
                     </span>
                     <div class="text-[10px] text-slate-500 mt-0.5">Approved Attendance Limit: {{ $requestItem->expected_attendance ?: 'Standard' }} persons</div>
@@ -100,14 +100,14 @@
 
             <!-- Scannable Verification QR Code Representation -->
             <div class="text-center p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
-                <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" title="Click to test Gatekeeper Verification Screen" class="inline-block p-2.5 bg-white rounded-2xl shadow-xs border border-slate-300 hover:border-[#DC2626] hover:scale-105 transition-all duration-200 group">
+                <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" title="Click to test Gatekeeper Verification Screen" class="inline-block p-2.5 bg-white rounded-2xl shadow-xs border border-slate-300 hover:border-brand hover:scale-105 transition-all duration-200 group">
                     <x-qr-code :value="$verifyUrl" size="160" label="Gatekeeper verification QR code for {{ $requestItem->reference_no }}" />
                 </a>
                 <div class="font-mono text-[10px] text-slate-500 font-bold uppercase tracking-wider">
                     VERIFY CODE: {{ $verifyToken }}
                 </div>
                 <div class="text-[10px] text-slate-400">
-                    Scan by Security / Campus Life or <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" class="text-[#DC2626] font-bold underline">click to simulate gate scan</a>
+                    Scan by Security / Campus Life or <a href="{{ $verifyUrl }}" target="_blank" rel="noopener" class="text-brand font-bold underline">click to simulate gate scan</a>
                 </div>
             </div>
 
@@ -115,7 +115,7 @@
             <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-[11px]">
                 <div>
                     <span class="text-[9px] font-bold uppercase text-slate-400 block font-cinzel">Approved By Authority</span>
-                    <span class="font-bold text-[#DC2626]">{{ $requestItem->decidedBy ? $requestItem->decidedBy?->name : 'University Chaplaincy Office' }}</span>
+                    <span class="font-bold text-brand">{{ $requestItem->decidedBy ? $requestItem->decidedBy?->name : 'University Chaplaincy Office' }}</span>
                     <span class="text-[10px] text-slate-500 block font-mono">{{ $requestItem->decided_at ? $requestItem->decided_at->format('M d, Y H:i') : now()->format('M d, Y') }}</span>
                 </div>
                 <div class="text-right">

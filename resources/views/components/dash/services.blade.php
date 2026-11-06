@@ -12,7 +12,7 @@
     <div class="py-3 first:pt-0 last:pb-0 border-b last:border-0 border-slate-100">
         <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
-                <a href="{{ route('worship.show', $service->id) }}" class="text-sm font-semibold text-slate-900 hover:text-[#DC2626] truncate block">
+                <a href="{{ route('worship.show', $service->id) }}" class="text-sm font-semibold text-slate-900 hover:text-brand truncate block">
                     {{ $service->service_type }} &bull; {{ $service->service_date->format('D, M j') }}
                 </a>
                 <p class="text-xs text-slate-500 truncate">
@@ -32,8 +32,8 @@
             @endif
         </ul>
         <div class="mt-2 flex gap-3 text-xs font-semibold">
-            <a href="{{ route('worship.slides', $service->id) }}" class="text-[#DC2626] hover:underline">Slides</a>
-            <a href="{{ route('worship.bulletin', $service->id) }}" class="text-[#DC2626] hover:underline">Bulletin</a>
+            <a href="{{ route('worship.slides', $service->id) }}" class="text-brand hover:underline">Slides</a>
+            <a href="{{ route('worship.bulletin', $service->id) }}" class="text-brand hover:underline">Bulletin</a>
             @if($canEdit)
                 <a href="{{ route('worship.edit', $service->id) }}" class="text-slate-600 hover:underline">Edit</a>
             @endif
@@ -42,6 +42,6 @@
 @empty
     <p class="text-sm text-slate-500">No upcoming services planned yet.</p>
     @if($canEdit)
-        <a href="{{ route('worship.create') }}" class="inline-block mt-2 text-xs font-semibold text-[#DC2626] hover:underline">Plan a service &rarr;</a>
+        <a href="{{ route('worship.create') }}" class="inline-block mt-2 text-xs font-semibold text-brand hover:underline">Plan a service &rarr;</a>
     @endif
 @endforelse

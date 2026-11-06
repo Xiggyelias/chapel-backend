@@ -8,7 +8,7 @@
     <!-- Top Header & Breadcrumbs -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-[#DC2626] tracking-wider uppercase">
+            <div class="flex items-center space-x-2 text-xs font-semibold text-brand tracking-wider uppercase">
                 <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
                 <span>&bull;</span>
                 <span class="text-slate-400 font-bold">Institutional Governance</span>
@@ -39,7 +39,7 @@
         </div>
         <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 space-y-1">
             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Chaplaincy Decisions Audited</span>
-            <div class="text-2xl font-black font-cinzel text-[#DC2626]">{{ number_format($approvalActionsCount) }}</div>
+            <div class="text-2xl font-black font-cinzel text-brand">{{ number_format($approvalActionsCount) }}</div>
             <span class="text-[11px] text-red-700">Approvals, declines, changes requested</span>
         </div>
         <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 space-y-1">
@@ -52,16 +52,16 @@
     <!-- Filter Bar -->
     <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('audit.index') }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ empty($actionFilter) ? 'bg-[#DC2626] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+            <a href="{{ route('audit.index') }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ empty($actionFilter) ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
                 All Events
             </a>
-            <a href="{{ route('audit.index', ['action' => 'approve']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'approve' ? 'bg-[#DC2626] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+            <a href="{{ route('audit.index', ['action' => 'approve']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'approve' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
                 Approvals Only
             </a>
-            <a href="{{ route('audit.index', ['action' => 'submit']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'submit' ? 'bg-[#DC2626] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+            <a href="{{ route('audit.index', ['action' => 'submit']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'submit' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
                 Submissions
             </a>
-            <a href="{{ route('audit.index', ['action' => 'vc_go_ahead']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'vc_go_ahead' ? 'bg-[#DC2626] text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+            <a href="{{ route('audit.index', ['action' => 'vc_go_ahead']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'vc_go_ahead' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
                 VC Clearances
             </a>
         </div>
@@ -109,7 +109,7 @@
                             </td>
                             <td class="py-3.5 px-4">
                                 @if($log->request)
-                                    <a href="{{ route('requests.show', $log->request?->id) }}" class="font-semibold text-[#DC2626] hover:underline">
+                                    <a href="{{ route('requests.show', $log->request?->id) }}" class="font-semibold text-brand hover:underline">
                                         {{ $log->request?->title }}
                                     </a>
                                     <div class="text-[10px] text-slate-400">Ref: {{ $log->request?->reference_no }} &bull; {{ $log->request?->club?->name }}</div>

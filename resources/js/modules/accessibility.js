@@ -51,10 +51,10 @@ export function updateA11yUI() {
     const btnSn = document.getElementById('langBtnSn');
     if (btnEn && btnSn) {
         if (lang === 'sn') {
-            btnSn.className = 'w-full py-2 px-3 rounded-xl text-xs font-bold transition border border-[#DC2626] bg-[#DC2626] text-white shadow-xs';
+            btnSn.className = 'w-full py-2 px-3 rounded-xl text-xs font-bold transition border border-brand bg-brand text-white shadow-xs';
             btnEn.className = 'w-full py-2 px-3 rounded-xl text-xs font-bold transition border border-slate-300 bg-white text-slate-800 hover:bg-slate-50';
         } else {
-            btnEn.className = 'w-full py-2 px-3 rounded-xl text-xs font-bold transition border border-[#DC2626] bg-[#DC2626] text-white shadow-xs';
+            btnEn.className = 'w-full py-2 px-3 rounded-xl text-xs font-bold transition border border-brand bg-brand text-white shadow-xs';
             btnSn.className = 'w-full py-2 px-3 rounded-xl text-xs font-bold transition border border-slate-300 bg-white text-slate-800 hover:bg-slate-50';
         }
     }

@@ -4,7 +4,7 @@
 
 @section('content')
 @php
-    $field = 'w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-white transition';
+    $field = 'w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-white transition';
     $label = 'block text-xs font-semibold text-slate-700 mb-1.5';
     $categories = [
         'event' => 'Campus Event / Fellowship Activity',
@@ -18,9 +18,9 @@
 
     <div>
         <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-            <a href="{{ route('requests.index') }}" class="hover:underline text-[#DC2626] font-bold">Requests</a>
+            <a href="{{ route('requests.index') }}" class="hover:underline text-brand font-bold">Requests</a>
             <span>/</span>
-            <a href="{{ route('requests.show', $requestItem->id) }}" class="hover:underline text-[#DC2626] font-bold">{{ $requestItem->reference_no }}</a>
+            <a href="{{ route('requests.show', $requestItem->id) }}" class="hover:underline text-brand font-bold">{{ $requestItem->reference_no }}</a>
             <span>/</span>
             <span>Revise</span>
         </div>
@@ -123,7 +123,7 @@
 
         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
             <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
-                <input type="checkbox" name="sign_interpreter_required" value="1" @checked(old('sign_interpreter_required', $requestItem->sign_interpreter_required)) class="rounded text-[#DC2626] focus:ring-[#DC2626]">
+                <input type="checkbox" name="sign_interpreter_required" value="1" @checked(old('sign_interpreter_required', $requestItem->sign_interpreter_required)) class="rounded text-brand focus:ring-brand">
                 Sign-language interpreter required
             </label>
             <input type="text" name="sign_interpreter_name" aria-label="Interpreter name" maxlength="255" value="{{ old('sign_interpreter_name', $requestItem->sign_interpreter_name) }}" placeholder="Interpreter name (if arranged)" class="{{ $field }}">
@@ -131,7 +131,7 @@
 
         <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 pt-2">
             <a href="{{ route('requests.show', $requestItem->id) }}" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold text-center transition">Cancel</a>
-            <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] disabled:opacity-60 text-white text-xs font-bold transition shadow-sm">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-brand hover:bg-brand-dark disabled:opacity-60 text-white text-xs font-bold transition shadow-sm">
                 Save & Submit for Review
             </button>
         </div>

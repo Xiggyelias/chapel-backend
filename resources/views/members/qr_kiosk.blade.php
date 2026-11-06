@@ -36,7 +36,7 @@
     <div class="max-w-md w-full bg-white text-slate-900 rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-6">
         
         <!-- Card Banner -->
-        <div class="bg-gradient-to-br from-[#DC2626] via-[#B91C1C] to-[#991B1B] text-white p-6 text-center border-b border-white/10">
+        <div class="bg-gradient-to-br from-brand via-brand-dark to-brand-dark text-white p-6 text-center border-b border-white/10">
             <span class="text-[10px] font-mono uppercase tracking-widest text-rose-200 font-bold block mb-1">
                 Africa University Chaplaincy
             </span>
@@ -49,7 +49,7 @@
         <div class="p-6 text-center space-y-5">
             <div>
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Scan with Phone Camera</span>
-                <a href="{{ route('members.self_checkin', $token) }}" target="_blank" rel="noopener" title="Open the student check-in page" class="inline-block p-4 bg-slate-50 border-2 border-dashed border-[#DC2626]/40 rounded-3xl hover:scale-105 transition group cursor-pointer shadow-inner">
+                <a href="{{ route('members.self_checkin', $token) }}" target="_blank" rel="noopener" title="Open the student check-in page" class="inline-block p-4 bg-slate-50 border-2 border-dashed border-brand/40 rounded-3xl hover:scale-105 transition group cursor-pointer shadow-inner">
                     <x-qr-code :value="route('members.self_checkin', $token)" size="240" label="Attendance check-in QR code" class="mx-auto" />
                 </a>
             </div>
@@ -57,7 +57,7 @@
             <div class="space-y-1">
                 <span class="text-[11px] font-mono text-slate-400 block font-bold">MEETING TOKEN: {{ $token }}</span>
                 <p class="text-xs text-slate-500">
-                    Students scan with their default camera to automatically mark attendance. Or <a href="{{ route('members.self_checkin', $token) }}" target="_blank" class="text-[#DC2626] font-bold underline">click to simulate student check-in</a>.
+                    Students scan with their default camera to automatically mark attendance. Or <a href="{{ route('members.self_checkin', $token) }}" target="_blank" class="text-brand font-bold underline">click to simulate student check-in</a>.
                 </p>
             </div>
 

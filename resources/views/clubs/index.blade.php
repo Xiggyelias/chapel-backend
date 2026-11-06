@@ -8,7 +8,7 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-[#DC2626] mb-1">
+            <div class="flex items-center space-x-2 text-xs font-semibold text-brand mb-1">
                 <span>Fellowships &amp; Charters</span>
             </div>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
@@ -25,7 +25,7 @@
                 <span>Export CSV</span>
             </a>
 
-            <a href="{{ route('clubs.register') }}" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold transition shadow-xs active:scale-95">
+            <a href="{{ route('clubs.register') }}" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-semibold transition shadow-xs active:scale-95">
                 <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                 <span>Register Fellowship</span>
             </a>
@@ -34,7 +34,7 @@
 
     <!-- Metric Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <a href="{{ route('clubs.index', ['status' => 'active']) }}" class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-[#DC2626]/40 transition group">
+        <a href="{{ route('clubs.index', ['status' => 'active']) }}" class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-brand/40 transition group">
             <div class="flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Active Fellowships</span>
                 <span class="p-2 rounded-xl bg-emerald-50 text-emerald-700 group-hover:scale-110 transition">
@@ -75,16 +75,16 @@
 
     <!-- Filter Tabs -->
     <div class="flex items-center space-x-1.5 border-b border-slate-200 pb-2 overflow-x-auto text-xs font-semibold">
-        <a href="{{ route('clubs.index', ['status' => 'all']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'all' ? 'bg-[#DC2626] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
+        <a href="{{ route('clubs.index', ['status' => 'all']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'all' ? 'bg-brand text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
             All Fellowships ({{ $activeCount + $pendingCount + $archivedCount }})
         </a>
-        <a href="{{ route('clubs.index', ['status' => 'active']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'active' ? 'bg-[#DC2626] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
+        <a href="{{ route('clubs.index', ['status' => 'active']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'active' ? 'bg-brand text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
             Active & Chartered ({{ $activeCount }})
         </a>
-        <a href="{{ route('clubs.index', ['status' => 'pending']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'pending' ? 'bg-[#DC2626] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
+        <a href="{{ route('clubs.index', ['status' => 'pending']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'pending' ? 'bg-brand text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
             Pending Review ({{ $pendingCount }})
         </a>
-        <a href="{{ route('clubs.index', ['status' => 'archived']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'archived' ? 'bg-[#DC2626] text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
+        <a href="{{ route('clubs.index', ['status' => 'archived']) }}" class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ $statusFilter === 'archived' ? 'bg-brand text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100' }}">
             Archived ({{ $archivedCount }})
         </a>
     </div>
@@ -95,7 +95,7 @@
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 hover:border-slate-300 transition space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div class="flex items-start space-x-3.5">
-                        <span class="w-4 h-4 rounded-full mt-1 shrink-0 ring-2 ring-white shadow-sm" style="background-color: {{ $club->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
+                        <span class="w-4 h-4 rounded-full mt-1 shrink-0 ring-2 ring-white shadow-sm" style="background-color: {{ $club->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
                         <div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="text-base font-bold text-slate-900 font-cinzel">{{ $club->name }}</h3>
@@ -115,7 +115,7 @@
                                     </span>
                                 @endif
 
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-rose-50 text-[#DC2626] border border-rose-100">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-rose-50 text-brand border border-rose-100">
                                     {{ ucfirst($club->type) }}
                                 </span>
                             </div>
@@ -167,23 +167,23 @@
                 <!-- Footer Action Buttons -->
                 <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
                     <div class="flex flex-wrap items-center gap-2">
-                        <a href="{{ route('vault.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-[#DC2626] font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                        <a href="{{ route('vault.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-brand font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                             <span>Club Vault</span>
                         </a>
 
-                        <a href="{{ route('members.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-[#DC2626] font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                        <a href="{{ route('members.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-brand font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                             <span>Members</span>
                         </a>
 
-                        <a href="{{ route('requests.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-[#DC2626] font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
+                        <a href="{{ route('requests.index', ['club_id' => $club->id]) }}" class="inline-flex items-center space-x-1 text-slate-600 hover:text-brand font-semibold bg-slate-50 hover:bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 transition">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                             <span>Requests</span>
                         </a>
 
                         @if($club->constitution_path)
-                            <a href="{{ route('clubs.constitution', $club->id) }}" target="_blank" rel="noopener" class="inline-flex items-center space-x-1 text-[#DC2626] hover:text-[#B91C1C] font-semibold bg-rose-50 hover:bg-rose-100 px-2.5 py-1.5 rounded-lg border border-rose-200 transition">
+                            <a href="{{ route('clubs.constitution', $club->id) }}" target="_blank" rel="noopener" class="inline-flex items-center space-x-1 text-brand hover:text-brand-dark font-semibold bg-rose-50 hover:bg-rose-100 px-2.5 py-1.5 rounded-lg border border-rose-200 transition">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                 <span>Constitution (PDF)</span>
                             </a>
@@ -223,7 +223,7 @@
                 <p class="text-xs text-slate-500 max-w-sm mx-auto">
                     No fellowship records match the selected filter criteria.
                 </p>
-                <a href="{{ route('clubs.register') }}" class="inline-flex items-center space-x-1 text-xs font-bold text-[#DC2626] hover:underline pt-2">
+                <a href="{{ route('clubs.register') }}" class="inline-flex items-center space-x-1 text-xs font-bold text-brand hover:underline pt-2">
                     <span>Submit new charter application &rarr;</span>
                 </a>
             </div>

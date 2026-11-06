@@ -8,7 +8,7 @@
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-[#DC2626] mb-1">
+            <div class="flex items-center space-x-2 text-xs font-semibold text-brand mb-1">
                 <span>Clearance & Approvals</span>
             </div>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
@@ -19,7 +19,7 @@
             </p>
         </div>
 
-        <a href="{{ route('requests.create') }}" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold transition shadow-xs self-start sm:self-auto active:scale-95">
+        <a href="{{ route('requests.create') }}" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-semibold transition shadow-xs self-start sm:self-auto active:scale-95">
             <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             <span>Submit Proposal</span>
         </a>
@@ -31,13 +31,13 @@
             <!-- Search -->
             <div>
                 <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Search</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Title or Ref No..." class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Title or Ref No..." class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
             </div>
 
             <!-- Status Filter -->
             <div>
                 <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Status</label>
-                <select name="status" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                <select name="status" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                     <option value="">All Statuses</option>
                     <option value="submitted" {{ request('status') === 'submitted' ? 'selected' : '' }}>Submitted</option>
                     <option value="under_review" {{ request('status') === 'under_review' ? 'selected' : '' }}>Under Review</option>
@@ -50,7 +50,7 @@
             <!-- Category Filter -->
             <div>
                 <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Category</label>
-                <select name="category" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                <select name="category" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                     <option value="">All Categories</option>
                     <option value="event" {{ request('category') === 'event' ? 'selected' : '' }}>Event</option>
                     <option value="venue" {{ request('category') === 'venue' ? 'selected' : '' }}>Venue</option>
@@ -64,7 +64,7 @@
             @if(auth()->user()->isOffice())
                 <div>
                     <label class="block text-[11px] font-bold uppercase text-slate-500 mb-1">Club / Fellowship</label>
-                    <select name="club_id" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <select name="club_id" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                         <option value="">All Clubs</option>
                         @foreach($clubs as $club)
                             <option value="{{ $club->id }}" {{ request('club_id') == $club->id ? 'selected' : '' }}>{{ $club->name }} ({{ $club->code }})</option>
@@ -82,7 +82,7 @@
 
             <!-- Buttons -->
             <div class="flex items-end space-x-2">
-                <button type="submit" class="w-full py-2.5 px-3.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition shadow-sm active:scale-95">
+                <button type="submit" class="w-full py-2.5 px-3.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-sm active:scale-95">
                     Filter
                 </button>
                 <a href="{{ route('requests.index') }}" class="py-2.5 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition text-center active:scale-95">
@@ -113,14 +113,14 @@
                             <td class="p-4 whitespace-nowrap">
                                 <div class="font-mono font-bold text-slate-900">{{ $req->reference_no }}</div>
                                 <div class="mt-1">
-                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white" style="background-color: {{ $req->club?->color_hex ?? '#DC2626' }}">
+                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white" style="background-color: {{ $req->club?->color_hex ?? '#A51C30' }}">
                                         {{ $req->club?->code }}
                                     </span>
                                 </div>
                             </td>
 
                             <td class="p-4">
-                                <a href="{{ route('requests.show', $req->id) }}" class="font-bold text-slate-900 hover:text-[#DC2626] hover:underline transition">
+                                <a href="{{ route('requests.show', $req->id) }}" class="font-bold text-slate-900 hover:text-brand hover:underline transition">
                                     {{ $req->title }}
                                 </a>
                                 <div class="text-[11px] text-slate-500 uppercase tracking-wide mt-1 flex items-center space-x-1.5">
@@ -190,7 +190,7 @@
                             </td>
 
                             <td class="p-4 text-right whitespace-nowrap">
-                                <a href="{{ route('requests.show', $req->id) }}" class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-[#DC2626] hover:text-white text-slate-700 text-xs font-bold transition active:scale-95">
+                                <a href="{{ route('requests.show', $req->id) }}" class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-brand hover:text-white text-slate-700 text-xs font-bold transition active:scale-95">
                                     <span>Review</span>
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                                 </a>

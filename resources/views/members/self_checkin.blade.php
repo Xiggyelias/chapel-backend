@@ -17,10 +17,10 @@
     <div class="max-w-md w-full space-y-6">
         
         <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#DC2626] p-2 mb-1 shadow-md shadow-red-200">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand p-2 mb-1 shadow-md shadow-red-200">
                 <x-umc-logo class="w-full h-full" />
             </div>
-            <div class="text-xs uppercase tracking-widest text-[#DC2626] font-bold">Africa University Chaplaincy</div>
+            <div class="text-xs uppercase tracking-widest text-brand font-bold">Africa University Chaplaincy</div>
             <h1 class="text-2xl font-bold text-slate-900">{{ $matchingClub?->name ?? 'Check-In Code Expired' }}</h1>
             <p class="text-xs text-slate-500">Fellowship Attendance &bull; {{ date('l, F j, Y') }}</p>
         </div>
@@ -43,10 +43,10 @@
 
                 <div>
                     <label for="student_input" class="block text-xs font-semibold text-slate-700 mb-1.5">Student ID or AU Email</label>
-                    <input type="text" id="student_input" required minlength="3" maxlength="255" autocomplete="email" autofocus placeholder="e.g. 102458 or bmutasa@africau.edu" class="w-full text-sm p-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] transition">
+                    <input type="text" id="student_input" required minlength="3" maxlength="255" autocomplete="email" autofocus placeholder="e.g. 102458 or bmutasa@africau.edu" class="w-full text-sm p-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition">
                 </div>
 
-                <button type="submit" id="submitBtn" class="w-full py-3.5 px-4 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold uppercase tracking-wider transition shadow-sm active:scale-98">
+                <button type="submit" id="submitBtn" class="w-full py-3.5 px-4 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold uppercase tracking-wider transition shadow-sm active:scale-98">
                     Confirm My Attendance
                 </button>
             </form>

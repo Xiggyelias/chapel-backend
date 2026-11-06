@@ -6,8 +6,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
 
     <!-- Header Banner -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#171717] via-[#220B11] to-[#DC2626] p-8 text-white shadow-2xl border-t-2 border-[#DC2626]">
-        <div class="absolute -right-12 -bottom-16 w-80 h-80 rounded-full bg-[#DC2626]/20 blur-3xl pointer-events-none"></div>
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#171717] via-[#220B11] to-brand p-8 text-white shadow-2xl border-t-2 border-brand">
+        <div class="absolute -right-12 -bottom-16 w-80 h-80 rounded-full bg-brand/20 blur-3xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
                 <div class="flex items-center space-x-2 text-xs font-bold tracking-widest text-rose-200 uppercase mb-2">
@@ -33,24 +33,24 @@
 
     <!-- Quick Index Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <a href="#fourteen-day-rule" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-[#DC2626] transition group">
-            <div class="w-10 h-10 rounded-xl bg-red-50 text-[#DC2626] flex items-center justify-center font-bold text-sm mb-3 group-hover:scale-105 transition">14d</div>
-            <h3 class="text-xs font-bold text-slate-900 group-hover:text-[#DC2626] transition">14-Day Advance Notice</h3>
+        <a href="#fourteen-day-rule" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-brand transition group">
+            <div class="w-10 h-10 rounded-xl bg-red-50 text-brand flex items-center justify-center font-bold text-sm mb-3 group-hover:scale-105 transition">14d</div>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-brand transition">14-Day Advance Notice</h3>
             <p class="text-[11px] text-slate-500 mt-1">Submission timelines & exception protocols</p>
         </a>
-        <a href="#vc-clearance" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-[#DC2626] transition group">
-            <div class="w-10 h-10 rounded-xl bg-red-50 text-[#DC2626] flex items-center justify-center font-bold text-sm mb-3 group-hover:scale-105 transition">VC</div>
-            <h3 class="text-xs font-bold text-slate-900 group-hover:text-[#DC2626] transition">VC Clearance Protocol</h3>
+        <a href="#vc-clearance" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-brand transition group">
+            <div class="w-10 h-10 rounded-xl bg-red-50 text-brand flex items-center justify-center font-bold text-sm mb-3 group-hover:scale-105 transition">VC</div>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-brand transition">VC Clearance Protocol</h3>
             <p class="text-[11px] text-slate-500 mt-1">Outings & high-profile campus events</p>
         </a>
-        <a href="#venue-rules" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-[#DC2626] transition group">
+        <a href="#venue-rules" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-brand transition group">
             <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-sm mb-3 group-hover:scale-105 transition">🏛️</div>
-            <h3 class="text-xs font-bold text-slate-900 group-hover:text-[#DC2626] transition">Sanctuary & Venue Rules</h3>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-brand transition">Sanctuary & Venue Rules</h3>
             <p class="text-[11px] text-slate-500 mt-1">Capacities, sound equipment, curfew</p>
         </a>
-        <a href="#reporting-712" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-[#DC2626] transition group">
+        <a href="#reporting-712" class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-brand transition group">
             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm mb-3 group-hover:scale-105 transition">§7</div>
-            <h3 class="text-xs font-bold text-slate-900 group-hover:text-[#DC2626] transition">Chapel Manual §7.1.2</h3>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-brand transition">Chapel Manual §7.1.2</h3>
             <p class="text-[11px] text-slate-500 mt-1">Post-activity report & spending audits</p>
         </a>
     </div>
@@ -61,7 +61,7 @@
         <!-- Section 1: The 14-Day Advance Notice Rule -->
         <div id="fourteen-day-rule" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
             <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
-                <span class="w-2.5 h-8 rounded-full bg-[#DC2626]"></span>
+                <span class="w-2.5 h-8 rounded-full bg-brand"></span>
                 <div>
                     <h2 class="text-lg font-bold font-cinzel text-slate-900">Section 1: The Mandatory 14-Day Advance Notice Rule</h2>
                     <p class="text-xs text-slate-500">Chapel Constitution & Operating Procedures §4.2</p>
@@ -73,7 +73,7 @@
                 </p>
                 <div class="p-4 rounded-2xl bg-red-50/60 border border-red-200/80 text-xs text-red-900 space-y-2">
                     <div class="font-bold flex items-center space-x-1.5">
-                        <svg class="w-4 h-4 text-[#DC2626]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                         <span>Automated System Enforcement:</span>
                     </div>
                     <ul class="list-disc pl-5 space-y-1">
@@ -88,7 +88,7 @@
         <!-- Section 2: Vice-Chancellor Concurrence Protocol -->
         <div id="vc-clearance" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
             <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
-                <span class="w-2.5 h-8 rounded-full bg-[#DC2626]"></span>
+                <span class="w-2.5 h-8 rounded-full bg-brand"></span>
                 <div>
                     <h2 class="text-lg font-bold font-cinzel text-slate-900">Section 2: Vice-Chancellor Clearance & Off-Campus Outings</h2>
                     <p class="text-xs text-slate-500">University Executive Governance Directive §2.1</p>

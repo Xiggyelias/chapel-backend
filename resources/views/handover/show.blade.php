@@ -8,7 +8,7 @@
     <!-- Header Section -->
     <div>
         <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-            <a href="{{ route('handover.index') }}" class="hover:underline text-[#DC2626] font-bold">Leadership Handover</a>
+            <a href="{{ route('handover.index') }}" class="hover:underline text-brand font-bold">Leadership Handover</a>
             <span>/</span>
             <span class="font-mono text-slate-700">{{ $handover->club?->code }}</span>
         </div>
@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class="flex items-center space-x-2">
-                <a href="{{ route('handover.certificate', $handover->id) }}" target="_blank" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition shadow-xs">
+                <a href="{{ route('handover.certificate', $handover->id) }}" target="_blank" class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-xs">
                     <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span>Handover Certificate</span>
                 </a>
@@ -105,21 +105,21 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">What is currently running? <span class="text-rose-600">*</span></label>
-                    <textarea name="checklist_running_activities" rows="2" required placeholder="Describe active weekly fellowships, ongoing campaigns, or projects..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626]"></textarea>
+                    <textarea name="checklist_running_activities" rows="2" required placeholder="Describe active weekly fellowships, ongoing campaigns, or projects..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Pending items or outstanding matters <span class="text-rose-600">*</span></label>
-                    <textarea name="checklist_pending_items" rows="2" required placeholder="Any pending approvals, unpaid invoices, or borrowed equipment..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626]"></textarea>
+                    <textarea name="checklist_pending_items" rows="2" required placeholder="Any pending approvals, unpaid invoices, or borrowed equipment..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Key contacts & faculty advisors <span class="text-rose-600">*</span></label>
-                    <textarea name="checklist_key_contacts" rows="2" required placeholder="Chaplaincy contacts, patrons, senior committee leads..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626]"></textarea>
+                    <textarea name="checklist_key_contacts" rows="2" required placeholder="Chaplaincy contacts, patrons, senior committee leads..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Yearly calendar traditions & recurrent events <span class="text-rose-600">*</span></label>
-                    <textarea name="checklist_yearly_calendar" rows="2" required placeholder="Annual retreat dates, joint fellowships, missionary outreach..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626]"></textarea>
+                    <textarea name="checklist_yearly_calendar" rows="2" required placeholder="Annual retreat dates, joint fellowships, missionary outreach..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"></textarea>
                 </div>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#DC2626] to-[#B91C1C] hover:brightness-110 text-white font-bold text-xs shadow-md active:scale-95">
+                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand to-brand-dark hover:brightness-110 text-white font-bold text-xs shadow-md active:scale-95">
                     Save Handover Checklist
                 </button>
             </form>
@@ -152,9 +152,9 @@
                 <div class="mt-3 p-4 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center justify-between">
                     <div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block font-cinzel">Vault Sentinel Health Score</span>
-                        <span class="text-xs font-bold text-[#DC2626]">{{ $vaultHealth['score'] }}% &bull; {{ $vaultHealth['grade'] }}</span>
+                        <span class="text-xs font-bold text-brand">{{ $vaultHealth['score'] }}% &bull; {{ $vaultHealth['grade'] }}</span>
                     </div>
-                    <a href="{{ route('vault.index', ['club_id' => $handover->club?->id]) }}" target="_blank" class="text-[11px] text-[#DC2626] font-bold hover:underline">
+                    <a href="{{ route('vault.index', ['club_id' => $handover->club?->id]) }}" target="_blank" class="text-[11px] text-brand font-bold hover:underline">
                         Inspect Club Vault &rarr;
                     </a>
                 </div>
@@ -163,7 +163,7 @@
             @if(auth()->user()->isOffice() && !$handover->folders_verified && $handover->checklist_running_activities)
                 <form method="POST" action="{{ route('handover.verify_folders', $handover->id) }}" class="shrink-0">
                     @csrf
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#DC2626] to-[#B91C1C] hover:brightness-110 text-white font-bold text-xs shadow-sm active:scale-95">
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand to-brand-dark hover:brightness-110 text-white font-bold text-xs shadow-sm active:scale-95">
                         Confirm Vault Complete
                     </button>
                 </form>
@@ -220,7 +220,7 @@
             </p>
             <form method="POST" action="{{ route('handover.transfer', $handover->id) }}" onsubmit="return confirm('Confirm transfer of leadership access to {{ $handover->incoming_president_name }}?');">
                 @csrf
-                <button type="submit" class="px-6 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold text-xs shadow-sm active:scale-95 cursor-pointer">
+                <button type="submit" class="px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-xs shadow-sm active:scale-95 cursor-pointer">
                     Complete Handover & Transfer Access
                 </button>
             </form>
@@ -234,7 +234,7 @@
                     <p class="mt-0.5 text-slate-700">Official executive authority conferred upon <strong>{{ $handover->incoming_president_name }}</strong>. All records archived in permanent history.</p>
                 </div>
             </div>
-            <a href="{{ route('handover.certificate', $handover->id) }}" target="_blank" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold text-xs shadow-sm shrink-0 transition">
+            <a href="{{ route('handover.certificate', $handover->id) }}" target="_blank" class="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-xs shadow-sm shrink-0 transition">
                 <span>View & Print Official Certificate &rarr;</span>
             </a>
         </div>

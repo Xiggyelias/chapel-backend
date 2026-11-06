@@ -50,7 +50,7 @@
                             Set a secure private password known only to you.
                         </p>
                     </div>
-                    <span class="w-8 h-8 rounded-xl bg-red-50 text-[#DC2626] flex items-center justify-center shrink-0">
+                    <span class="w-8 h-8 rounded-xl bg-red-50 text-brand flex items-center justify-center shrink-0">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </span>
                 </div>
@@ -59,7 +59,7 @@
                     <div class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs space-y-1">
                         @foreach ($errors->all() as $err)
                             <div class="flex items-center space-x-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-[#DC2626] shrink-0"></span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand shrink-0"></span>
                                 <span>{{ $err }}</span>
                             </div>
                         @endforeach
@@ -73,7 +73,7 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-700 mb-1">Current / Default Password</label>
                         <div class="relative">
-                            <input type="password" id="current_password" name="current_password" required placeholder="Enter your current or temporary password" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] text-slate-900 bg-white transition">
+                            <input type="password" id="current_password" name="current_password" required placeholder="Enter your current or temporary password" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white transition">
                             <button type="button" onclick="togglePassVisibility('current_password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer" title="Toggle password visibility">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                             </button>
@@ -85,7 +85,7 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">New Password</label>
                             <div class="relative">
-                                <input type="password" id="new_password" name="password" required placeholder="Minimum 8 characters" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] text-slate-900 bg-white transition">
+                                <input type="password" id="new_password" name="password" required placeholder="Minimum 8 characters" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white transition">
                                 <button type="button" onclick="togglePassVisibility('new_password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer" title="Toggle password visibility">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                 </button>
@@ -95,7 +95,7 @@
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Confirm New Password</label>
                             <div class="relative">
-                                <input type="password" id="new_password_confirmation" name="password_confirmation" required placeholder="Re-type new password" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] text-slate-900 bg-white transition">
+                                <input type="password" id="new_password_confirmation" name="password_confirmation" required placeholder="Re-type new password" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white transition">
                                 <button type="button" onclick="togglePassVisibility('new_password_confirmation', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer" title="Toggle password visibility">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                 </button>
@@ -113,7 +113,7 @@
                     </div>
 
                     <div class="pt-2">
-                        <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer">
+                        <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer">
                             <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                             <span>Save New Password</span>
                         </button>
@@ -127,12 +127,12 @@
             <!-- Profile Identity Card -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 space-y-4">
                 <div class="text-center space-y-2">
-                    <div class="w-16 h-16 rounded-full bg-[#DC2626] text-white flex items-center justify-center font-bold text-xl mx-auto shadow-sm">
+                    <div class="w-16 h-16 rounded-full bg-brand text-white flex items-center justify-center font-bold text-xl mx-auto shadow-sm">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>
                     <div>
                         <h2 class="text-sm font-bold text-slate-900">{{ $user->name }}</h2>
-                        <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-50 text-[#DC2626] border border-red-100">
+                        <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-50 text-brand border border-red-100">
                             {{ $user->getRoleDisplayName() }}
                         </span>
                     </div>
@@ -178,7 +178,7 @@
                     @csrf
                     <div>
                         <label class="block text-[11px] font-medium text-slate-600 mb-1">Mobile / WhatsApp</label>
-                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="+263 77 123 4567" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] text-slate-900 bg-white">
+                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="+263 77 123 4567" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white">
                     </div>
                     <button type="submit" class="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-[0.99] text-slate-800 text-xs font-semibold transition cursor-pointer">
                         Update Contact
@@ -197,10 +197,10 @@
         if (!input) return;
         if (input.type === 'password') {
             input.type = 'text';
-            btn.classList.add('text-[#DC2626]');
+            btn.classList.add('text-brand');
         } else {
             input.type = 'password';
-            btn.classList.remove('text-[#DC2626]');
+            btn.classList.remove('text-brand');
         }
     }
 </script>

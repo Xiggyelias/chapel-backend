@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hymn;
 use App\Models\ServiceSheet;
+use App\Services\LiturgicalCalendarService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -187,12 +189,59 @@ class ServiceSheetController extends Controller
     public function slides($id)
     {
         $sheet = ServiceSheet::findOrFail($id);
-        
-        // Parse hymns into array
-        $hymnsRaw = $sheet->hymns ? preg_split('/[\r\n,;]+/', $sheet->hymns) : [];
-        $hymnsList = array_values(array_filter(array_map('trim', $hymnsRaw)));
 
-        return view('worship.slides', compact('sheet', 'hymnsList'));
+        // Titles such as "Holy, Holy, Holy" contain commas, so commas only separate entries on single-line lists.
+        $raw = (string) $sheet->hymns;
+        $separator = preg_match('/[\r\n;]/', $raw) ? '/[\r\n;]+/' : '/,+/';
+        $hymnsList = array_values(array_filter(array_map('trim', $raw === '' ? [] : preg_split($separator, $raw))));
+
+        $hymnSlides = array_map(fn (string $entry) => $this->resolveHymnForSlides($entry), $hymnsList);
+        $season = LiturgicalCalendarService::getCurrentSeason($sheet->service_date);
+
+        return view('worship.slides', compact('sheet', 'hymnsList', 'hymnSlides', 'season'));
+    }
+
+    /**
+     * Match a free-text hymn entry ("UMH 378", "MHB #49 Amazing Grace", "Amazing Grace") to the hymnal.
+     */
+    private function resolveHymnForSlides(string $entry): array
+    {
+        $hymn = null;
+        if (preg_match('/\b(UMH|MHB|SHONA|SHO)\s*(?:no\.?|#)?\s*(\d+)/i', $entry, $m)) {
+            $code = strtoupper($m[1]) === 'SHO' ? 'SHONA' : strtoupper($m[1]);
+            $hymn = Hymn::where('hymnal_code', $code)->where('number', $m[2])->first();
+        }
+        if (! $hymn) {
+            $title = trim(preg_replace('/^\s*(UMH|MHB|SHONA|SHO)?\s*#?\s*\d+\s*[-:.]?\s*/i', '', $entry));
+            if ($title !== '') {
+                $hymn = Hymn::whereRaw('LOWER(title) = ?', [mb_strtolower($title)])
+                    ->orderByRaw("CASE WHEN lyrics_status = 'available' THEN 0 ELSE 1 END")
+                    ->first();
+            }
+        }
+
+        $stanzas = [];
+        if ($hymn && $hymn->hasLyrics()) {
+            $chunks = preg_split('/\R\s*\R/', trim($hymn->lyrics));
+            foreach ($chunks as $chunk) {
+                $chunk = trim($chunk);
+                if ($chunk === '') {
+                    continue;
+                }
+                $isRefrain = (bool) preg_match('/^(refrain|chorus)\s*:?/i', $chunk);
+                $text = trim(preg_replace('/^(refrain|chorus)\s*:?\s*/i', '', $chunk));
+                $text = preg_replace('/^\d+\.\s+/', '', $text);
+                $stanzas[] = ['refrain' => $isRefrain, 'text' => $text];
+            }
+        }
+
+        return [
+            'entry' => $entry,
+            'title' => $hymn->title ?? $entry,
+            'label' => $hymn ? "{$hymn->hymnal_code} {$hymn->number}" : null,
+            'author' => $hymn->author ?? null,
+            'stanzas' => $stanzas,
+        ];
     }
 
     /**

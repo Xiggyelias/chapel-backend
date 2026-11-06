@@ -24,7 +24,7 @@
             max-width: 900px;
             margin: 0 auto;
             background: #ffffff;
-            border: 12px double #DC2626;
+            border: 12px double #A51C30;
             outline: 2px solid #0B0F17;
             outline-offset: -6px;
             padding: 48px;
@@ -36,12 +36,12 @@
             position: absolute;
             width: 32px;
             height: 32px;
-            border-color: #DC2626;
+            border-color: #A51C30;
         }
-        .cert-tl { top: 12px; left: 12px; border-top: 3px solid #DC2626; border-left: 3px solid #DC2626; }
-        .cert-tr { top: 12px; right: 12px; border-top: 3px solid #DC2626; border-right: 3px solid #DC2626; }
-        .cert-bl { bottom: 12px; left: 12px; border-bottom: 3px solid #DC2626; border-left: 3px solid #DC2626; }
-        .cert-br { bottom: 12px; right: 12px; border-bottom: 3px solid #DC2626; border-right: 3px solid #DC2626; }
+        .cert-tl { top: 12px; left: 12px; border-top: 3px solid #A51C30; border-left: 3px solid #A51C30; }
+        .cert-tr { top: 12px; right: 12px; border-top: 3px solid #A51C30; border-right: 3px solid #A51C30; }
+        .cert-bl { bottom: 12px; left: 12px; border-bottom: 3px solid #A51C30; border-left: 3px solid #A51C30; }
+        .cert-br { bottom: 12px; right: 12px; border-bottom: 3px solid #A51C30; border-right: 3px solid #A51C30; }
 
         .watermark {
             position: absolute;
@@ -66,12 +66,12 @@
 
     <!-- Top Action Toolbar -->
     <div class="no-print max-w-4xl mx-auto mb-6 flex items-center justify-between font-sans text-xs">
-        <a href="{{ route('handover.show', $handover->id) }}" class="text-[#DC2626] font-bold hover:underline flex items-center space-x-1">
+        <a href="{{ route('handover.show', $handover->id) }}" class="text-brand font-bold hover:underline flex items-center space-x-1">
             <span>&larr; Back to Handover Dossier</span>
         </a>
         <div class="flex items-center space-x-3">
             <span class="text-slate-500 font-mono">Academic Year: {{ $handover->academic_year }}</span>
-            <button onclick="window.print()" class="px-5 py-2.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold rounded-xl shadow-sm transition flex items-center space-x-2">
+            <button onclick="window.print()" class="px-5 py-2.5 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl shadow-sm transition flex items-center space-x-2">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 <span>Print Official Certificate</span>
             </button>
@@ -87,7 +87,7 @@
         <div class="cert-corner cert-br"></div>
 
         <!-- Watermark -->
-        <svg class="watermark text-[#DC2626]" viewBox="0 0 100 100" fill="currentColor">
+        <svg class="watermark text-brand" viewBox="0 0 100 100" fill="currentColor">
             <rect x="45" y="10" width="10" height="80" rx="3" />
             <rect x="20" y="32" width="60" height="10" rx="3" />
         </svg>
@@ -96,10 +96,10 @@
 
             <!-- Institutional Header -->
             <div class="space-y-1">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-[#DC2626] border border-white/20 flex items-center justify-center p-2.5 shadow-md mb-2">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-brand border border-white/20 flex items-center justify-center p-2.5 shadow-md mb-2">
                     <x-umc-logo class="w-full h-full" />
                 </div>
-                <div class="font-cinzel text-xs font-bold uppercase tracking-widest text-[#DC2626]">
+                <div class="font-cinzel text-xs font-bold uppercase tracking-widest text-brand">
                     Africa University &bull; Office of the University Chaplain
                 </div>
                 <div class="font-cinzel text-sm font-semibold tracking-wider text-slate-600 uppercase">
@@ -108,8 +108,8 @@
             </div>
 
             <!-- Title Decree -->
-            <div class="py-2 border-y-2 border-[#DC2626]/30 my-4 space-y-1">
-                <h1 class="font-cinzel text-2xl sm:text-3xl font-extrabold text-[#DC2626] tracking-wide uppercase">
+            <div class="py-2 border-y-2 border-brand/30 my-4 space-y-1">
+                <h1 class="font-cinzel text-2xl sm:text-3xl font-extrabold text-brand tracking-wide uppercase">
                     Certificate of Leadership Stewardship & Institutional Transition
                 </h1>
                 <div class="text-xs font-sans text-slate-500 font-mono tracking-widest">
@@ -123,7 +123,7 @@
                     This is to solemnly attest that under the regulations of the Africa University Chaplaincy Office and the Kwang-Lim Chapel Fellowship Manual, the formal leadership transition for:
                 </p>
 
-                <div class="font-cinzel text-2xl sm:text-3xl font-black text-[#DC2626] py-1 tracking-wider border-b border-dashed border-[#DC2626] max-w-lg mx-auto">
+                <div class="font-cinzel text-2xl sm:text-3xl font-black text-brand py-1 tracking-wider border-b border-dashed border-brand max-w-lg mx-auto">
                     {{ $handover->club?->name }}
                 </div>
 
@@ -140,7 +140,7 @@
                     </div>
                     <div>
                         <span class="text-slate-400 uppercase font-bold text-[10px] block">Conferred Executive Authority</span>
-                        <span class="font-bold text-[#DC2626] text-sm">{{ $handover->incoming_president_name }}</span>
+                        <span class="font-bold text-brand text-sm">{{ $handover->incoming_president_name }}</span>
                         <span class="text-[10px] text-slate-600 block">President & Chapel Committee Member</span>
                     </div>
                 </div>
@@ -161,8 +161,8 @@
                 </div>
 
                 <div class="text-center space-y-1 flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 rounded-full border-2 border-[#DC2626] bg-red-50/40 flex items-center justify-center p-1 shadow-inner">
-                        <div class="w-14 h-14 rounded-full border border-dashed border-[#DC2626] flex flex-col items-center justify-center text-[8px] font-cinzel font-bold text-[#DC2626] uppercase text-center leading-tight">
+                    <div class="w-16 h-16 rounded-full border-2 border-brand bg-red-50/40 flex items-center justify-center p-1 shadow-inner">
+                        <div class="w-14 h-14 rounded-full border border-dashed border-brand flex flex-col items-center justify-center text-[8px] font-cinzel font-bold text-brand uppercase text-center leading-tight">
                             <span>Chapel</span>
                             <span>Seal</span>
                             <span>Affixed</span>
@@ -172,7 +172,7 @@
                 </div>
 
                 <div class="text-center space-y-2">
-                    <div class="h-10 border-b border-slate-400 flex items-end justify-center font-cinzel font-bold text-sm text-[#DC2626] pb-1">
+                    <div class="h-10 border-b border-slate-400 flex items-end justify-center font-cinzel font-bold text-sm text-brand pb-1">
                         {{ $handover->completer ? $handover->completer?->name : 'Rev. Supt. Eunice Marima' }}
                     </div>
                     <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">University Chaplain</span>

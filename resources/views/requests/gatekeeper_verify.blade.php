@@ -20,7 +20,7 @@
         
         <!-- Institutional Security Header -->
         <div class="text-center space-y-1.5">
-            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#DC2626] border border-white/20 p-2 mb-1 shadow-lg shadow-black/40">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand border border-white/20 p-2 mb-1 shadow-lg shadow-black/40">
                 <x-umc-logo class="w-full h-full" />
             </div>
             <div class="text-xs uppercase tracking-widest text-rose-200 font-bold">Kwang-Lim Chapel</div>
@@ -62,7 +62,7 @@
                         </div>
                         <div>
                             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Approved Venue</span>
-                            <span class="font-bold text-[#DC2626] text-xs block truncate">
+                            <span class="font-bold text-brand text-xs block truncate">
                                 📍 {{ $requestItem->venue ? $requestItem->venue?->name : $requestItem->venue_other }}
                             </span>
                         </div>
@@ -132,7 +132,7 @@
                     </div>
 
                     <div class="text-center pt-2">
-                        <a href="{{ route('calendar.public') }}" class="inline-block px-5 py-2.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold rounded-xl text-xs transition shadow-sm">
+                        <a href="{{ route('calendar.public') }}" class="inline-block px-5 py-2.5 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl text-xs transition shadow-sm">
                             Check Official Public Calendar &rarr;
                         </a>
                     </div>

@@ -7,19 +7,19 @@
 
 @php
     if ($variant === 'official') {
-        $fColor = $flameColor ?? '#DC2626';
+        $fColor = $flameColor ?? '#A51C30';
         $cColor = $crossColor ?? '#1E293B';
         $strokeColor = 'none';
         $strokeWidth = '0';
     } elseif ($variant === 'gold') {
         $fColor = $flameColor ?? '#F59E0B';
         $cColor = $crossColor ?? '#FFFFFF';
-        $strokeColor = '#B91C1C';
+        $strokeColor = '#861527';
         $strokeWidth = '4.5';
     } elseif ($variant === 'badge-white') {
         $fColor = $flameColor ?? '#FFFFFF';
         $cColor = $crossColor ?? '#FFFFFF';
-        $strokeColor = '#B91C1C';
+        $strokeColor = '#861527';
         $strokeWidth = '4.5';
     } else {
         $fColor = $flameColor ?? 'currentColor';

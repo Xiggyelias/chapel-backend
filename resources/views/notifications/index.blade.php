@@ -6,8 +6,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
 
     <!-- Header Banner -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B0F17] via-[#1A0B12] to-[#DC2626] p-8 text-white shadow-2xl border-t-2 border-[#DC2626]">
-        <div class="absolute -right-12 -bottom-16 w-80 h-80 rounded-full bg-[#DC2626]/20 blur-3xl pointer-events-none"></div>
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B0F17] via-[#1A0B12] to-brand p-8 text-white shadow-2xl border-t-2 border-brand">
+        <div class="absolute -right-12 -bottom-16 w-80 h-80 rounded-full bg-brand/20 blur-3xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
                 <div class="flex items-center space-x-2 text-xs font-bold tracking-widest text-rose-200 uppercase mb-2">
@@ -26,7 +26,7 @@
                 <div class="flex items-center space-x-3 shrink-0">
                     <form method="POST" action="{{ route('notifications.trigger_reminders') }}">
                         @csrf
-                        <button type="submit" class="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-white hover:bg-slate-100 text-[#DC2626] text-xs font-black shadow-lg hover:shadow-xl transition transform active:scale-95 border border-white/30">
+                        <button type="submit" class="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-white hover:bg-slate-100 text-brand text-xs font-black shadow-lg hover:shadow-xl transition transform active:scale-95 border border-white/30">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             <span>Trigger Daily Policy Checks</span>
                         </button>
@@ -101,7 +101,7 @@
                     @php
                         $daysLeft = Carbon\Carbon::today()->diffInDays($req->event_date, false);
                     @endphp
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 hover:border-[#DC2626] transition">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 hover:border-brand transition">
                         <div class="flex items-center justify-between text-[11px]">
                             <span class="font-bold text-slate-900 truncate">{{ $req->title }}</span>
                             <span class="font-mono text-[10px] font-bold {{ $daysLeft < 14 ? 'text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded' : 'text-slate-500' }}">
@@ -114,7 +114,7 @@
                         </div>
                         <div class="pt-1 flex items-center justify-between">
                             <span class="text-[10px] text-slate-400 font-mono">Ref: {{ $req->reference_no }}</span>
-                            <a href="{{ route('requests.show', $req->id) }}" class="text-[10px] font-bold text-[#DC2626] hover:underline">
+                            <a href="{{ route('requests.show', $req->id) }}" class="text-[10px] font-bold text-brand hover:underline">
                                 Review Request &rarr;
                             </a>
                         </div>
@@ -142,7 +142,7 @@
                     @php
                         $daysToService = Carbon\Carbon::today()->diffInDays($service->service_date, false);
                     @endphp
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-[#DC2626] transition">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-brand transition">
                         <div class="flex items-center justify-between text-xs font-bold">
                             <span class="text-slate-900">{{ $service->service_type }}</span>
                             <span class="font-mono text-[10px] text-slate-500">{{ $service->service_date->format('l, M d') }}</span>
@@ -162,7 +162,7 @@
                             <a href="{{ route('worship.slides', $service->id) }}" target="_blank" class="text-[10px] font-bold text-slate-600 hover:text-slate-900">
                                 Projector Slides
                             </a>
-                            <a href="{{ route('worship.show', $service->id) }}" class="text-[10px] font-bold text-[#DC2626] hover:underline">
+                            <a href="{{ route('worship.show', $service->id) }}" class="text-[10px] font-bold text-brand hover:underline">
                                 Manage Service &rarr;
                             </a>
                         </div>
@@ -197,7 +197,7 @@
                         </div>
                         <div class="pt-1 flex items-center justify-between text-[10px]">
                             <span class="text-rose-600 font-semibold">Report Due Within 7 Days</span>
-                            <a href="{{ route('reports.create', ['event_id' => $ev->id]) }}" class="font-bold text-[#DC2626] hover:underline">
+                            <a href="{{ route('reports.create', ['event_id' => $ev->id]) }}" class="font-bold text-brand hover:underline">
                                 File Report &rarr;
                             </a>
                         </div>
@@ -216,7 +216,7 @@
     <div class="bg-white rounded-3xl shadow-xs border border-slate-200/80 overflow-hidden">
         <div class="p-6 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/60">
             <div>
-                <h3 class="text-xs font-bold text-[#DC2626] uppercase tracking-wider font-cinzel">
+                <h3 class="text-xs font-bold text-brand uppercase tracking-wider font-cinzel">
                     Automated System Dispatch Ledger
                 </h3>
                 <p class="text-[11px] text-slate-500 mt-0.5">Cryptographic log of all simulated emails, SMS alerts, and clearance dispatches.</p>

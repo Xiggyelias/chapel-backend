@@ -14,7 +14,7 @@
         .font-mono { font-family: 'JetBrains Mono', monospace; }
         #video-container { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 1.5rem; overflow: hidden; background: #000; margin: 0 auto; }
         #video { width: 100%; height: 100%; object-fit: cover; }
-        .scanner-laser { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #DC2626; box-shadow: 0 0 10px #DC2626; animation: scan 2s infinite ease-in-out; }
+        .scanner-laser { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: #A51C30; box-shadow: 0 0 10px #A51C30; animation: scan 2s infinite ease-in-out; }
         @keyframes scan { 0% { top: 5%; } 50% { top: 95%; } 100% { top: 5%; } }
     </style>
 </head>
@@ -35,7 +35,7 @@
     <div class="max-w-md w-full space-y-4 my-4">
         
         <!-- Camera Viewfinder -->
-        <div id="video-container" class="border-2 border-[#DC2626] shadow-2xl relative">
+        <div id="video-container" class="border-2 border-brand shadow-2xl relative">
             <video id="video" autoplay playsinline muted></video>
             <div class="scanner-laser"></div>
             
@@ -48,7 +48,7 @@
 
             <!-- Fallback overlay if camera disabled -->
             <div id="cameraFallback" class="hidden absolute inset-0 bg-slate-900/95 flex flex-col items-center justify-center p-6 text-center space-y-2">
-                <svg class="w-10 h-10 text-[#DC2626]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                <svg class="w-10 h-10 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                 <span class="text-xs font-bold text-white">Browser Camera Inactive</span>
                 <p class="text-[11px] text-slate-400">Use rapid check-in below or allow camera permissions in browser settings.</p>
             </div>
@@ -60,8 +60,8 @@
                 Quick Student ID / Name / Barcode Entry
             </label>
             <form onsubmit="handleManualScan(event)" class="flex space-x-2">
-                <input type="text" id="manualInput" autofocus placeholder="Scan barcode or type name/ID..." class="flex-1 text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]">
-                <button type="submit" class="px-5 py-3 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold text-xs rounded-xl transition shadow">
+                <input type="text" id="manualInput" autofocus placeholder="Scan barcode or type name/ID..." class="flex-1 text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand">
+                <button type="submit" class="px-5 py-3 bg-brand hover:bg-brand-dark text-white font-bold text-xs rounded-xl transition shadow">
                     Check In
                 </button>
             </form>
@@ -78,7 +78,7 @@
             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">1-Tap Fast Check-In:</span>
             <div class="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto">
                 @foreach($members as $m)
-                    <button type="button" data-name="{{ $m->full_name }}" onclick="quickCheckin(this.dataset.name)" class="px-3 py-1.5 bg-white/10 hover:bg-[#DC2626] hover:text-white rounded-xl text-[11px] text-slate-200 transition font-medium border border-white/10">
+                    <button type="button" data-name="{{ $m->full_name }}" onclick="quickCheckin(this.dataset.name)" class="px-3 py-1.5 bg-white/10 hover:bg-brand hover:text-white rounded-xl text-[11px] text-slate-200 transition font-medium border border-white/10">
                         + {{ $m->full_name }}
                     </button>
                 @endforeach

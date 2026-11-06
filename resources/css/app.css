@@ -4,34 +4,47 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@source '../../app/**/*.php';
 
+/* ==========================================================================
+   Kwang-Lim Chapel design system
+   Collegiate crimson + restrained gold on warm paper, Fraunces display serif
+   over Plus Jakarta Sans. Every view uses these tokens (bg-brand, text-gold…).
+   ========================================================================== */
 @theme {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-serif: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
 
-    /* Official Africa University Color System (Bright Red, Pure White, Deep Slate/Black) */
-    --color-au-crimson: #DC2626;
-    --color-au-crimson-dark: #B91C1C;
-    --color-au-crimson-light: #FEF2F2;
-    --color-au-red: #EF4444;
-    --color-au-red-dark: #DC2626;
-    --color-au-red-light: #FEF2F2;
+    /* Brand */
+    --color-brand: #A51C30;
+    --color-brand-dark: #861527;
+    --color-brand-deep: #5E0F1C;
+    --color-brand-soft: #FBF1F2;
+    --color-gold: #B8892B;
+    --color-gold-soft: #F7EFDC;
 
-    /* Obsidian Slate & Neutrals */
-    --color-au-obsidian: #0F172A;
-    --color-au-black: #0F172A;
-    --color-au-gray-light: #F8FAFC;
-    --color-au-border: #E2E8F0;
-    --color-au-muted: #64748B;
-}
+    /* Surfaces & ink */
+    --color-paper: #F7F6F3;
+    --color-ink: #12131A;
 
-@theme {
-    --animate-scale-up: scale-up 0.15s ease-out;
+    /* Legacy aliases kept for older markup */
+    --color-au-crimson: #A51C30;
+    --color-au-crimson-dark: #861527;
+    --color-au-crimson-light: #FBF1F2;
+    --color-au-obsidian: #12131A;
+
+    /* Softer, layered elevation */
+    --shadow-2xs: 0 1px 1px rgb(18 19 26 / 0.03);
+    --shadow-xs: 0 1px 2px rgb(18 19 26 / 0.05), 0 1px 1px rgb(18 19 26 / 0.02);
+    --shadow-sm: 0 1px 2px rgb(18 19 26 / 0.04), 0 4px 12px -4px rgb(18 19 26 / 0.08);
+    --shadow-md: 0 2px 4px rgb(18 19 26 / 0.04), 0 12px 24px -8px rgb(18 19 26 / 0.12);
+
+    --animate-scale-up: scale-up 0.16s cubic-bezier(0.16, 1, 0.3, 1);
     --animate-fade-in: fade-in 0.2s ease-out;
 
     @keyframes scale-up {
-        from { opacity: 0; transform: scale(0.97); }
-        to { opacity: 1; transform: scale(1); }
+        from { opacity: 0; transform: translateY(-2px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
     @keyframes fade-in {
         from { opacity: 0; }
@@ -39,17 +52,163 @@
     }
 }
 
-/* Visible keyboard focus everywhere (mouse clicks are unaffected) */
 @layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        background-color: var(--color-paper);
+        font-feature-settings: 'cv11', 'ss01';
+    }
+
+    /* Page titles and section display headings use the serif */
+    main h1,
+    .font-display,
+    .font-cinzel {
+        font-family: var(--font-display);
+        font-optical-sizing: auto;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+    }
+
+    ::selection {
+        background: var(--color-brand);
+        color: #fff;
+    }
+
+    /* Visible keyboard focus everywhere (mouse clicks are unaffected) */
     :focus-visible {
-        outline: 2px solid #DC2626;
+        outline: 2px solid var(--color-brand);
         outline-offset: 2px;
     }
-    .app-header-black :focus-visible,
-    .bg-black :focus-visible {
-        outline-color: #FFFFFF;
+    .app-header :focus-visible {
+        outline-color: #fff;
+    }
+
+    /* Figures line up in tables and stat tiles */
+    table,
+    .tabular-nums {
+        font-variant-numeric: tabular-nums;
+    }
+
+    input:not([type='checkbox']):not([type='radio']):not([type='file']),
+    select,
+    textarea {
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    input:not([type='checkbox']):not([type='radio']):focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--color-brand);
+        box-shadow: 0 0 0 3px rgb(165 28 48 / 0.12);
+        outline: none;
+    }
+    input[type='checkbox'],
+    input[type='radio'] {
+        accent-color: var(--color-brand);
     }
 }
+
+/* Unlayered on purpose: these refine utility-styled markup, so they must outrank the utilities layer */
+
+    /* Display serif reads best at a medium weight, whatever weight utility the markup carries */
+    main h1,
+    .font-display,
+    .font-cinzel {
+        font-weight: 600 !important;
+    }
+
+    /* Surface cards: white panels get the same quiet, layered elevation everywhere */
+    .card-elevation,
+    .bg-white.rounded-2xl:not([class*='shadow-lg']):not([class*='shadow-xl']):not([class*='shadow-2xl']),
+    .bg-white.rounded-3xl:not([class*='shadow-lg']):not([class*='shadow-xl']):not([class*='shadow-2xl']) {
+        border-color: rgb(18 19 26 / 0.08);
+        box-shadow: var(--shadow-sm);
+    }
+    .card-elevation {
+        background-color: #fff;
+        border-width: 1px;
+        transition: box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s;
+    }
+    a.card-elevation:hover,
+    a.bg-white.rounded-2xl:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Primary actions: subtle depth on brand buttons */
+    a.bg-brand,
+    button.bg-brand,
+    input[type='submit'].bg-brand {
+        background-image: linear-gradient(180deg, rgb(255 255 255 / 0.10), rgb(255 255 255 / 0));
+        box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14), 0 1px 2px rgb(94 15 28 / 0.25), 0 4px 10px -4px rgb(165 28 48 / 0.45);
+    }
+    a.bg-brand:active,
+    button.bg-brand:active {
+        transform: translateY(1px);
+    }
+
+    /* Table headers read as quiet labels */
+    thead th {
+        font-size: 0.6875rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: rgb(100 116 139);
+        font-weight: 600;
+    }
+
+    .au-crimson-gradient {
+        background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-deep) 100%);
+    }
+
+    /* App header */
+    .app-header {
+        background: linear-gradient(180deg, #17181F 0%, #101117 100%);
+        color: #fff;
+    }
+    .app-header::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-brand) 20%, var(--color-gold) 50%, var(--color-brand) 80%, transparent);
+        opacity: 0.9;
+    }
+    .nav-link {
+        position: relative;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.625rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: rgb(255 255 255 / 0.68);
+        transition: color 0.15s, background-color 0.15s;
+    }
+    .nav-link:hover {
+        color: #fff;
+        background-color: rgb(255 255 255 / 0.06);
+    }
+    .nav-link[aria-current='page'] {
+        color: #fff;
+        background-color: rgb(255 255 255 / 0.08);
+    }
+    .nav-link[aria-current='page']::after {
+        content: '';
+        position: absolute;
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: -0.6rem;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--color-gold);
+    }
+
+    .badge-ring-emerald { background-color: #ECFDF5; color: #065F46; box-shadow: inset 0 0 0 1px rgb(5 150 105 / 0.2); }
+    .badge-ring-amber { background-color: #FFFBEB; color: #92400E; box-shadow: inset 0 0 0 1px rgb(217 119 6 / 0.2); }
+    .badge-ring-rose { background-color: #FFF1F2; color: #9F1239; box-shadow: inset 0 0 0 1px rgb(225 29 72 / 0.2); }
+    .badge-ring-sky { background-color: #F0F9FF; color: #075985; box-shadow: inset 0 0 0 1px rgb(2 132 199 / 0.2); }
+    .badge-ring-purple { background-color: #FAF5FF; color: #6B21A8; box-shadow: inset 0 0 0 1px rgb(147 51 234 / 0.2); }
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -60,75 +219,250 @@
     }
 }
 
-.font-cinzel {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
-    letter-spacing: -0.01em;
+/* Slim scrollbars */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D4D2CC; border-radius: 9999px; border: 2px solid var(--color-paper); }
+::-webkit-scrollbar-thumb:hover { background: #A8A59D; }
+
+@media print {
+    .sidebar-shell, .topbar, .no-print { display: none !important; }
+    body { background: #fff; }
 }
 
-/* Custom scrollbars for high aesthetic finish */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #F8FAFC;
-}
-::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
-    border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
-}
+/* ==========================================================================
+   Sidebar navigation system
+   ========================================================================== */
 
-/* High-End Enterprise Card and Glass Utilities */
-.card-elevation {
-    background-color: #FFFFFF;
-    border: 1px solid rgba(226, 232, 240, 0.85);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 10px 25px -5px rgba(0, 0, 0, 0.02);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.card-elevation:hover {
-    box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.07);
-}
+    .sidebar-shell {
+        background: linear-gradient(180deg, #0F1117 0%, #0A0B10 100%);
+        border-right: 1px solid rgb(255 255 255 / 0.07);
+    }
 
-.glass-nav {
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-}
+    .sidebar-brand {
+        background: linear-gradient(180deg, #13141C 0%, #0F1117 100%);
+    }
 
-.au-crimson-gradient {
-    background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
-}
+    .sidebar-section-label {
+        font-size: 0.625rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgb(255 255 255 / 0.3);
+        padding: 0 0.5rem;
+        margin-bottom: 0.125rem;
+    }
 
-.badge-ring-emerald {
-    background-color: #ECFDF5;
-    color: #065F46;
-    box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.2);
-}
+    .sidebar-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.5rem 0.625rem;
+        border-radius: 0.625rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: rgb(255 255 255 / 0.58);
+        transition: color 0.15s, background-color 0.15s;
+        text-decoration: none;
+        position: relative;
+    }
+    .sidebar-nav-item:hover {
+        color: rgb(255 255 255 / 0.9);
+        background-color: rgb(255 255 255 / 0.07);
+    }
+    .sidebar-nav-item.active {
+        color: #fff;
+        background-color: rgb(165 28 48 / 0.18);
+        font-weight: 600;
+    }
+    .sidebar-nav-item.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.375rem;
+        bottom: 0.375rem;
+        width: 2.5px;
+        border-radius: 0 2px 2px 0;
+        background: var(--color-brand);
+    }
+    .sidebar-nav-icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+        opacity: 0.6;
+        transition: opacity 0.15s;
+    }
+    .sidebar-nav-item:hover .sidebar-nav-icon,
+    .sidebar-nav-item.active .sidebar-nav-icon {
+        opacity: 1;
+    }
+    .sidebar-badge {
+        min-width: 1.25rem;
+        height: 1.25rem;
+        padding: 0 0.3rem;
+        border-radius: 9999px;
+        background: var(--color-brand);
+        color: #fff;
+        font-size: 0.625rem;
+        font-weight: 700;
+        line-height: 1.25rem;
+        text-align: center;
+        flex-shrink: 0;
+    }
 
-.badge-ring-amber {
-    background-color: #FFFBEB;
-    color: #92400E;
-    box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.2);
-}
+/* ==========================================================================
+   Top bar (slim, sits above main content)
+   ========================================================================== */
 
-.badge-ring-rose {
-    background-color: #FFF1F2;
-    color: #9F1239;
-    box-shadow: inset 0 0 0 1px rgba(225, 29, 72, 0.2);
-}
+    .topbar {
+        background: #fff;
+        border-bottom: 1px solid rgb(18 19 26 / 0.07);
+        box-shadow: 0 1px 3px rgb(18 19 26 / 0.04);
+    }
 
-.badge-ring-sky {
-    background-color: #F0F9FF;
-    color: #075985;
-    box-shadow: inset 0 0 0 1px rgba(2, 132, 199, 0.2);
-}
+    .topbar-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem;
+        border-radius: 0.625rem;
+        color: rgb(100 116 139);
+        transition: color 0.15s, background-color 0.15s;
+        position: relative;
+    }
+    .topbar-action:hover {
+        color: rgb(15 23 42);
+        background-color: rgb(241 245 249);
+    }
 
-.badge-ring-purple {
-    background-color: #FAF5FF;
-    color: #6B21A8;
-    box-shadow: inset 0 0 0 1px rgba(147, 51, 234, 0.2);
+/* ==========================================================================
+   Flash messages
+   ========================================================================== */
+
+    .flash-success {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+        background: #ECFDF5;
+        border-left: 4px solid #059669;
+        border-radius: 0 0.75rem 0.75rem 0;
+        color: #064E3B;
+        animation: fade-in 0.2s ease-out;
+    }
+    .flash-warning {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+        background: #FFFBEB;
+        border-left: 4px solid #D97706;
+        border-radius: 0 0.75rem 0.75rem 0;
+        color: #78350F;
+        animation: fade-in 0.2s ease-out;
+    }
+    .flash-error {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+        background: #FFF1F2;
+        border-left: 4px solid #E11D48;
+        border-radius: 0 0.75rem 0.75rem 0;
+        color: #881337;
+        animation: fade-in 0.2s ease-out;
+    }
+    .flash-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+        background: #F0F9FF;
+        border-left: 4px solid #0284C7;
+        border-radius: 0 0.75rem 0.75rem 0;
+        color: #0C4A6E;
+        animation: fade-in 0.2s ease-out;
+    }
+
+/* ==========================================================================
+   Dashboard enhancements
+   ========================================================================== */
+
+    .dash-stat-card {
+        background: #fff;
+        border: 1px solid rgb(18 19 26 / 0.08);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        box-shadow: var(--shadow-sm);
+        transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .dash-stat-card:hover { box-shadow: var(--shadow-md); }
+
+    .dash-stat-critical { border-left: 3px solid var(--color-brand); }
+    .dash-stat-warning  { border-left: 3px solid #D97706; }
+    .dash-stat-info     { border-left: 3px solid #0284C7; }
+    .dash-stat-neutral  { border-left: 3px solid rgb(100 116 139 / 0.3); }
+
+    .dash-task-critical { border-left: 3px solid var(--color-brand); background: #FFF8F8; }
+    .dash-task-warning  { border-left: 3px solid #D97706; background: #FFFBEB; }
+    .dash-task-info     { border-left: 3px solid #0284C7; background: #F0F9FF; }
+
+    .liturgical-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.875rem 1.25rem;
+        border-radius: 1rem;
+        border: 1px solid rgb(18 19 26 / 0.08);
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+    }
+
+/* ==========================================================================
+   Hymnal view enhancements
+   ========================================================================== */
+
+    .hymn-card {
+        background: #fff;
+        border: 1px solid rgb(18 19 26 / 0.08);
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .hymn-card:hover {
+        border-color: rgb(165 28 48 / 0.35);
+        box-shadow: var(--shadow-md);
+    }
+    .hymn-number-badge {
+        font-size: 0.6875rem;
+        font-weight: 700;
+        font-family: 'Plus Jakarta Sans', monospace;
+        padding: 0.25rem 0.625rem;
+        border-radius: 0.5rem;
+    }
+    .hymn-lyrics-block {
+        font-family: var(--font-display);
+        font-size: 0.9375rem;
+        line-height: 1.8;
+        color: rgb(30 41 59);
+        white-space: pre-wrap;
+    }
+
+/* ==========================================================================
+   Responsive sidebar: on mobile it's a fixed drawer
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+    .sidebar-shell {
+        position: fixed;
+        inset-y: 0;
+        left: 0;
+        z-index: 50;
+        width: 16rem;
+    }
+}
+@media (min-width: 1024px) {
+    #sidebarDrawer { transform: translateX(0) !important; }
+    #sidebarOverlay { display: none !important; }
 }

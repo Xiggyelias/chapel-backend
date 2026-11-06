@@ -39,7 +39,7 @@
                             </div>
                         </td>
                         <td class="px-5 py-2.5 text-right">
-                            <a href="{{ route('requests.show', $r->id) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#DC2626] hover:bg-[#B91C1C] text-white whitespace-nowrap">Review</a>
+                            <a href="{{ route('requests.show', $r->id) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand hover:bg-brand-dark text-white whitespace-nowrap">Review</a>
                         </td>
                     </tr>
                 @endforeach

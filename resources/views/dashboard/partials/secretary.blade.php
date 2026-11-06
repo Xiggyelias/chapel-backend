@@ -19,7 +19,7 @@
                             @endif
                             <form method="POST" action="{{ route('clubs.approve', $club->id) }}" data-club-name="{{ $club->name }}" onsubmit="return confirm('Charter ' + this.dataset.clubName + ' and create the leader account?')">
                                 @csrf
-                                <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#DC2626] hover:bg-[#B91C1C] text-white">Approve &amp; charter</button>
+                                <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand hover:bg-brand-dark text-white">Approve &amp; charter</button>
                             </form>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                 @forelse($dash['vaultLeague'] as $row)
                     <a href="{{ route('vault.index', ['club_id' => $row['club']->id]) }}" class="block py-2 first:pt-0 group">
                         <div class="flex justify-between text-sm">
-                            <span class="font-semibold text-slate-800 group-hover:text-[#DC2626] truncate">{{ $row['club']->name }}</span>
+                            <span class="font-semibold text-slate-800 group-hover:text-brand truncate">{{ $row['club']->name }}</span>
                             <span class="font-bold" style="color: {{ $row['health']['color'] }}">{{ $row['health']['score'] }}%</span>
                         </div>
                         <div class="mt-1 h-1.5 rounded-full bg-slate-100 overflow-hidden" aria-hidden="true">
@@ -64,7 +64,7 @@
                 <ul class="divide-y divide-slate-100 -my-2">
                     @forelse($dash['recentDocuments'] as $doc)
                         <li class="py-2">
-                            <a href="{{ route('vault.download', $doc->id) }}" target="_blank" rel="noopener" class="text-sm font-semibold text-slate-900 hover:text-[#DC2626] truncate block">{{ $doc->title }}</a>
+                            <a href="{{ route('vault.download', $doc->id) }}" target="_blank" rel="noopener" class="text-sm font-semibold text-slate-900 hover:text-brand truncate block">{{ $doc->title }}</a>
                             <span class="text-xs text-slate-500">{{ $doc->club?->name }} &bull; {{ $doc->created_at->diffForHumans() }}</span>
                         </li>
                     @empty

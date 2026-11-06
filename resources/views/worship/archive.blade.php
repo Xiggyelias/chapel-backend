@@ -8,7 +8,7 @@
     <!-- Top Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-[#DC2626] tracking-wider uppercase">
+            <div class="flex items-center space-x-2 text-xs font-semibold text-brand tracking-wider uppercase">
                 <a href="{{ route('worship.index') }}" class="hover:underline">Worship Planning</a>
                 <span>&bull;</span>
                 <span class="text-slate-400 font-bold">Institutional Memory</span>
@@ -26,7 +26,7 @@
                 <span>&larr; Back to Service Sheets</span>
             </a>
             @if(auth()->user()->isOffice())
-                <a href="{{ route('worship.create') }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition shadow-sm">
+                <a href="{{ route('worship.create') }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-sm">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
                     <span>New Service Sheet</span>
                 </a>
@@ -40,14 +40,14 @@
             <div class="sm:col-span-2">
                 <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Search Keyword (Theme, Hymn, Scripture, or Preacher)</label>
                 <div class="relative">
-                    <input type="text" name="search" value="{{ $search }}" placeholder="e.g. O For a Thousand Tongues, Romans 12, Hope, Grace..." class="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626]">
+                    <input type="text" name="search" value="{{ $search }}" placeholder="e.g. O For a Thousand Tongues, Romans 12, Hope, Grace..." class="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand">
                     <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
             </div>
 
             <div>
                 <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Preacher Filter</label>
-                <select name="preacher" class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626]">
+                <select name="preacher" class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand">
                     <option value="">All Preachers</option>
                     @foreach($preachersList as $p)
                         <option value="{{ $p }}" {{ $preacherFilter == $p ? 'selected' : '' }}>{{ $p }}</option>
@@ -56,7 +56,7 @@
             </div>
 
             <div class="flex items-end space-x-2">
-                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold text-xs shadow-sm transition">
+                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-xs shadow-sm transition">
                     Search Archive
                 </button>
                 @if($search || $preacherFilter || $yearFilter)
@@ -71,7 +71,7 @@
     <!-- Archive Records Table -->
     <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/60">
-            <h2 class="text-xs font-bold text-[#DC2626] uppercase tracking-wider">
+            <h2 class="text-xs font-bold text-brand uppercase tracking-wider">
                 Historical Worship Records ({{ $records->total() }} matches)
             </h2>
             <span class="text-xs text-slate-500 font-mono">Total Chapel Archives: {{ $totalServices }} services</span>
@@ -103,7 +103,7 @@
                             <td class="py-3.5 px-4 text-slate-600 font-mono text-[11px]">
                                 {{ $rec->scripture ?: '—' }}
                             </td>
-                            <td class="py-3.5 px-4 text-[#DC2626] font-semibold">
+                            <td class="py-3.5 px-4 text-brand font-semibold">
                                 {{ $rec->preacher ?: 'Chaplaincy' }}
                             </td>
                             <td class="py-3.5 px-4 max-w-xs text-slate-600 leading-snug">
@@ -119,13 +119,13 @@
                                 @endif
                             </td>
                             <td class="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
-                                <a href="{{ route('worship.slides', $rec->id) }}" target="_blank" title="Project Slides" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-[#DC2626] text-white text-[10px] font-bold hover:bg-[#B91C1C] transition">
+                                <a href="{{ route('worship.slides', $rec->id) }}" target="_blank" title="Project Slides" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-brand text-white text-[10px] font-bold hover:bg-brand-dark transition">
                                     Slides
                                 </a>
                                 <a href="{{ route('worship.bulletin', $rec->id) }}" target="_blank" title="Print Bulletin" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[10px] font-semibold hover:bg-slate-200 transition">
                                     PDF / Print
                                 </a>
-                                <a href="{{ route('worship.show', $rec->id) }}" title="View Sheet" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-[#DC2626] text-[10px] font-semibold hover:bg-slate-200 transition">
+                                <a href="{{ route('worship.show', $rec->id) }}" title="View Sheet" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-brand text-[10px] font-semibold hover:bg-slate-200 transition">
                                     Details
                                 </a>
                             </td>

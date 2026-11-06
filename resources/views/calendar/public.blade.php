@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#DC2626">
+    <meta name="theme-color" content="#A51C30">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="manifest" href="/manifest.json">
     <title>Public Calendar Feed | Kwang-Lim Chapel</title>
@@ -17,10 +17,10 @@
         body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
     </style>
 </head>
-<body class="min-h-full flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-[#DC2626] selection:text-white">
+<body class="min-h-full flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-brand selection:text-white">
 
     <!-- Top Header -->
-    <header class="bg-[#DC2626] text-white border-b border-white/10 shadow-sm py-4">
+    <header class="bg-brand text-white border-b border-white/10 shadow-sm py-4">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center p-1.5 shadow-xs backdrop-blur-md">
@@ -36,7 +36,7 @@
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     <span>Subscribe (.ics)</span>
                 </a>
-                <a href="{{ route('login') }}" class="text-xs bg-white text-[#DC2626] font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xs hover:bg-slate-100 active:scale-95">
+                <a href="{{ route('login') }}" class="text-xs bg-white text-brand font-bold px-4 py-1.5 rounded-full uppercase tracking-wider shadow-xs hover:bg-slate-100 active:scale-95">
                     Sign In
                 </a>
             </div>
@@ -61,7 +61,7 @@
                 <div class="p-4 sm:p-5 hover:bg-slate-50/70 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div class="flex items-start space-x-4">
                         <!-- Date Badge -->
-                        <div class="w-14 h-14 rounded-2xl bg-[#DC2626] text-white text-center flex flex-col justify-center shrink-0 shadow-xs">
+                        <div class="w-14 h-14 rounded-2xl bg-brand text-white text-center flex flex-col justify-center shrink-0 shadow-xs">
                             <span class="text-[10px] uppercase font-bold text-rose-200">{{ $event->event_date->format('M') }}</span>
                             <span class="text-xl font-bold text-white leading-none">{{ $event->event_date->format('d') }}</span>
                             <span class="text-[9px] text-rose-200 font-medium">{{ $event->event_date->format('D') }}</span>
@@ -69,7 +69,7 @@
 
                         <div class="space-y-1">
                             <div class="flex items-center space-x-2">
-                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $event->club?->color_hex ?? '#DC2626' }}">
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $event->club?->color_hex ?? '#A51C30' }}">
                                     {{ $event->club?->name }}
                                 </span>
                                 <span class="text-xs font-bold text-slate-600 font-mono">

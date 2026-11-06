@@ -8,7 +8,7 @@
     <!-- Header Section -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-[#DC2626] mb-1">
+            <div class="flex items-center space-x-2 text-xs font-semibold text-brand mb-1">
                 <span>Schedule &amp; Bookings</span>
             </div>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
@@ -22,7 +22,7 @@
         <div class="flex flex-wrap items-center gap-2">
             <!-- iCal .ics Feed for Outlook & Google Calendar -->
             <a href="{{ route('calendar.feed_ics') }}" download="kwang-lim-chapel.ics" title="Subscribe or import into Outlook, Google Calendar or Apple Calendar" class="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold transition border border-slate-200 shadow-2xs active:scale-95">
-                <svg class="w-4 h-4 text-[#DC2626]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <svg class="w-4 h-4 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 <span>Subscribe (.ics)</span>
             </a>
 
@@ -33,7 +33,7 @@
             </a>
 
             @if(!auth()->user() || !auth()->user()->isCampusLifeSrc())
-                <a href="{{ route('requests.create') }}" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold transition shadow-xs active:scale-95">
+                <a href="{{ route('requests.create') }}" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-semibold transition shadow-xs active:scale-95">
                     <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                     <span>Request Booking</span>
                 </a>
@@ -92,7 +92,7 @@
             <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => $nextMonth->month, 'year' => $nextMonth->year])) }}" aria-label="Next month" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition active:scale-95">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </a>
-            <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => now()->month, 'year' => now()->year])) }}" class="text-[11px] font-bold uppercase text-[#DC2626] bg-[#DC2626]/10 hover:bg-[#DC2626]/20 px-3 py-1.5 rounded-xl transition border border-[#DC2626]/20 active:scale-95">
+            <a href="{{ route('calendar.index', array_merge(request()->all(), ['month' => now()->month, 'year' => now()->year])) }}" class="text-[11px] font-bold uppercase text-brand bg-brand/10 hover:bg-brand/20 px-3 py-1.5 rounded-xl transition border border-brand/20 active:scale-95">
                 Today
             </a>
         </div>
@@ -104,7 +104,7 @@
             <input type="hidden" name="view" value="{{ $viewMode }}">
 
             <label for="calClubFilter" class="sr-only">Filter by club</label>
-            <select id="calClubFilter" name="club_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50">
+            <select id="calClubFilter" name="club_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50">
                 <option value="">All Clubs</option>
                 @foreach($clubs as $club)
                     <option value="{{ $club->id }}" {{ request('club_id') == $club->id ? 'selected' : '' }}>{{ $club->name }} ({{ $club->code }})</option>
@@ -112,7 +112,7 @@
             </select>
 
             <label for="calVenueFilter" class="sr-only">Filter by venue</label>
-            <select id="calVenueFilter" name="venue_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50">
+            <select id="calVenueFilter" name="venue_id" onchange="this.form.submit()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50">
                 <option value="">All Venues</option>
                 @foreach($venues as $venue)
                     <option value="{{ $venue->id }}" {{ request('venue_id') == $venue->id ? 'selected' : '' }}>{{ $venue->name }}</option>
@@ -122,10 +122,10 @@
 
         <!-- View Mode Buttons (Month / List) -->
         <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl">
-            <a href="{{ route('calendar.index', array_merge(request()->all(), ['view' => 'month'])) }}" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $viewMode === 'month' ? 'bg-white shadow-xs text-[#DC2626]' : 'text-slate-600 hover:text-slate-900' }}">
+            <a href="{{ route('calendar.index', array_merge(request()->all(), ['view' => 'month'])) }}" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $viewMode === 'month' ? 'bg-white shadow-xs text-brand' : 'text-slate-600 hover:text-slate-900' }}">
                 Month Grid
             </a>
-            <a href="{{ route('calendar.index', array_merge(request()->all(), ['view' => 'list'])) }}" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $viewMode === 'list' ? 'bg-white shadow-xs text-[#DC2626]' : 'text-slate-600 hover:text-slate-900' }}">
+            <a href="{{ route('calendar.index', array_merge(request()->all(), ['view' => 'list'])) }}" class="px-3 py-1.5 rounded-lg text-xs font-bold transition {{ $viewMode === 'list' ? 'bg-white shadow-xs text-brand' : 'text-slate-600 hover:text-slate-900' }}">
                 Agenda List
             </a>
         </div>
@@ -151,7 +151,7 @@
         <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 overflow-x-auto">
           <div class="min-w-[640px]">
             <!-- Day of Week Headers -->
-            <div class="grid grid-cols-7 bg-[#DC2626] text-white text-center text-xs font-bold py-3 border-b border-white/10 tracking-wider">
+            <div class="grid grid-cols-7 bg-brand text-white text-center text-xs font-bold py-3 border-b border-white/10 tracking-wider">
                 <div>Sun</div>
                 <div>Mon</div>
                 <div>Tue</div>
@@ -172,9 +172,9 @@
                         $hasClashOnDay = isset($clashDates[$dayStr]);
                     @endphp
 
-                    <div class="p-2 sm:p-2.5 min-h-[115px] flex flex-col justify-between transition {{ $isCurrentMonth ? 'bg-white' : 'bg-slate-50/60 text-slate-400' }} {{ $isToday ? 'ring-2 ring-inset ring-[#DC2626] bg-red-50/30' : '' }}">
+                    <div class="p-2 sm:p-2.5 min-h-[115px] flex flex-col justify-between transition {{ $isCurrentMonth ? 'bg-white' : 'bg-slate-50/60 text-slate-400' }} {{ $isToday ? 'ring-2 ring-inset ring-brand bg-red-50/30' : '' }}">
                         <div class="flex items-center justify-between mb-1.5">
-                            <span class="font-bold text-xs {{ $isToday ? 'bg-[#DC2626] text-white w-6 h-6 rounded-full flex items-center justify-center font-cinzel shadow-xs' : ($isCurrentMonth ? 'text-slate-800' : 'text-slate-400') }}">
+                            <span class="font-bold text-xs {{ $isToday ? 'bg-brand text-white w-6 h-6 rounded-full flex items-center justify-center font-cinzel shadow-xs' : ($isCurrentMonth ? 'text-slate-800' : 'text-slate-400') }}">
                                 {{ $currentDay->day }}
                             </span>
                             @if($hasClashOnDay)
@@ -186,7 +186,7 @@
                         <div class="space-y-1.5 overflow-y-auto max-h-[85px] flex-1">
                             @foreach($dayEvents as $item)
                                 @php
-                                    $evClubColor = $item->club?->color_hex ?: '#DC2626';
+                                    $evClubColor = $item->club?->color_hex ?: '#A51C30';
                                     $evPayload = [
                                         'title' => $item->title,
                                         'club' => $item->club?->name ?? 'Chaplaincy Office',
@@ -225,13 +225,13 @@
                             <!-- Date Box -->
                             <div class="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 text-center flex flex-col justify-center shrink-0">
                                 <span class="text-[10px] uppercase font-bold text-slate-500">{{ $event->event_date->format('M') }}</span>
-                                <span class="text-lg font-black text-[#DC2626] leading-none">{{ $event->event_date->format('d') }}</span>
+                                <span class="text-lg font-black text-brand leading-none">{{ $event->event_date->format('d') }}</span>
                                 <span class="text-[9px] text-slate-400 font-medium">{{ $event->event_date->format('D') }}</span>
                             </div>
 
                             <div class="space-y-1">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <span class="text-xs font-semibold px-2 py-0.5 rounded text-white" style="background-color: {{ $event->club?->color_hex ?: '#DC2626' }}">
+                                    <span class="text-xs font-semibold px-2 py-0.5 rounded text-white" style="background-color: {{ $event->club?->color_hex ?: '#A51C30' }}">
                                         {{ $event->club?->name ?? 'Chaplaincy Office' }}
                                     </span>
                                     <span class="text-xs font-bold text-slate-500 font-mono">
@@ -256,7 +256,7 @@
                                 && (auth()->user()->isOffice() || auth()->user()->club_id === $event->club_id);
                         @endphp
                         @if($canOpenProposal)
-                            <a href="{{ route('requests.show', $event->request_id) }}" class="text-xs font-bold text-[#DC2626] hover:underline self-end sm:self-center">
+                            <a href="{{ route('requests.show', $event->request_id) }}" class="text-xs font-bold text-brand hover:underline self-end sm:self-center">
                                 View Linked Proposal &rarr;
                             </a>
                         @endif
@@ -305,7 +305,7 @@
 <!-- Event Detail Modal -->
 <div id="calendarEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if (event.target === this) this.classList.add('hidden')">
     <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden card-elevation">
-        <div id="modalHeader" class="p-5 text-white flex items-center justify-between" style="background-color: #DC2626">
+        <div id="modalHeader" class="p-5 text-white flex items-center justify-between" style="background-color: #A51C30">
             <div>
                 <span id="modalClub" class="text-[10px] font-bold uppercase tracking-wider block opacity-90 font-cinzel"></span>
                 <h3 id="modalTitle" class="text-base font-bold font-cinzel mt-0.5"></h3>
@@ -350,7 +350,7 @@
         document.getElementById('modalVenue').textContent = ev.venue || '';
         document.getElementById('modalAttendance').textContent = ev.attendance ? (ev.attendance + ' expected') : 'Not specified';
         document.getElementById('modalDesc').textContent = ev.desc || 'Official approved fellowship activity.';
-        document.getElementById('modalHeader').style.backgroundColor = /^#[0-9a-fA-F]{3,8}$/.test(ev.color || '') ? ev.color : '#DC2626';
+        document.getElementById('modalHeader').style.backgroundColor = /^#[0-9a-fA-F]{3,8}$/.test(ev.color || '') ? ev.color : '#A51C30';
         document.getElementById('calendarEventModal').classList.remove('hidden');
     }
     document.addEventListener('keydown', function (e) {

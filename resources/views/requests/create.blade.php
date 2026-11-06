@@ -8,7 +8,7 @@
     <!-- Breadcrumb & Title -->
     <div>
         <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-            <a href="{{ route('requests.index') }}" class="hover:underline text-[#DC2626] font-bold">Requests</a>
+            <a href="{{ route('requests.index') }}" class="hover:underline text-brand font-bold">Requests</a>
             <span>/</span>
             <span class="text-slate-700">New Proposal</span>
         </div>
@@ -41,7 +41,7 @@
 
         <!-- Suggested Alternatives -->
         <div id="smartSuggestionsContainer" class="hidden bg-white/95 p-4 rounded-xl border border-rose-200 space-y-2.5">
-            <div class="flex items-center space-x-1.5 text-xs font-bold text-[#DC2626] uppercase tracking-wide">
+            <div class="flex items-center space-x-1.5 text-xs font-bold text-brand uppercase tracking-wide">
                 <span>Available Alternative Venues &amp; Slots</span>
                 <span class="text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded font-mono">1-Click Auto-Fix</span>
             </div>
@@ -61,15 +61,15 @@
                         Sponsoring Club / Fellowship <span class="text-rose-600">*</span>
                     </label>
                     @if(auth()->user()->isOffice())
-                        <select name="club_id" id="club_id" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                        <select name="club_id" id="club_id" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                             @foreach($clubs as $club)
                                 <option value="{{ $club->id }}" @selected((string) old('club_id') === (string) $club->id)>{{ $club->name }} ({{ $club->code }})</option>
                             @endforeach
                         </select>
                     @else
                         <input type="hidden" name="club_id" value="{{ auth()->user()->club_id }}">
-                        <div class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-[#DC2626] flex items-center space-x-2">
-                            <span class="w-2 h-2 rounded-full bg-[#DC2626]"></span>
+                        <div class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-brand flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-brand"></span>
                             <span>{{ auth()->user()->club?->name ?? 'Chapel Club' }} ({{ auth()->user()->club?->code ?? 'AU' }})</span>
                         </div>
                     @endif
@@ -79,7 +79,7 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Request Category <span class="text-rose-600">*</span>
                     </label>
-                    <select name="category" id="category" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <select name="category" id="category" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                         <option value="event" @selected(old('category') === 'event')>Campus Event / Fellowship Activity</option>
                         <option value="venue" @selected(old('category') === 'venue')>Venue Booking Only</option>
                         <option value="poster" @selected(old('category') === 'poster')>Poster & Media Clearance</option>
@@ -94,7 +94,7 @@
                 <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                     Activity Title <span class="text-rose-600">*</span>
                 </label>
-                <input type="text" name="title" value="{{ old('title') }}" required placeholder="e.g. Annual Praise Night, Leadership Retreat, All-Night Vigil" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                <input type="text" name="title" value="{{ old('title') }}" required placeholder="e.g. Annual Praise Night, Leadership Retreat, All-Night Vigil" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
             </div>
 
             <!-- Purpose -->
@@ -102,7 +102,7 @@
                 <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                     Purpose & Detailed Description <span class="text-rose-600">*</span>
                 </label>
-                <textarea name="purpose" rows="3" required placeholder="Explain the spiritual, fellowship, or community purpose of this activity..." class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">{{ old('purpose') }}</textarea>
+                <textarea name="purpose" rows="3" required placeholder="Explain the spiritual, fellowship, or community purpose of this activity..." class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">{{ old('purpose') }}</textarea>
             </div>
 
             <!-- Date and Times Row with 14-Day Calculator -->
@@ -111,7 +111,7 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Proposed Event Date <span class="text-rose-600">*</span>
                     </label>
-                    <input type="date" name="event_date" id="event_date" min="{{ date('Y-m-d') }}" value="{{ old('event_date', date('Y-m-d', strtotime('+15 days'))) }}" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-white transition">
+                    <input type="date" name="event_date" id="event_date" min="{{ date('Y-m-d') }}" value="{{ old('event_date', date('Y-m-d', strtotime('+15 days'))) }}" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-white transition">
                     <div id="dateNoticeSpan" class="text-[10px] text-emerald-700 font-semibold mt-1">15 days notice (Compliant)</div>
                 </div>
 
@@ -119,14 +119,14 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Start Time <span class="text-rose-600">*</span>
                     </label>
-                    <input type="time" name="start_time" id="start_time" value="{{ old('start_time', '17:00') }}" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-white transition">
+                    <input type="time" name="start_time" id="start_time" value="{{ old('start_time', '17:00') }}" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-white transition">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         End Time <span class="text-rose-600">*</span>
                     </label>
-                    <input type="time" name="end_time" id="end_time" value="{{ old('end_time', '19:00') }}" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-white transition">
+                    <input type="time" name="end_time" id="end_time" value="{{ old('end_time', '19:00') }}" required class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-white transition">
                 </div>
             </div>
 
@@ -136,7 +136,7 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Chapel / University Venue
                     </label>
-                    <select name="venue_id" id="venue_id" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <select name="venue_id" id="venue_id" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                         <option value="">-- Select Chapel Venue --</option>
                         @foreach($venues as $venue)
                             <option value="{{ $venue->id }}" data-capacity="{{ $venue->capacity }}" @selected((string) old('venue_id') === (string) $venue->id)>
@@ -150,7 +150,7 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Other Venue / Off-Campus Location
                     </label>
-                    <input type="text" name="venue_other" id="venue_other" value="{{ old('venue_other') }}" placeholder="e.g. Honde Valley, Student Union Hall" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <input type="text" name="venue_other" id="venue_other" value="{{ old('venue_other') }}" placeholder="e.g. Honde Valley, Student Union Hall" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                 </div>
             </div>
 
@@ -160,14 +160,14 @@
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Expected Attendance
                     </label>
-                    <input type="number" name="expected_attendance" value="{{ old('expected_attendance', 50) }}" min="1" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <input type="number" name="expected_attendance" value="{{ old('expected_attendance', 50) }}" min="1" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-700 mb-1">
                         Estimated Budget (USD)
                     </label>
-                    <input type="number" step="0.01" name="budget" value="{{ old('budget', '0.00') }}" min="0" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[#DC2626]/20 focus:border-[#DC2626] bg-slate-50/50 focus:bg-white transition">
+                    <input type="number" step="0.01" name="budget" value="{{ old('budget', '0.00') }}" min="0" class="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand bg-slate-50/50 focus:bg-white transition">
                 </div>
 
                 <div>
@@ -181,7 +181,7 @@
             <!-- Accessibility: Sign-Language Interpreter Option -->
             <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                 <div class="flex items-center space-x-2.5">
-                    <input type="checkbox" id="sign_interpreter_required" name="sign_interpreter_required" value="1" onchange="document.getElementById('sign_req_name').classList.toggle('hidden', !this.checked)" class="rounded text-[#DC2626] focus:ring-[#DC2626]">
+                    <input type="checkbox" id="sign_interpreter_required" name="sign_interpreter_required" value="1" onchange="document.getElementById('sign_req_name').classList.toggle('hidden', !this.checked)" class="rounded text-brand focus:ring-brand">
                     <label for="sign_interpreter_required" class="text-xs font-bold text-slate-800">Request Sign-Language Interpreter (Chapel Accessibility & Special Needs)</label>
                 </div>
                 <div id="sign_req_name" class="hidden pt-2">
@@ -199,7 +199,7 @@
                     <a href="{{ route('requests.index') }}" class="w-1/2 sm:w-auto text-center px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition active:scale-95">
                         Cancel
                     </a>
-                    <button type="submit" class="w-1/2 sm:w-auto px-6 py-2.5 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold uppercase tracking-wider transition shadow-sm active:scale-95 cursor-pointer">
+                    <button type="submit" class="w-1/2 sm:w-auto px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold uppercase tracking-wider transition shadow-sm active:scale-95 cursor-pointer">
                         Submit Proposal
                     </button>
                 </div>
@@ -278,7 +278,7 @@
                                 btn.className = 'p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 flex items-center justify-between transition cursor-pointer';
                                 btn.innerHTML = `
                                     <div class="text-xs text-slate-800">💡 <strong>${s.message}</strong></div>
-                                    <button type="button" class="ml-2 px-3 py-1.5 rounded-lg bg-[#DC2626] hover:bg-[#B91C1C] text-white text-[10px] font-bold shrink-0 shadow-xs">
+                                    <button type="button" class="ml-2 px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-white text-[10px] font-bold shrink-0 shadow-xs">
                                         Apply
                                     </button>
                                 `;

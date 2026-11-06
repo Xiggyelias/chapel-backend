@@ -8,7 +8,7 @@
 @else
 <div class="space-y-6">
     <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center gap-3 shadow-2xs">
-        <div class="w-11 h-11 rounded-xl bg-red-50 text-[#DC2626] font-extrabold text-sm flex items-center justify-center shrink-0 border border-red-100" aria-hidden="true">
+        <div class="w-11 h-11 rounded-xl bg-red-50 text-brand font-extrabold text-sm flex items-center justify-center shrink-0 border border-red-100" aria-hidden="true">
             {{ \Illuminate\Support\Str::limit($club->code, 4, '') }}
         </div>
         <div class="min-w-0 flex-1">
@@ -42,7 +42,7 @@
                 @forelse($dash['myRequests'] as $r)
                     <div class="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0 border-b last:border-0 border-slate-100">
                         <div class="min-w-0 flex-1">
-                            <a href="{{ route('requests.show', $r->id) }}" class="text-sm font-semibold text-slate-900 hover:text-[#DC2626] truncate block">{{ $r->title }}</a>
+                            <a href="{{ route('requests.show', $r->id) }}" class="text-sm font-semibold text-slate-900 hover:text-brand truncate block">{{ $r->title }}</a>
                             <p class="text-xs text-slate-500">{{ $r->event_date->format('D, M j') }} &bull; {{ $r->venue?->name ?? $r->venue_other }}</p>
                         </div>
                         <span class="shrink-0 px-2 py-0.5 rounded-full text-[11px] font-bold {{ $badges[$r->status] ?? 'bg-slate-100 text-slate-700' }}">{{ ucwords(str_replace('_', ' ', $r->status)) }}</span>
@@ -50,7 +50,7 @@
                 @empty
                     <p class="text-sm text-slate-500">You haven't submitted any proposals yet. Activities need 14 days' notice.</p>
                 @endforelse
-                <a href="{{ route('requests.create') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold">+ New proposal</a>
+                <a href="{{ route('requests.create') }}" class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-semibold">+ New proposal</a>
             </x-dash.panel>
         </div>
 
@@ -88,7 +88,7 @@
                         @foreach($dash['lastMeetingAttendance'] as $row)
                             <div class="flex-1 flex flex-col items-center justify-end h-full gap-1">
                                 <span class="text-[10px] font-bold text-slate-700">{{ $row->present }}</span>
-                                <div class="w-full rounded-t bg-[#DC2626]/80" style="height: {{ max(6, round($row->present / $peak * 80)) }}px"></div>
+                                <div class="w-full rounded-t bg-brand/80" style="height: {{ max(6, round($row->present / $peak * 80)) }}px"></div>
                                 <span class="text-[10px] text-slate-500">{{ \Carbon\Carbon::parse($row->meeting_date)->format('M j') }}</span>
                             </div>
                         @endforeach

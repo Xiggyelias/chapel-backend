@@ -23,14 +23,14 @@
 
     <!-- Top Action Bar (hidden on print) -->
     <div class="no-print max-w-5xl mx-auto mb-6 flex items-center justify-between">
-        <a href="{{ route('reports.budget_tracker') }}" class="text-xs text-[#DC2626] font-bold hover:underline flex items-center space-x-1">
+        <a href="{{ route('reports.budget_tracker') }}" class="text-xs text-brand font-bold hover:underline flex items-center space-x-1">
             <span>&larr; Back to Budget Tracker</span>
         </a>
         <div class="flex items-center space-x-3">
             <a href="{{ route('exports.budget_tracker') }}" class="px-4 py-2 rounded-xl bg-white text-slate-800 text-xs font-bold border border-slate-300 hover:bg-slate-50 transition shadow-xs">
                 Download CSV Data
             </a>
-            <button onclick="window.print()" class="px-5 py-2 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold transition shadow-sm">
+            <button onclick="window.print()" class="px-5 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-sm">
                 Print / Save PDF Report
             </button>
         </div>
@@ -40,13 +40,13 @@
     <div class="report-card max-w-5xl mx-auto bg-white rounded-3xl p-8 sm:p-12 shadow-xl border-2 border-slate-200/80 space-y-8">
         
         <!-- Institutional Header -->
-        <div class="border-b-2 border-[#DC2626] pb-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div class="border-b-2 border-brand pb-6 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 rounded-2xl bg-[#DC2626] border border-white/20 flex items-center justify-center p-2.5 shadow-md shrink-0">
+                <div class="w-16 h-16 rounded-2xl bg-brand border border-white/20 flex items-center justify-center p-2.5 shadow-md shrink-0">
                     <x-umc-logo class="w-full h-full" />
                 </div>
                 <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-[#DC2626] block">
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand block">
                         Office of the Chaplain
                     </span>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
@@ -60,14 +60,14 @@
 
             <div class="text-right sm:border-l border-slate-200 sm:pl-6 space-y-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Report Dossier Ref</span>
-                <span class="font-mono font-bold text-xs text-[#DC2626]">AU-CHAPEL-AR-{{ $year }}</span>
+                <span class="font-mono font-bold text-xs text-brand">AU-CHAPEL-AR-{{ $year }}</span>
                 <span class="text-[10px] text-slate-400 block font-mono">Issued: {{ date('F d, Y') }}</span>
             </div>
         </div>
 
         <!-- Executive Narrative Summary -->
         <div class="space-y-2">
-            <h2 class="font-cinzel text-sm font-bold uppercase tracking-wider text-[#DC2626]">
+            <h2 class="font-cinzel text-sm font-bold uppercase tracking-wider text-brand">
                 Executive Chaplaincy Governance Summary
             </h2>
             <p class="text-slate-700 leading-relaxed text-justify">
@@ -79,7 +79,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Total Activities Conducted</span>
-                <div class="text-2xl font-black font-cinzel text-[#DC2626]">{{ $totalEvents }}</div>
+                <div class="text-2xl font-black font-cinzel text-brand">{{ $totalEvents }}</div>
                 <span class="text-[10px] text-emerald-700 font-semibold">Approved & Scheduled</span>
             </div>
 
@@ -97,7 +97,7 @@
 
             <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Financial Execution</span>
-                <div class="text-2xl font-black font-cinzel text-[#DC2626]">${{ number_format($totalSpending, 2) }}</div>
+                <div class="text-2xl font-black font-cinzel text-brand">${{ number_format($totalSpending, 2) }}</div>
                 <span class="text-[10px] text-slate-500">Budgeted: ${{ number_format($totalBudget, 2) }}</span>
             </div>
         </div>
@@ -105,7 +105,7 @@
         <!-- Club Performance & Vault Sentinel Institutional Health Ledger -->
         <div class="space-y-3">
             <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                <h3 class="font-cinzel text-sm font-bold uppercase tracking-wider text-[#DC2626]">
+                <h3 class="font-cinzel text-sm font-bold uppercase tracking-wider text-brand">
                     Fellowship Performance & Institutional Memory Index
                 </h3>
                 <span class="text-[10px] text-slate-400 font-mono">10 Official Chaplaincy Clubs</span>
@@ -138,7 +138,7 @@
                                 <td class="py-3 px-3 text-center font-mono">
                                     {{ $club->members_count }}
                                 </td>
-                                <td class="py-3 px-3 text-center font-mono font-bold text-[#DC2626]">
+                                <td class="py-3 px-3 text-center font-mono font-bold text-brand">
                                     {{ $club->events_count }}
                                 </td>
                                 <td class="py-3 px-3 text-center font-mono">
@@ -171,7 +171,7 @@
             <div class="space-y-4 text-right">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Approved & Confirmed</span>
                 <div class="border-b border-slate-300 pb-1">
-                    <span class="font-bold text-[#DC2626] block">Rev. University Chaplain</span>
+                    <span class="font-bold text-brand block">Rev. University Chaplain</span>
                     <span class="text-slate-500">Kwang-Lim Chapel &bull; Africa University</span>
                 </div>
                 <div class="text-[10px] text-slate-400 font-mono">Official Seal Affixed</div>

@@ -3,7 +3,7 @@
 <div class="flex items-start gap-3 py-2.5">
     @if($showDate)
         <div class="w-11 shrink-0 text-center rounded-lg bg-slate-50 border border-slate-200 py-1">
-            <div class="text-[10px] font-bold uppercase text-[#DC2626]">{{ $event->event_date->format('M') }}</div>
+            <div class="text-[10px] font-bold uppercase text-brand">{{ $event->event_date->format('M') }}</div>
             <div class="text-base font-extrabold text-slate-900 leading-none">{{ $event->event_date->format('j') }}</div>
         </div>
     @endif

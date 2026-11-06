@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#DC2626">
+    <meta name="theme-color" content="#A51C30">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Charter Application Receipt | Kwang-Lim Chapel - Africa University</title>
 
@@ -17,7 +17,7 @@
         .font-cinzel { font-family: 'Cinzel', Georgia, serif; }
     </style>
 </head>
-<body class="min-h-full flex flex-col justify-between p-4 sm:p-6 bg-[#F8FAFC] text-slate-800 relative selection:bg-[#DC2626] selection:text-white">
+<body class="min-h-full flex flex-col justify-between p-4 sm:p-6 bg-[#F8FAFC] text-slate-800 relative selection:bg-brand selection:text-white">
 
     <!-- Ambient Subtle Glow Background -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden select-none">
@@ -30,7 +30,7 @@
         
         <!-- Header & AU Crest -->
         <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#DC2626] p-2.5 shadow-md shadow-red-200">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand p-2.5 shadow-md shadow-red-200">
                 <svg class="w-full h-full text-white" viewBox="0 0 100 100" fill="currentColor">
                     <rect x="44" y="12" width="12" height="76" rx="3" fill="#FFFFFF" />
                     <rect x="22" y="32" width="56" height="12" rx="3" fill="#FFFFFF" />
@@ -38,7 +38,7 @@
                 </svg>
             </div>
             <div>
-                <div class="text-xs uppercase tracking-widest text-[#DC2626] font-bold">
+                <div class="text-xs uppercase tracking-widest text-brand font-bold">
                     Africa University Chaplaincy
                 </div>
                 <h1 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
@@ -49,7 +49,7 @@
 
         <!-- Receipt Card -->
         <div class="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-white/20 space-y-6 relative overflow-hidden">
-            <div class="absolute top-0 left-0 right-0 h-2 bg-[#DC2626]"></div>
+            <div class="absolute top-0 left-0 right-0 h-2 bg-brand"></div>
 
             <!-- Success Pill -->
             <div class="flex items-center space-x-3 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900">
@@ -110,7 +110,7 @@
 
             <!-- Return Action -->
             <div class="pt-2">
-                <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold text-xs uppercase tracking-wider transition shadow-sm active:scale-95">
+                <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-sm active:scale-95">
                     <span>Return to Kwang-Lim Portal Sign In</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </a>

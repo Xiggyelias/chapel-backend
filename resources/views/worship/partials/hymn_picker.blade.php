@@ -2,7 +2,7 @@
 <div class="bg-gradient-to-r from-red-50/70 via-slate-50 to-red-50/40 p-4 sm:p-5 rounded-2xl border-2 border-red-200/80 shadow-xs space-y-3.5">
     <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center space-x-2.5">
-            <div class="w-8 h-8 rounded-lg bg-[#DC2626] text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+            <div class="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
             <div>
@@ -12,7 +12,7 @@
         </div>
         <div class="flex items-center space-x-2">
             <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase">2,029 Complete Hymns</span>
-            <a href="{{ route('hymns.index') }}" target="_blank" class="text-[11px] font-semibold text-[#DC2626] hover:underline flex items-center space-x-1" title="Open full digital hymnal in new tab">
+            <a href="{{ route('hymns.index') }}" target="_blank" class="text-[11px] font-semibold text-brand hover:underline flex items-center space-x-1" title="Open full digital hymnal in new tab">
                 <span>Digital Hymnal</span>
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
             </a>
@@ -24,11 +24,11 @@
         <div class="sm:col-span-5 relative">
             <label class="block text-[11px] font-bold text-slate-700 mb-1">Pick Hymn # (e.g. 1, 57, 140, 378, 734)</label>
             <div class="relative">
-                <input type="text" id="hymnNumberInput" placeholder="Type hymn no. (e.g. 1, 57, 378, MHB 1)..." class="w-full text-xs pl-8 pr-20 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] bg-white font-medium" oninput="handleHymnNumberInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); fetchHymnByNumber();}">
+                <input type="text" id="hymnNumberInput" placeholder="Type hymn no. (e.g. 1, 57, 378, MHB 1)..." class="w-full text-xs pl-8 pr-20 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand bg-white font-medium" oninput="handleHymnNumberInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); fetchHymnByNumber();}">
                 <div class="absolute left-2.5 top-2.5 text-slate-400">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
-                <button type="button" onclick="fetchHymnByNumber()" class="absolute right-1.5 top-1 px-2.5 py-1.5 bg-[#DC2626] hover:bg-[#B91C1C] text-white rounded-lg text-[10px] font-bold transition cursor-pointer">
+                <button type="button" onclick="fetchHymnByNumber()" class="absolute right-1.5 top-1 px-2.5 py-1.5 bg-brand hover:bg-brand-dark text-white rounded-lg text-[10px] font-bold transition cursor-pointer">
                     Lookup
                 </button>
             </div>
@@ -36,7 +36,7 @@
 
         <div class="sm:col-span-7">
             <label class="block text-[11px] font-bold text-slate-700 mb-1">Or Choose from Index</label>
-            <select id="hymnQuickSelect" onchange="if(this.value){ const parts = this.value.split(' '); document.getElementById('hymnNumberInput').value = this.value; fetchHymnByNumber(parts[1], parts[0]); }" class="w-full text-xs py-2.5 px-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#DC2626] focus:border-[#DC2626] bg-white text-slate-800 font-medium">
+            <select id="hymnQuickSelect" onchange="if(this.value){ const parts = this.value.split(' '); document.getElementById('hymnNumberInput').value = this.value; fetchHymnByNumber(parts[1], parts[0]); }" class="w-full text-xs py-2.5 px-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand bg-white text-slate-800 font-medium">
                 <option value="">-- Choose from Complete Hymnal Registry --</option>
                 <optgroup label="Chapel Classics & Standards">
                     <option value="UMH 57">UMH 57: O For a Thousand Tongues to Sing</option>
@@ -71,7 +71,7 @@
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
             <div>
                 <div class="flex items-center space-x-2">
-                    <span id="hymnBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-[#DC2626] text-white">UMH 57</span>
+                    <span id="hymnBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand text-white">UMH 57</span>
                     <h5 id="hymnTitle" class="text-sm font-bold text-slate-900 font-cinzel">O For a Thousand Tongues to Sing</h5>
                 </div>
                 <div class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -163,7 +163,7 @@
                     window.currentSelectedHymn = h;
                     document.getElementById('hymnBadge').textContent = `${h.hymnal_code} ${h.number}`;
                     document.getElementById('hymnBadge').className = 'px-2 py-0.5 rounded text-[10px] font-bold ' + 
-                        (h.hymnal_code === 'SHONA' ? 'bg-amber-100 text-amber-800' : (h.hymnal_code === 'MHB' ? 'bg-blue-100 text-blue-800' : 'bg-[#DC2626] text-white'));
+                        (h.hymnal_code === 'SHONA' ? 'bg-amber-100 text-amber-800' : (h.hymnal_code === 'MHB' ? 'bg-blue-100 text-blue-800' : 'bg-brand text-white'));
                     document.getElementById('hymnTitle').textContent = h.title;
                     document.getElementById('hymnAuthor').textContent = h.author || 'Author Unspecified';
                     document.getElementById('hymnTune').textContent = h.tune ? `Tune: ${h.tune}` : '';
