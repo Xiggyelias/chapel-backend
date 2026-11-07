@@ -84,24 +84,7 @@
             <p class="mt-4 text-[10.5px] font-bold uppercase tracking-[0.24em] text-white/35" data-reveal="1500">Psalm 119:105</p>
         </div>
 
-        {{-- The Three Hymnals: Restored & Complete (UMH 1–734, MHB 1–984, SHONA 1–311) --}}
-        <div class="relative z-10 grid grid-cols-3 gap-3.5 pt-5 border-t border-white/[0.08]" data-reveal="1600">
-            <a href="{{ route('hymns.index', ['hymnal' => 'UMH']) }}" class="group p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] ring-1 ring-white/10 hover:ring-gold/40 transition">
-                <span class="block text-[10px] font-bold text-gold tracking-widest uppercase">UMH</span>
-                <span class="block font-display text-[17px] text-white font-medium mt-0.5">1–734</span>
-                <span class="block text-[10px] text-white/45 truncate mt-0.5">United Methodist</span>
-            </a>
-            <a href="{{ route('hymns.index', ['hymnal' => 'MHB']) }}" class="group p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] ring-1 ring-white/10 hover:ring-gold/40 transition">
-                <span class="block text-[10px] font-bold text-gold tracking-widest uppercase">MHB</span>
-                <span class="block font-display text-[17px] text-white font-medium mt-0.5">1–984</span>
-                <span class="block text-[10px] text-white/45 truncate mt-0.5">Methodist Hymn Book</span>
-            </a>
-            <a href="{{ route('hymns.index', ['hymnal' => 'SHONA']) }}" class="group p-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] ring-1 ring-white/10 hover:ring-gold/40 transition">
-                <span class="block text-[10px] font-bold text-gold tracking-widest uppercase">SHONA</span>
-                <span class="block font-display text-[17px] text-white font-medium mt-0.5">1–311</span>
-                <span class="block text-[10px] text-white/45 truncate mt-0.5">Ndiyo Nziyo</span>
-            </a>
-        </div>
+
 
         <div class="relative z-10 flex items-center justify-between text-[11px] text-white/35 pt-5 border-t border-white/[0.07]">
             <span>Old Mutare · Zimbabwe</span>
