@@ -52,7 +52,7 @@
         <div class="room-light absolute inset-0 pointer-events-none" aria-hidden="true"></div>
 
         <div class="relative z-10 flex items-center justify-between">
-            <a href="{{ route('welcome') }}" class="flex items-center gap-3">
+            <a href="{{ Route::has('welcome') ? route('welcome') : url('/welcome') }}" class="flex items-center gap-3">
                 <span class="w-10 h-10 rounded-full grid place-items-center shrink-0"
                       style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px #15121A, 0 0 0 4px rgb(217 183 108 / .45);">
                     <x-umc-logo class="w-[1.15rem] h-[1.15rem]" />
@@ -206,7 +206,7 @@
             </div>
 
             <p class="mt-10 text-center text-[11px] text-slate-400">
-                Kwang-Lim Chapel · Africa University · <a href="{{ route('welcome') }}" class="hover:text-slate-700 underline-offset-2 hover:underline">About the portal</a>
+                Kwang-Lim Chapel · Africa University · <a href="{{ Route::has('welcome') ? route('welcome') : url('/welcome') }}" class="hover:text-slate-700 underline-offset-2 hover:underline">About the portal</a>
             </p>
         </div>
     </section>

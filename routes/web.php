@@ -32,6 +32,9 @@ Route::get('/', function () {
     return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
 })->name('home');
 
+// Public landing page (the root stays a straight redirect to sign-in)
+Route::view('/welcome', 'welcome')->name('welcome');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);

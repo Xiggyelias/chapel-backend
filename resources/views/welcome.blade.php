@@ -79,7 +79,7 @@
          style="background: radial-gradient(60% 50% at 78% 45%, rgb(217 183 108 / .12), transparent 70%), radial-gradient(50% 60% at 0% 100%, rgb(165 28 48 / .24), transparent 70%);"></div>
 
     <header class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pt-6 flex items-center justify-between">
-        <a href="{{ route('welcome') }}" class="flex items-center gap-3">
+        <a href="{{ Route::has('welcome') ? route('welcome') : url('/welcome') }}" class="flex items-center gap-3">
             <span class="w-10 h-10 rounded-full grid place-items-center shrink-0 shadow-lg"
                   style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px #15121A, 0 0 0 4px rgb(217 183 108 / .45);">
                 <x-umc-logo class="w-[1.15rem] h-[1.15rem]" />
