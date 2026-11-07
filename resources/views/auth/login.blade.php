@@ -106,15 +106,7 @@
             pointer-events: none;
         }
 
-        .stat-card-3d {
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease;
-            transform-style: preserve-3d;
-        }
 
-        .stat-card-3d:hover {
-            border-color: rgba(184, 137, 43, 0.45);
-            background-color: rgba(255, 255, 255, 0.05);
-        }
 
         /* Respect accessibility reduced-motion preference */
         @media (prefers-reduced-motion: reduce) {
@@ -200,29 +192,7 @@
             </p>
         </div>
 
-        {{-- Bottom: 3D Interactive Hymnal Catalog Tiles with Counter Animation --}}
-        <div class="relative z-10 border-t border-white/10 pt-7">
-            <p class="text-[10px] uppercase font-bold tracking-widest text-white/40 mb-3">Liturgical Hymnody &bull; Public Domain &amp; Curated</p>
-            <div class="grid grid-cols-3 gap-4" id="hymnalCardsGrid">
-                @php
-                    $stats = [
-                        ['UMH', 'United Methodist Hymnal', 734],
-                        ['MHB', 'Methodist Hymn Book', 984],
-                        ['SHO', 'Shona Hymnal', 311],
-                    ];
-                @endphp
-                @foreach($stats as [$code, $label, $count])
-                    <div class="stat-card-3d rounded-xl p-3.5 bg-white/[0.03] border border-white/8 backdrop-blur-md cursor-default">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-bold text-gold opacity-90">{{ $code }}</span>
-                            <span class="text-[9px] text-white/30 font-mono tracking-tight">hymns</span>
-                        </div>
-                        <p class="text-2xl font-bold text-white tabular-nums mt-1 hymnal-counter" data-target="{{ $count }}">0</p>
-                        <p class="text-[10px] text-white/40 truncate mt-0.5 font-medium">{{ $label }}</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+
     </div>
 
     {{-- ═══ RIGHT PANEL: The Gateway & Sign-In Card ═══ --}}
@@ -541,46 +511,7 @@ document.getElementById('loginForm')?.addEventListener('submit', function() {
     });
 })();
 
-// ═══ 3D Card Perspective Tilt & Counter Animation ═══
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Counter animation
-    const counters = document.querySelectorAll('.hymnal-counter');
-    counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-target') || '0', 10);
-        if (!target) return;
 
-        let start = 0;
-        const duration = 1800;
-        const startTime = performance.now();
-
-        function step(now) {
-            const progress = Math.min((now - startTime) / duration, 1);
-            // Ease out cubic
-            const ease = 1 - Math.pow(1 - progress, 3);
-            counter.textContent = Math.floor(ease * target);
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else {
-                counter.textContent = target;
-            }
-        }
-        requestAnimationFrame(step);
-    });
-
-    // 2. Subtle 3D perspective tilt on stat tiles
-    const cards = document.querySelectorAll('.stat-card-3d');
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            card.style.transform = `perspective(500px) rotateX(${-y * 0.08}deg) rotateY(${x * 0.08}deg) translateY(-3px)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(500px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-        });
-    });
-});
 </script>
 </body>
 </html>
