@@ -100,7 +100,9 @@ RUN cp -a /var/www/html/database /opt/chapel-database-dist
 
 # Copy entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY docker/bootstrap.sh /usr/local/bin/chapel-bootstrap.sh
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh /usr/local/bin/chapel-bootstrap.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/chapel-bootstrap.sh
 
 # Ensure storage and cache directories exist with correct permissions
 RUN mkdir -p \
