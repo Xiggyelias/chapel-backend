@@ -106,6 +106,8 @@ RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh /usr/local/bin/chapel-bootstra
 
 # Ensure storage and cache directories exist with correct permissions
 RUN mkdir -p \
+    /var/log/supervisor \
+    /var/log/nginx \
     /var/www/html/storage/app/public \
     /var/www/html/storage/framework/cache/data \
     /var/www/html/storage/framework/sessions \
@@ -116,7 +118,9 @@ RUN mkdir -p \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
-EXPOSE 80
+ENV ENABLE_QUEUE_WORKER=true
+
+EXPOSE 80 8000 3000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
     CMD curl -f http://127.0.0.1:80/up || exit 1

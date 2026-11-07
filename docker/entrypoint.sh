@@ -49,8 +49,8 @@ fi
 
 # 3. Fix storage and bootstrap cache permissions
 echo "Step 2: Fixing file permissions for www-data..."
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
 
 # 4. Create public storage symlink
 echo "Step 3: Linking public storage..."
@@ -71,7 +71,7 @@ if [ "${APP_ENV:-production}" = "production" ] && [ "${APP_DEBUG:-false}" != "tr
 fi
 
 # Anything the root-run artisan calls above wrote must stay writable by PHP-FPM
-chown -R www-data:www-data /var/www/html/storage/logs /var/www/html/storage/framework /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage/logs /var/www/html/storage/framework /var/www/html/bootstrap/cache || true
 
 # Migrations and seeding run under supervisor (docker/bootstrap.sh) once the web server is up
 echo "Step 6: Database migrations and seeding will run in the background (see [bootstrap] log lines)."
