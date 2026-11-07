@@ -58,9 +58,11 @@ php /var/www/html/artisan storage:link --force || true
 
 # 5. Clear stale caches before running migrations
 echo "Step 4: Clearing any stale runtime caches..."
+rm -f /var/www/html/bootstrap/cache/*.php
 php /var/www/html/artisan config:clear || true
 php /var/www/html/artisan route:clear || true
 php /var/www/html/artisan view:clear || true
+php /var/www/html/artisan package:discover || true
 
 # 6. Production caching (no database needed)
 if [ "${APP_ENV:-production}" = "production" ] && [ "${APP_DEBUG:-false}" != "true" ]; then

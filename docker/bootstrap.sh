@@ -9,8 +9,10 @@ export HOME=/tmp
 if [ "${DB_CONNECTION:-sqlite}" != "sqlite" ]; then
     MAX_RETRIES=30
     COUNT=0
-    echo "[bootstrap] Waiting for ${DB_CONNECTION} at ${DB_HOST:-127.0.0.1}:${DB_PORT:-5432}..."
-    until php -r "try { new PDO(getenv('DB_CONNECTION').':host='.getenv('DB_HOST').';port='.getenv('DB_PORT').';dbname='.getenv('DB_DATABASE'), getenv('DB_USERNAME'), getenv('DB_PASSWORD'), [PDO::ATTR_TIMEOUT => 3, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); exit(0); } catch (Exception \$e) { fwrite(STDERR, \$e->getMessage().PHP_EOL); exit(1); }"; do
+    DB_HOST_VAL="${DB_HOST:-127.0.0.1}"
+    DB_PORT_VAL="${DB_PORT:-5432}"
+    echo "[bootstrap] Waiting for ${DB_CONNECTION} at ${DB_HOST_VAL}:${DB_PORT_VAL}..."
+    until php -r "\$c=getenv('DB_CONNECTION'); \$h=getenv('DB_HOST')?:'127.0.0.1'; \$p=getenv('DB_PORT')?:'5432'; \$db=getenv('DB_DATABASE'); \$u=getenv('DB_USERNAME'); \$pw=getenv('DB_PASSWORD'); try { new PDO(\"\$c:host=\$h;port=\$p;dbname=\$db\", \$u, \$pw, [PDO::ATTR_TIMEOUT => 3, PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]); exit(0); } catch (Exception \$e) { fwrite(STDERR, \$e->getMessage().PHP_EOL); exit(1); }"; do
         COUNT=$((COUNT+1))
         if [ $COUNT -ge $MAX_RETRIES ]; then
             echo "[bootstrap] ERROR: database unreachable after $MAX_RETRIES attempts. Check DB_HOST/DB_PORT/credentials. Skipping migrations and seeding."

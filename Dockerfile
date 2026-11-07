@@ -21,7 +21,8 @@ COPY . .
 RUN composer dump-autoload \
     --optimize \
     --no-dev \
-    --classmap-authoritative
+    --classmap-authoritative \
+    --no-scripts
 
 # ==========================================
 # Stage 2: Node.js Frontend Assets (Vite)
