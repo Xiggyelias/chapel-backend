@@ -60,7 +60,7 @@
                     @endif
                     <div class="min-w-0">
                         <p class="text-[13px] font-semibold {{ $m['satisfied'] ? 'text-slate-900' : 'text-amber-900' }}">{{ $m['label'] }}</p>
-                        <p class="text-[11.5px] text-slate-500 mt-0.5 tabular-nums">Target Deadline: {{ $m['deadline']->format('D, M d') }}</p>
+                        <p class="text-[12.5px] text-slate-500 mt-0.5 tabular-nums">Target Deadline: {{ $m['deadline']->format('D, M d') }}</p>
                     </div>
                 </li>
             @endforeach
@@ -70,9 +70,9 @@
     {{-- The service sheet itself --}}
     <article class="card overflow-hidden">
         <header class="relative grain bg-ink text-white px-6 py-8 sm:px-10 sm:py-10 text-center overflow-hidden">
-            <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: radial-gradient(70% 90% at 50% 0%, rgb(165 28 48 / 0.28), transparent 70%);"></div>
+            <div aria-hidden="true" class="absolute inset-0 pointer-events-none" style="background: radial-gradient(70% 90% at 50% 0%, rgb(220 38 38 / 0.28), transparent 70%);"></div>
             <div class="relative">
-                <p class="text-[10.5px] font-bold uppercase tracking-[0.24em] text-gold-light">Liturgy & Order of Worship</p>
+                <p class="text-[12.5px] font-semibold text-gold-light">Liturgy & Order of Worship</p>
                 <h2 class="mt-3 font-display text-[1.75rem] sm:text-[2.375rem] leading-[1.1] text-white text-balance">&ldquo;{{ $sheet->theme ?: 'Worship Service' }}&rdquo;</h2>
                 <div class="rule-ornament text-[9px] max-w-[14rem] mx-auto my-4" aria-hidden="true">&#9670;</div>
                 <p class="text-[13px] text-white/60">Scripture Reading: <strong class="font-display font-normal italic text-[15px] text-white">{{ $sheet->scripture ?: 'To be announced' }}</strong></p>
@@ -92,16 +92,16 @@
                         ['Praise & Worship Team', $sheet->praise_worship_team ?: 'Chapel Worship Band'],
                     ] as [$role, $name])
                         <div class="border-l-2 border-gold-light/60 pl-3">
-                            <dt class="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400">{{ $role }}</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">{{ $role }}</dt>
                             <dd class="mt-0.5 text-[14px] font-semibold text-slate-900">{{ $name }}</dd>
                         </div>
                     @endforeach
                     <div class="border-l-2 border-gold-light/60 pl-3">
-                        <dt class="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400">Media & Sound Contact</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Media & Sound Contact</dt>
                         <dd class="mt-0.5 text-[14px] font-semibold text-slate-900 break-words">{{ $sheet->media_contact ?: 'media@africau.edu' }}</dd>
                     </div>
                     <div class="sm:col-span-2 lg:col-span-3 border-l-2 {{ $sheet->sign_interpreter_required ? 'border-emerald-500/60' : 'border-slate-200' }} pl-3">
-                        <dt class="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400">Sign-Language Interpreter</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Sign-Language Interpreter</dt>
                         @if($sheet->sign_interpreter_required)
                             <dd class="mt-1"><span class="badge badge-emerald badge-dot">{{ $sheet->sign_interpreter_name ?: 'Chaplaincy Interpreter Confirmed' }}</span></dd>
                         @else

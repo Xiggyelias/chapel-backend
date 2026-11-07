@@ -25,27 +25,27 @@
     {{-- Summary --}}
     <dl class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div class="dash-stat-card" style="--tone: var(--color-gold)">
-            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Total Approved Budgets</dt>
+            <dt class="text-[12.5px] font-semibold text-slate-500">Total Approved Budgets</dt>
             <dd class="mt-4 flex items-baseline gap-0.5 text-slate-900">
                 <span class="font-display text-[1.4rem] text-slate-400">$</span><span class="stat-value text-[2.4rem]">{{ number_format($totalApprovedBudget, 2) }}</span>
             </dd>
-            <p class="mt-2 text-[11.5px] text-slate-500">Allocated across approved activity proposals</p>
+            <p class="mt-2 text-[12.5px] text-slate-500">Allocated across approved activity proposals</p>
         </div>
 
         <div class="dash-stat-card" style="--tone: var(--color-slate-600)">
-            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Actual Reported Spending</dt>
+            <dt class="text-[12.5px] font-semibold text-slate-500">Actual Reported Spending</dt>
             <dd class="mt-4 flex items-baseline gap-0.5 text-slate-900">
                 <span class="font-display text-[1.4rem] text-slate-400">$</span><span class="stat-value text-[2.4rem]">{{ number_format($totalActualSpending, 2) }}</span>
             </dd>
-            <p class="mt-2 text-[11.5px] text-slate-500">Receipts &amp; vouchers filed in post-activity reports</p>
+            <p class="mt-2 text-[12.5px] text-slate-500">Receipts &amp; vouchers filed in post-activity reports</p>
         </div>
 
         <div class="dash-stat-card" style="--tone: {{ $variance >= 0 ? '#059669' : '#E11D48' }}">
-            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Net Budget Variance</dt>
+            <dt class="text-[12.5px] font-semibold text-slate-500">Net Budget Variance</dt>
             <dd class="mt-4 flex items-baseline gap-0.5 {{ $variance >= 0 ? 'text-emerald-700' : 'text-rose-700' }}">
                 <span class="font-display text-[1.4rem] opacity-60">{{ $variance >= 0 ? '+' : '−' }}$</span><span class="stat-value text-[2.4rem]">{{ number_format(abs($variance), 2) }}</span>
             </dd>
-            <p class="mt-2 text-[11.5px] font-semibold {{ $variance >= 0 ? 'text-emerald-700' : 'text-rose-700' }}">
+            <p class="mt-2 text-[12.5px] font-semibold {{ $variance >= 0 ? 'text-emerald-700' : 'text-rose-700' }}">
                 {{ $variance >= 0 ? 'Under-budget surplus' : 'Budget overrun requiring clearance' }}
             </p>
         </div>
@@ -101,7 +101,7 @@
                                 <a href="{{ route('requests.show', $item->id) }}" class="font-semibold text-brand hover:text-brand-dark tabular-nums block">
                                     {{ $item->reference_no }}
                                 </a>
-                                <span class="text-[11.5px] text-slate-500">{{ $item->event_date->format('M d, Y') }}</span>
+                                <span class="text-[12.5px] text-slate-500">{{ $item->event_date->format('M d, Y') }}</span>
                             </td>
                             <td class="text-slate-700">
                                 {{ $item->club?->name ?? 'Chapel Ministry' }}

@@ -22,12 +22,12 @@
 
     {{-- ═══ Ink header band ═══ --}}
     <header class="relative grain on-dark bg-ink text-white overflow-hidden"
-            style="background-image: radial-gradient(70% 120% at 0% 0%, rgb(165 28 48 / 0.28), transparent 60%), radial-gradient(50% 90% at 100% 100%, rgb(184 137 43 / 0.14), transparent 70%);">
+            style="background-image: radial-gradient(70% 120% at 0% 0%, rgb(220 38 38 / 0.28), transparent 60%), radial-gradient(50% 90% at 100% 100%, rgb(184 137 43 / 0.14), transparent 70%);">
         <div class="relative max-w-3xl mx-auto px-4 sm:px-6 pt-6 pb-24 sm:pb-28">
             <div class="flex items-center justify-between gap-4">
                 <div class="flex items-center gap-3 min-w-0">
                     <span class="w-10 h-10 rounded-full grid place-items-center shrink-0"
-                          style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px rgb(21 18 26), 0 0 0 4px rgb(217 183 108 / .45), 0 8px 18px -6px rgb(165 28 48 / .7);">
+                          style="background: radial-gradient(circle at 35% 30%, #EF4444, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px rgb(21 18 26), 0 0 0 4px rgb(217 183 108 / .45), 0 8px 18px -6px rgb(220 38 38 / .7);">
                         <x-umc-logo class="w-[1.15rem] h-[1.15rem]" />
                     </span>
                     <span class="leading-tight min-w-0">

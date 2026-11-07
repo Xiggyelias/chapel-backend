@@ -12,13 +12,13 @@
     <section class="card p-4 sm:px-5 flex flex-col md:flex-row md:items-center gap-4">
         <div class="flex items-center gap-3.5 min-w-0 flex-1">
             <div class="relative w-12 h-12 rounded-full grid place-items-center shrink-0 bg-white font-display text-[11px] tracking-wide text-brand"
-                 style="box-shadow: inset 0 0 0 1px rgb(165 28 48 / .18), 0 0 0 3px #fff, 0 0 0 4px rgb(184 137 43 / .45), 0 6px 14px -8px rgb(165 28 48 / .5);" aria-hidden="true">
+                 style="box-shadow: inset 0 0 0 1px rgb(220 38 38 / .18), 0 0 0 3px #fff, 0 0 0 4px rgb(184 137 43 / .45), 0 6px 14px -8px rgb(220 38 38 / .5);" aria-hidden="true">
                 {{ \Illuminate\Support\Str::limit($club->code, 4, '') }}
             </div>
             <div class="min-w-0">
                 <p class="card-kicker">Your fellowship</p>
                 <p class="font-display text-[1.15rem] leading-tight text-slate-900 truncate">{{ $club->name }}</p>
-                <p class="mt-0.5 text-[12px] text-slate-500 truncate">{{ $club->meeting_schedule ?: 'Meeting schedule not set' }} · {{ $club->venue ?: 'Venue not set' }}</p>
+                <p class="mt-0.5 text-[12.5px] text-slate-500 truncate">{{ $club->meeting_schedule ?: 'Meeting schedule not set' }} · {{ $club->venue ?: 'Venue not set' }}</p>
             </div>
         </div>
         <nav class="flex flex-wrap gap-2" aria-label="Club quick actions">
@@ -47,7 +47,7 @@
         <div class="lg:col-span-2 space-y-6">
             <x-dash.tasks :tasks="$dash['tasks']" title="Your fellowship's to-do list" />
 
-            <x-dash.panel title="Our proposals" :link="route('requests.index')">
+            <x-dash.panel title="Our proposals" icon="requests" :link="route('requests.index')">
                 @php
                     $badges = [
                         'submitted' => 'badge-sky',
@@ -60,13 +60,13 @@
                 @forelse($dash['myRequests'] as $r)
                     <div class="flex items-center gap-3 py-3 first:pt-0 last:pb-0 border-b last:border-0 border-slate-100">
                         <div class="min-w-0 flex-1">
-                            <a href="{{ route('requests.show', $r->id) }}" class="text-[13.5px] font-semibold text-slate-900 hover:text-brand truncate block transition-colors">{{ $r->title }}</a>
-                            <p class="mt-0.5 text-[12px] text-slate-500">{{ $r->event_date->format('D, M j') }} · {{ $r->venue?->name ?? $r->venue_other }}</p>
+                            <a href="{{ route('requests.show', $r->id) }}" class="text-[14px] font-semibold text-slate-900 hover:text-brand truncate block transition-colors">{{ $r->title }}</a>
+                            <p class="mt-0.5 text-[12.5px] text-slate-500">{{ $r->event_date->format('D, M j') }} · {{ $r->venue?->name ?? $r->venue_other }}</p>
                         </div>
                         <span class="shrink-0 badge badge-dot {{ $badges[$r->status] ?? '' }}">{{ ucwords(str_replace('_', ' ', $r->status)) }}</span>
                     </div>
                 @empty
-                    <p class="text-[13px] text-slate-500">You haven't submitted any proposals yet. Activities need 14 days' notice.</p>
+                    <p class="text-[14px] text-slate-500">You haven't submitted any proposals yet. Activities need 14 days' notice.</p>
                 @endforelse
                 <a href="{{ route('requests.create') }}" class="btn btn-primary btn-sm mt-5">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -76,16 +76,16 @@
         </div>
 
         <div class="space-y-6">
-            <x-dash.panel title="Coming up for us" :link="route('calendar.index', ['club_id' => $club->id])">
+            <x-dash.panel title="Coming up for us" icon="calendar" :link="route('calendar.index', ['club_id' => $club->id])">
                 @forelse($dash['upcoming'] as $event)
                     <x-dash.event-row :event="$event" />
                 @empty
-                    <p class="text-[13px] text-slate-500">No approved activities scheduled yet.</p>
+                    <p class="text-[14px] text-slate-500">No approved activities scheduled yet.</p>
                 @endforelse
             </x-dash.panel>
 
             @php $health = $dash['health']; @endphp
-            <x-dash.panel title="Records vault health" :link="route('vault.index')">
+            <x-dash.panel title="Records vault health" icon="vault" :link="route('vault.index')">
                 <div class="flex items-end justify-between gap-4">
                     <div class="flex items-baseline gap-0.5" style="color: {{ $health['color'] }}">
                         <span class="stat-value text-[2.6rem]">{{ $health['score'] }}</span><span class="font-display text-[1.3rem] opacity-70">%</span>
@@ -111,10 +111,10 @@
                 </ul>
             </x-dash.panel>
 
-            <x-dash.panel title="Meeting attendance" :link="route('members.index')">
+            <x-dash.panel title="Meeting attendance" icon="members" :link="route('members.index')">
                 @php $peak = max(1, (int) $dash['lastMeetingAttendance']->max('present')); @endphp
                 @if($dash['lastMeetingAttendance']->isEmpty())
-                    <p class="text-[13px] text-slate-500">No attendance recorded yet. Use the kiosk or roster to start tracking.</p>
+                    <p class="text-[14px] text-slate-500">No attendance recorded yet. Use the kiosk or roster to start tracking.</p>
                 @else
                     <div class="flex items-end gap-2.5 h-32 border-b border-slate-200" role="img" aria-label="Attendance for the last {{ $dash['lastMeetingAttendance']->count() }} meetings">
                         @foreach($dash['lastMeetingAttendance'] as $row)

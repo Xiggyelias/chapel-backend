@@ -76,8 +76,17 @@ class CalendarController extends Controller
         $clubs = Club::active()->get();
         $venues = Venue::where('is_active', true)->get();
 
-        // Current calendar view mode: month, week, or list
-        $viewMode = $request->input('view', 'month');
+        // Calendar view mode: month grid or agenda list
+        $viewMode = $request->input('view') === 'list' ? 'list' : 'month';
+
+        // "Coming up" rail: the next few activities from today, whatever month is on screen
+        $upcoming = Event::with(['club', 'venue'])
+            ->where('event_date', '>=', Carbon::today()->toDateString())
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('event_date', 'asc')
+            ->orderBy('start_time', 'asc')
+            ->take(5)
+            ->get();
 
         return view('calendar.index', compact(
             'events',
@@ -89,6 +98,7 @@ class CalendarController extends Controller
             'year',
             'viewMode',
             'clashDates',
+            'upcoming',
             'user'
         ));
     }
@@ -147,8 +157,9 @@ class CalendarController extends Controller
     }
 
     /**
-     * RFC 5545 iCalendar (.ics) Feed for Google Calendar, Outlook, and Apple Calendar
-     * Allows staff and Campus Life to subscribe directly in their calendar app.
+     * RFC 5545 iCalendar (.ics) subscription feed for Google Calendar, Outlook and Apple Calendar.
+     * People subscribe to it once (one tap from the calendar page) and their own calendar app
+     * keeps itself up to date; nobody has to download or import a file.
      */
     public function icsFeed(Request $request)
     {
@@ -158,52 +169,96 @@ class CalendarController extends Controller
             ->orderBy('event_date', 'asc')
             ->get();
 
-        $lines = [];
-        $lines[] = 'BEGIN:VCALENDAR';
-        $lines[] = 'VERSION:2.0';
-        $lines[] = 'PRODID:-//Africa University Chaplaincy//Kwang-Lim Chapel System//EN';
-        $lines[] = 'CALSCALE:GREGORIAN';
-        $lines[] = 'METHOD:PUBLISH';
-        $lines[] = 'X-WR-CALNAME:Africa University Kwang-Lim Chapel';
-        $lines[] = 'X-WR-TIMEZONE:Africa/Harare';
-        $lines[] = 'X-WR-CALDESC:Official Kwang-Lim Chapel Fellowships and Ministry Master Calendar';
-
+        $lines = self::icsHeader([
+            'X-WR-CALNAME:Africa University Kwang-Lim Chapel',
+            'X-WR-CALDESC:Official Kwang-Lim Chapel Fellowships and Ministry Master Calendar',
+            // Ask subscribing apps to check for changes hourly (Apple/Outlook honour this)
+            'REFRESH-INTERVAL;VALUE=DURATION:PT1H',
+            'X-PUBLISHED-TTL:PT1H',
+        ]);
         foreach ($events as $event) {
-            $dateStr = $event->event_date->format('Ymd');
-            $startFormatted = str_replace(':', '', substr($event->start_time, 0, 5)) . '00';
-            $endFormatted = str_replace(':', '', substr($event->end_time, 0, 5)) . '00';
-
-            $dtStart = "{$dateStr}T{$startFormatted}";
-            $dtEnd = "{$dateStr}T{$endFormatted}";
-            $dtStamp = gmdate('Ymd\THis\Z');
-            $uid = "chapel-event-{$event->id}@africau.edu";
-
-            $clubName = $event->club?->name ?? 'Kwang-Lim Chapel';
-            $summary = self::icsEscape("{$event->title} ({$clubName})");
-            $location = self::icsEscape($event->venue ? $event->venue->name : ($event->venue_name ?: 'Kwang-Lim Chapel'));
-            $desc = self::icsEscape("Fellowship Activity: {$event->title} by {$clubName}. Cleared by Africa University Chaplaincy Office.");
-
-            $lines[] = 'BEGIN:VEVENT';
-            $lines[] = "UID:{$uid}";
-            $lines[] = "DTSTAMP:{$dtStamp}";
-            $lines[] = "DTSTART;TZID=Africa/Harare:{$dtStart}";
-            $lines[] = "DTEND;TZID=Africa/Harare:{$dtEnd}";
-            $lines[] = "SUMMARY:{$summary}";
-            $lines[] = "LOCATION:{$location}";
-            $lines[] = "DESCRIPTION:{$desc}";
-            $lines[] = 'STATUS:CONFIRMED';
-            $lines[] = 'TRANSP:OPAQUE';
-            $lines[] = 'END:VEVENT';
+            array_push($lines, ...self::icsEvent($event));
         }
-
         $lines[] = 'END:VCALENDAR';
-        $content = implode("\r\n", $lines);
 
-        return response($content, 200, [
+        return response(implode("\r\n", array_map(self::icsFold(...), $lines)) . "\r\n", 200, [
             'Content-Type' => 'text/calendar; charset=utf-8',
             'Content-Disposition' => 'inline; filename="kwang-lim-chapel.ics"',
             'Cache-Control' => 'no-cache, no-store, must-revalidate',
         ]);
+    }
+
+    /**
+     * A single activity as an .ics file: the "Apple / other calendar" option on an event.
+     * On iPhone and Android this opens straight into the phone's calendar.
+     */
+    public function eventIcs(Event $event)
+    {
+        abort_if($event->status === 'cancelled', 404);
+        $event->loadMissing(['club', 'venue']);
+
+        $lines = self::icsHeader();
+        array_push($lines, ...self::icsEvent($event));
+        $lines[] = 'END:VCALENDAR';
+
+        $filename = (\Illuminate\Support\Str::slug($event->title) ?: 'chapel-activity') . '.ics';
+
+        return response(implode("\r\n", array_map(self::icsFold(...), $lines)) . "\r\n", 200, [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+        ]);
+    }
+
+    /**
+     * VCALENDAR preamble with the campus time zone (CAT, UTC+2, no daylight saving).
+     */
+    private static function icsHeader(array $extra = []): array
+    {
+        return [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//Africa University Chaplaincy//Kwang-Lim Chapel System//EN',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH',
+            'X-WR-TIMEZONE:Africa/Harare',
+            ...$extra,
+            'BEGIN:VTIMEZONE',
+            'TZID:Africa/Harare',
+            'BEGIN:STANDARD',
+            'DTSTART:19700101T000000',
+            'TZOFFSETFROM:+0200',
+            'TZOFFSETTO:+0200',
+            'TZNAME:CAT',
+            'END:STANDARD',
+            'END:VTIMEZONE',
+        ];
+    }
+
+    private static function icsEvent(Event $event): array
+    {
+        $dateStr = $event->event_date->format('Ymd');
+        $startFormatted = str_replace(':', '', substr($event->start_time, 0, 5)) . '00';
+        $endFormatted = str_replace(':', '', substr($event->end_time, 0, 5)) . '00';
+
+        $clubName = $event->club?->name ?? 'Kwang-Lim Chapel';
+        $summary = self::icsEscape("{$event->title} ({$clubName})");
+        $location = self::icsEscape($event->venue ? $event->venue->name : ($event->venue_name ?: 'Kwang-Lim Chapel'));
+        $desc = self::icsEscape(trim(($event->description ? $event->description . "\n\n" : '') . "Fellowship Activity: {$event->title} by {$clubName}. Cleared by Africa University Chaplaincy Office."));
+
+        return [
+            'BEGIN:VEVENT',
+            "UID:chapel-event-{$event->id}@africau.edu",
+            'DTSTAMP:' . gmdate('Ymd\THis\Z'),
+            "DTSTART;TZID=Africa/Harare:{$dateStr}T{$startFormatted}",
+            "DTEND;TZID=Africa/Harare:{$dateStr}T{$endFormatted}",
+            "SUMMARY:{$summary}",
+            "LOCATION:{$location}",
+            "DESCRIPTION:{$desc}",
+            'STATUS:CONFIRMED',
+            'TRANSP:OPAQUE',
+            'END:VEVENT',
+        ];
     }
 
     /**
@@ -212,5 +267,29 @@ class CalendarController extends Controller
     private static function icsEscape(string $text): string
     {
         return str_replace(['\\', ',', ';', "\r\n", "\n", "\r"], ['\\\\', '\,', '\;', '\n', '\n', ''], $text);
+    }
+
+    /**
+     * RFC 5545 §3.1 line folding: content lines longer than 75 octets continue on
+     * the next line after a single space. Never splits a multi-byte character.
+     */
+    private static function icsFold(string $line): string
+    {
+        if (strlen($line) <= 75) {
+            return $line;
+        }
+        $out = [];
+        $current = '';
+        foreach (mb_str_split($line) as $char) {
+            $limit = $out ? 74 : 75; // continuation lines start with a space
+            if (strlen($current) + strlen($char) > $limit) {
+                $out[] = $current;
+                $current = '';
+            }
+            $current .= $char;
+        }
+        $out[] = $current;
+
+        return implode("\r\n ", $out);
     }
 }

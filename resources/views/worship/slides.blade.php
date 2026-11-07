@@ -28,7 +28,7 @@
            gold hairlines for ornament, crimson only for the presenter's primary action. */
         :root {
             --accent: {{ $accent }};
-            --crimson: var(--color-brand, #A51C30);
+            --crimson: var(--color-brand, #DC2626);
             --gold: var(--color-gold, #B8892B);
             --gold-light: var(--color-gold-light, #D9B76C);
             --ink: #110E13;
@@ -87,7 +87,7 @@
         .verse-dots span.on { background: var(--gold-light); }
 
         .crest { border-radius: 1.75rem; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(160deg, var(--crimson), #5E0F1C);
+            background: linear-gradient(160deg, var(--crimson), #7F1D1D);
             box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 0 0 1px rgba(217,183,108,.35), 0 24px 60px -28px rgba(165,28,48,.8); }
 
         .panel { background: rgba(251,247,239,.03); border: 1px solid rgba(251,247,239,.08); border-radius: 1.5rem; }
@@ -113,8 +113,8 @@
             transition: background-color .2s, border-color .2s, color .2s; white-space: nowrap; text-decoration: none; }
         .ctl:hover { background: rgba(255,255,255,.12); color: #fff; }
         .ctl svg { width: .95rem; height: .95rem; flex-shrink: 0; }
-        .ctl.primary { color: #fff; background-color: var(--crimson); background-image: linear-gradient(180deg, rgba(255,255,255,.12), transparent 60%); border-color: #861527; }
-        .ctl.primary:hover { background-color: #861527; }
+        .ctl.primary { color: #fff; background-color: var(--crimson); background-image: linear-gradient(180deg, rgba(255,255,255,.12), transparent 60%); border-color: #B91C1C; }
+        .ctl.primary:hover { background-color: #B91C1C; }
         .ctl.on { color: #fff; background: rgba(184,137,43,.18); border-color: rgba(217,183,108,.6); }
         .ctl:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
 

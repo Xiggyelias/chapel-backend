@@ -36,7 +36,7 @@
                 <div class="min-w-0">
                     <span class="card-kicker block">{{ $label }}</span>
                     <span class="block text-[13px] font-semibold text-slate-900 mt-0.5 truncate">{{ $value }}</span>
-                    <span class="mt-1 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-emerald-700">
+                    <span class="mt-1 inline-flex items-center gap-1.5 text-[12.5px] font-medium text-emerald-700">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>{!! $status !!}
                     </span>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="px-5 py-4 space-y-1.5 hover:bg-slate-50/60 transition-colors">
                         <div class="flex items-start justify-between gap-3">
                             <span class="text-[13px] font-semibold text-slate-900 truncate">{{ $req->title }}</span>
-                            <span class="shrink-0 tabular-nums text-[11px] font-semibold {{ $daysLeft < 14 ? 'badge badge-rose' : 'text-slate-500' }}">
+                            <span class="shrink-0 tabular-nums text-[12px] font-semibold {{ $daysLeft < 14 ? 'badge badge-rose' : 'text-slate-500' }}">
                                 {{ $daysLeft }}d left
                             </span>
                         </div>
@@ -74,7 +74,7 @@
                             <span class="tabular-nums shrink-0">{{ $req->event_date->format('M d') }}</span>
                         </div>
                         <div class="pt-0.5 flex items-center justify-between gap-3">
-                            <span class="text-[11px] text-slate-400 font-mono">Ref: {{ $req->reference_no }}</span>
+                            <span class="text-[12px] text-slate-400 font-mono">Ref: {{ $req->reference_no }}</span>
                             <a href="{{ route('requests.show', $req->id) }}" class="card-link">Review Request</a>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                     <div class="px-5 py-4 space-y-2 hover:bg-slate-50/60 transition-colors">
                         <div class="flex items-start justify-between gap-3">
                             <span class="text-[13px] font-semibold text-slate-900">{{ $service->service_type }}</span>
-                            <span class="text-[11.5px] text-slate-500 shrink-0 tabular-nums">{{ $service->service_date->format('l, M d') }}</span>
+                            <span class="text-[12.5px] text-slate-500 shrink-0 tabular-nums">{{ $service->service_date->format('l, M d') }}</span>
                         </div>
                         <div class="font-display italic text-[13px] text-slate-600 truncate">
                             Theme: "{{ $service->theme ?: 'Worship Assembly' }}"
@@ -153,12 +153,12 @@
                     <div class="px-5 py-4 space-y-1.5 hover:bg-slate-50/60 transition-colors">
                         <div class="flex items-start justify-between gap-3">
                             <span class="text-[13px] font-semibold text-slate-900 truncate">{{ $ev->title }}</span>
-                            <span class="text-[11.5px] text-slate-500 tabular-nums shrink-0">{{ $ev->event_date->format('M d') }}</span>
+                            <span class="text-[12.5px] text-slate-500 tabular-nums shrink-0">{{ $ev->event_date->format('M d') }}</span>
                         </div>
                         <div class="text-[12px] text-slate-500">
                             Sponsoring: <span class="font-semibold text-slate-800">{{ $ev->club?->name }}</span>
                         </div>
-                        <div class="pt-0.5 flex items-center justify-between gap-3 text-[11.5px]">
+                        <div class="pt-0.5 flex items-center justify-between gap-3 text-[12.5px]">
                             <span class="text-rose-700 font-semibold">Report Due Within 7 Days</span>
                             <a href="{{ route('reports.create', ['event_id' => $ev->id]) }}" class="card-link">File Report</a>
                         </div>
@@ -198,14 +198,14 @@
                         <div class="space-y-1 min-w-0">
                             <div class="flex flex-wrap items-center gap-2">
                                 <span class="text-[13px] font-semibold text-slate-900">{{ $log->user_name ?: ($log->user?->name ?: 'Automated Sentinel') }}</span>
-                                <span class="badge uppercase tracking-wider !text-[10px]">{{ $log->action }}</span>
+                                <span class="badge">{{ $log->action }}</span>
                             </div>
                             <p class="text-[12.5px] text-slate-600 max-w-2xl leading-relaxed">
                                 {{ $log->notes ?: 'Automated policy notification processed.' }}
                             </p>
                         </div>
                     </div>
-                    <div class="sm:text-right text-[11px] text-slate-400 font-mono shrink-0 pl-[2.875rem] sm:pl-0">
+                    <div class="sm:text-right text-[12px] text-slate-400 font-mono shrink-0 pl-[2.875rem] sm:pl-0">
                         <div>{{ $log->created_at->timezone('Africa/Harare')->format('Y-m-d H:i:s') }} CAT</div>
                         <div>IP: {{ $log->ip_address ?: '127.0.0.1' }}</div>
                     </div>

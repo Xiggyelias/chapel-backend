@@ -6,12 +6,12 @@
         <div class="lg:col-span-2 space-y-6">
             <x-dash.tasks :tasks="$dash['tasks']" title="Logistics watch: large or late activities" />
 
-            <x-dash.panel title="Next 14 days" :link="route('calendar.index')" link-label="Full calendar">
+            <x-dash.panel title="Next 14 days" icon="calendar" :link="route('calendar.index')" link-label="Full calendar">
                 @forelse($dash['weekByDay'] as $date => $events)
                     @php $isToday = \Carbon\Carbon::parse($date)->isToday(); @endphp
                     <div class="pb-3 mb-3 border-b last:border-0 last:mb-0 last:pb-0 border-slate-100">
-                        <h3 class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] {{ $isToday ? 'text-brand' : 'text-slate-500' }}">
-                            <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $isToday ? 'bg-brand breathe' : 'bg-gold' }}" style="{{ $isToday ? '--breathe: 165 28 48' : '' }}" aria-hidden="true"></span>
+                        <h3 class="flex items-center gap-2 text-[12.5px] font-bold {{ $isToday ? 'text-brand' : 'text-slate-500' }}">
+                            <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $isToday ? 'bg-brand breathe' : 'bg-gold' }}" style="{{ $isToday ? '--breathe: 220 38 38' : '' }}" aria-hidden="true"></span>
                             {{ \Carbon\Carbon::parse($date)->isToday() ? 'Today' : \Carbon\Carbon::parse($date)->format('l, M j') }}
                         </h3>
                         @foreach($events as $event)
@@ -19,26 +19,22 @@
                         @endforeach
                     </div>
                 @empty
-                    <p class="text-[13px] text-slate-500">No approved chapel activities in the next two weeks.</p>
+                    <p class="text-[14px] text-slate-500">No approved chapel activities in the next two weeks.</p>
                 @endforelse
             </x-dash.panel>
         </div>
 
         <div class="space-y-6">
-            <x-dash.panel title="Sync schedule with your phone" kicker="Calendar Sync">
-                <p class="text-[13px] text-slate-600 leading-relaxed">Add approved chapel activities to your phone, Google Calendar, or Apple/Outlook so you stay updated automatically.</p>
-                <label for="icsFeed" class="sr-only">Calendar feed URL</label>
-                <div class="mt-4 flex gap-2">
-                    <input id="icsFeed" type="text" readonly value="{{ route('calendar.feed_ics') }}" class="field min-w-0 flex-1 py-2 text-[12px] font-mono bg-slate-50 text-slate-600">
-                    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('icsFeed').value).then(() => { this.textContent = 'Copied!'; setTimeout(() => { this.textContent = 'Copy Link'; }, 2000); })" class="btn btn-primary shrink-0">Copy Link</button>
-                </div>
+            <x-dash.panel title="Subscribe to the chapel calendar" kicker="On your phone" icon="phone">
+                <p class="text-[14px] text-slate-600 leading-relaxed mb-3">One tap adds every approved chapel activity to the calendar you already use. It stays up to date on its own.</p>
+                <x-calendar-subscribe compact />
                 <a href="{{ route('calendar.public') }}" target="_blank" rel="noopener" class="card-link mt-4">Shareable public calendar</a>
             </x-dash.panel>
 
-            <section class="card card-ink grain overflow-hidden p-5">
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-gold-light/80">Observer role</p>
-                <h2 class="mt-1.5 font-display text-[1.15rem] text-white">Your access</h2>
-                <p class="mt-2 text-[12.5px] text-white/65 leading-relaxed">As a Campus Life / SRC observer you can see every approved activity. Proposals, club records and rosters stay private to the Chaplaincy and each fellowship.</p>
+            <section class="card p-5 bg-slate-50">
+                <div class="flex items-center gap-3"><span class="icon-tile icon-tile-sm" style="--tile:#0369A1"><x-icon name="shield" /></span><div><p class="card-kicker">Observer role</p>
+                <h2 class="card-title">Your access</h2></div></div>
+                <p class="mt-3 text-[13.5px] text-slate-600 leading-relaxed">As a Campus Life / SRC observer you can see every approved activity. Proposals, club records and rosters stay private to the Chaplaincy and each fellowship.</p>
             </section>
         </div>
     </div>

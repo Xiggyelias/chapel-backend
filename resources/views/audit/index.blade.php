@@ -34,28 +34,28 @@
     {{-- Ledger at a glance --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div class="dash-stat-card hover:!translate-y-0" style="--tone: var(--color-gold)">
-            <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500">
                 <span class="w-1.5 h-1.5 rounded-full bg-gold" aria-hidden="true"></span>
                 Total Recorded Transactions
             </span>
             <div class="mt-4 stat-value text-[2.4rem] text-slate-900">{{ number_format($totalLogsCount) }}</div>
-            <div class="mt-2 text-[11.5px] text-slate-500">All actions logged permanently</div>
+            <div class="mt-2 text-[12.5px] text-slate-500">All actions logged permanently</div>
         </div>
         <div class="dash-stat-card hover:!translate-y-0" style="--tone: var(--color-brand)">
-            <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500">
                 <span class="w-1.5 h-1.5 rounded-full bg-brand" aria-hidden="true"></span>
                 Chaplaincy Decisions Audited
             </span>
             <div class="mt-4 stat-value text-[2.4rem] text-brand-dark">{{ number_format($approvalActionsCount) }}</div>
-            <div class="mt-2 text-[11.5px] text-slate-500">Approvals, declines, changes requested</div>
+            <div class="mt-2 text-[12.5px] text-slate-500">Approvals, declines, changes requested</div>
         </div>
         <div class="dash-stat-card hover:!translate-y-0" style="--tone: var(--color-slate-300)">
-            <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+            <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500">
                 <span class="w-1.5 h-1.5 rounded-full bg-slate-300" aria-hidden="true"></span>
                 Proposals Submitted
             </span>
             <div class="mt-4 stat-value text-[2.4rem] text-slate-900">{{ number_format($submissionActionsCount) }}</div>
-            <div class="mt-2 text-[11.5px] text-slate-500">Student leader filings</div>
+            <div class="mt-2 text-[12.5px] text-slate-500">Student leader filings</div>
         </div>
     </div>
 
@@ -102,24 +102,24 @@
                             };
                         @endphp
                         <tr>
-                            <td class="w-[6.5rem] font-mono text-[11.5px] leading-snug text-slate-500">
+                            <td class="w-[6.5rem] font-mono text-[12.5px] leading-snug text-slate-500">
                                 {{ $log->created_at->timezone('Africa/Harare')->format('Y-m-d H:i:s') }}
                             </td>
                             <td class="min-w-[9rem]">
                                 <div class="font-semibold text-slate-900">{{ $log->user_name ?: ($log->user?->name ?: 'System Automatic') }}</div>
                                 @if($log->user)
-                                    <div class="text-[11px] text-slate-400">{{ $log->user->getRoleDisplayName() }}</div>
+                                    <div class="text-[12px] text-slate-400">{{ $log->user->getRoleDisplayName() }}</div>
                                 @endif
                             </td>
                             <td class="whitespace-nowrap">
-                                <span class="badge {{ $actionTone }} font-mono !text-[10.5px]">{{ $log->action }}</span>
+                                <span class="badge {{ $actionTone }} font-mono !text-[11.5px]">{{ $log->action }}</span>
                             </td>
                             <td class="min-w-[13rem]">
                                 @if($log->request)
                                     <a href="{{ route('requests.show', $log->request?->id) }}" class="font-semibold text-brand hover:text-brand-dark hover:underline underline-offset-2">
                                         {{ $log->request?->title }}
                                     </a>
-                                    <div class="text-[11px] text-slate-400">Ref: {{ $log->request?->reference_no }} &bull; {{ $log->request?->club?->name }}</div>
+                                    <div class="text-[12px] text-slate-400">Ref: {{ $log->request?->reference_no }} &bull; {{ $log->request?->club?->name }}</div>
                                 @else
                                     <span class="text-slate-300">&mdash;</span>
                                 @endif
@@ -137,7 +137,7 @@
                                 <span class="line-clamp-2">
                                 {{ $log->notes ?: 'Standard operational execution' }}</span>
                             </td>
-                            <td class="text-right font-mono text-[11.5px] text-slate-400">
+                            <td class="text-right font-mono text-[12.5px] text-slate-400">
                                 {{ $log->ip_address ?: '127.0.0.1' }}
                             </td>
                         </tr>

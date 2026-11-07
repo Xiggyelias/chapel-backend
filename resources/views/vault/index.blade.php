@@ -22,7 +22,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto]">
             <div class="card-body flex flex-wrap items-start gap-x-8 gap-y-5">
                 <div class="flex items-start gap-3 min-w-0">
-                    <span class="mt-1.5 w-3 h-3 rounded-full shrink-0 ring-4 ring-slate-100" style="background-color: {{ $selectedClub->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                    <span class="mt-1.5 w-3 h-3 rounded-full shrink-0 ring-4 ring-slate-100" style="background-color: {{ $selectedClub->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                     <div class="min-w-0">
                         <p class="card-kicker">Active repository</p>
                         <h2 class="card-title mt-0.5 text-[1.25rem]">{{ $selectedClub->name }}</h2>
@@ -75,12 +75,12 @@
         </div>
 
         {{-- Retention policy & naming convention --}}
-        <div class="px-5 py-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[11.5px] text-slate-500">
+        <div class="px-5 py-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[12.5px] text-slate-500">
             <p class="flex items-center gap-2">
                 <svg class="w-3.5 h-3.5 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 <span>Permanent storage: records are retained permanently in Chaplaincy custody and cannot be deleted by clubs.</span>
             </p>
-            <code class="font-mono text-[10.5px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md self-start sm:self-auto break-all">Format: YYYY-MM-DD_{{ $selectedClub->code }}_Document-Title.pdf</code>
+            <code class="font-mono text-[12px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md self-start sm:self-auto break-all">Format: YYYY-MM-DD_{{ $selectedClub->code }}_Document-Title.pdf</code>
         </div>
     </section>
 
@@ -90,13 +90,13 @@
             <a href="{{ route('vault.index', ['club_id' => $selectedClub->id, 'folder' => 'all']) }}"
                class="whitespace-nowrap inline-flex items-center gap-1.5 {{ $folder === 'all' ? 'is-active' : '' }}" @if($folder === 'all') aria-current="page" @endif>
                 All Records
-                <span class="tabular-nums text-[10.5px] {{ $folder === 'all' ? 'text-brand' : 'text-slate-400' }}">{{ $documents->total() }}</span>
+                <span class="tabular-nums text-[12px] {{ $folder === 'all' ? 'text-brand' : 'text-slate-400' }}">{{ $documents->total() }}</span>
             </a>
             @foreach($folderLabels as $key => $label)
                 <a href="{{ route('vault.index', ['club_id' => $selectedClub->id, 'folder' => $key]) }}"
                    class="whitespace-nowrap inline-flex items-center gap-1.5 {{ $folder === $key ? 'is-active' : '' }}" @if($folder === $key) aria-current="page" @endif>
                     {{ $label }}
-                    <span class="tabular-nums text-[10.5px] {{ $folder === $key ? 'text-brand' : 'text-slate-400' }}">{{ $folderCounts[$key] ?? 0 }}</span>
+                    <span class="tabular-nums text-[12px] {{ $folder === $key ? 'text-brand' : 'text-slate-400' }}">{{ $folderCounts[$key] ?? 0 }}</span>
                 </a>
             @endforeach
         </div>
@@ -238,7 +238,7 @@
             </div>
 
             <div class="rounded-xl bg-gold-soft/60 ring-1 ring-gold/20 px-3.5 py-3">
-                <span class="text-[10px] uppercase font-bold tracking-[0.12em] text-[#7A5A12] block mb-0.5">Automated file name</span>
+                <span class="text-[12px] font-semibold text-[#7A5A12] block mb-0.5">Automated file name</span>
                 <span id="namingPreview" class="font-mono text-[12px] font-semibold text-slate-900 break-all">
                     {{ date('Y-m-d') }}_{{ $selectedClub->code }}_document-title.pdf
                 </span>

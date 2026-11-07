@@ -34,8 +34,8 @@
             <article class="group flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 px-5 py-5 border-b last:border-0 border-slate-100 transition-colors hover:bg-slate-50/70">
                 <div class="min-w-0 flex-1 space-y-2">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-slate-700">
-                            <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $rep->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                        <span class="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-slate-700">
+                            <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $rep->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                             {{ $rep->club?->name }} ({{ $rep->club?->code }})
                         </span>
                         @if($rep->status === 'reviewed')

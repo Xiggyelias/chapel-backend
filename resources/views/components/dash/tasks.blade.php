@@ -2,30 +2,34 @@
 
 @php
     $tones = [
-        'critical' => ['dot' => 'bg-brand',     'ring' => 'ring-brand/15',     'cta' => 'btn-primary',   'label' => 'Urgent', 'tag' => 'badge-brand'],
-        'warning'  => ['dot' => 'bg-amber-500', 'ring' => 'ring-amber-500/15', 'cta' => 'btn-secondary', 'label' => 'Soon',   'tag' => 'badge-amber'],
-        'info'     => ['dot' => 'bg-sky-500',   'ring' => 'ring-sky-500/15',   'cta' => 'btn-secondary', 'label' => 'To do',  'tag' => 'badge-sky'],
+        'critical' => ['bar' => 'bg-brand',     'icon' => 'alert', 'tile' => 'var(--color-brand)', 'cta' => 'btn-primary',   'label' => 'Urgent', 'tag' => 'badge-brand'],
+        'warning'  => ['bar' => 'bg-amber-500', 'icon' => 'clock', 'tile' => '#C2410C',            'cta' => 'btn-secondary', 'label' => 'Soon',   'tag' => 'badge-amber'],
+        'info'     => ['bar' => 'bg-sky-500',   'icon' => 'info',  'tile' => '#0369A1',            'cta' => 'btn-secondary', 'label' => 'To do',  'tag' => 'badge-sky'],
     ];
     $visible = $tasks->take($limit);
+    $urgent = $tasks->where('tone', 'critical')->count();
 @endphp
 
-<section class="card" aria-labelledby="tasks-heading">
+<section class="card overflow-hidden" aria-labelledby="tasks-heading">
     <div class="card-header">
         <div class="flex items-center gap-2.5 min-w-0">
             <h2 id="tasks-heading" class="card-title">{{ $title }}</h2>
             @if($tasks->isNotEmpty())
-                <span class="min-w-[1.5rem] h-6 px-2 rounded-full bg-brand text-white text-[11px] font-bold grid place-items-center tabular-nums">{{ $tasks->count() }}</span>
+                <span class="badge tabular-nums">{{ $tasks->count() }}</span>
+            @endif
+            @if($urgent)
+                <span class="badge badge-brand badge-dot tabular-nums">{{ $urgent }} urgent</span>
             @endif
         </div>
         @if($tasks->count() > $limit)
-            <span class="text-[11.5px] text-slate-400">Showing {{ $limit }} of {{ $tasks->count() }}</span>
+            <span class="text-[12.5px] text-slate-500">Showing {{ $limit }} of {{ $tasks->count() }}</span>
         @endif
     </div>
 
     @if($visible->isEmpty())
         <div class="empty-state">
-            <div class="empty-state-mark" aria-hidden="true">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <div class="empty-state-mark" style="color:#047857;background:#E9F7EF" aria-hidden="true">
+                <x-icon name="check" class="w-6 h-6" stroke="2" />
             </div>
             <p class="empty-state-title">All is in good order</p>
             <p class="empty-state-text">Nothing needs your attention right now.</p>
@@ -34,15 +38,14 @@
         <ul class="divide-y divide-slate-100">
             @foreach($visible as $task)
                 @php $t = $tones[$task['tone']] ?? $tones['info']; @endphp
-                <li class="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 px-5 py-4 transition-colors hover:bg-slate-50/70">
-                    <span class="hidden sm:grid place-items-center w-8 h-8 rounded-full bg-white ring-4 {{ $t['ring'] }} shrink-0" aria-hidden="true">
-                        <span class="w-2 h-2 rounded-full {{ $t['dot'] }}"></span>
-                    </span>
+                <li class="relative flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pl-5 pr-4 sm:pr-5 py-3.5 transition-colors hover:bg-slate-50">
+                    <span class="absolute left-0 top-3 bottom-3 w-[3px] rounded-r {{ $t['bar'] }}" aria-hidden="true"></span>
+                    <span class="hidden sm:grid icon-tile icon-tile-sm" style="--tile: {{ $t['tile'] }}"><x-icon :name="$t['icon']" /></span>
                     <div class="min-w-0 flex-1">
-                        <p class="text-[13.5px] font-semibold text-slate-900 leading-snug">
+                        <p class="text-[14px] font-semibold text-slate-900 leading-snug">
                             <span class="sr-only">{{ $t['label'] }}:</span>{{ $task['title'] }}
                         </p>
-                        <p class="text-[12px] text-slate-500 mt-0.5 truncate">{{ $task['meta'] }}</p>
+                        <p class="text-[12.5px] text-slate-500 mt-0.5 truncate">{{ $task['meta'] }}</p>
                     </div>
                     <span class="hidden md:inline-flex badge {{ $t['tag'] }}">{{ $t['label'] }}</span>
                     <a href="{{ $task['url'] }}" class="btn btn-sm {{ $t['cta'] }} self-start sm:self-auto shrink-0">{{ $task['cta'] }}</a>

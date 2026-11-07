@@ -11,7 +11,7 @@
         .kiosk-light {
             background:
                 radial-gradient(60% 50% at 78% 40%, rgb(217 183 108 / .10), transparent 70%),
-                radial-gradient(50% 45% at 10% 0%, rgb(165 28 48 / .16), transparent 70%);
+                radial-gradient(50% 45% at 10% 0%, rgb(220 38 38 / .16), transparent 70%);
         }
         .kiosk-title { font-variation-settings: 'SOFT' 100, 'opsz' 144; }
     </style>

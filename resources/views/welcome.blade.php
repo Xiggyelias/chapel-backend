@@ -62,7 +62,7 @@
         }
     </style>
 </head>
-<body class="bg-paper text-slate-800 antialiased selection:bg-brand selection:text-white">
+<body class="classic bg-paper text-slate-800 antialiased selection:bg-brand selection:text-white">
 @php
     $season = \App\Services\LiturgicalCalendarService::getCurrentSeason();
     $hymnCount = rescue(fn () => \App\Models\Hymn::count(), 0, false);

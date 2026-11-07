@@ -23,20 +23,20 @@
     {{-- Summary --}}
     <dl class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
         <div class="dash-stat-card" style="--tone: var(--color-brand)">
-            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Actual Attendance</dt>
+            <dt class="text-[12.5px] font-semibold text-slate-500">Actual Attendance</dt>
             <dd class="mt-4 flex items-baseline gap-2">
                 <span class="stat-value text-[2.4rem] text-slate-900">{{ $report->attendance }}</span>
                 <span class="text-[12px] text-slate-500">attendees</span>
             </dd>
         </div>
         <div class="dash-stat-card" style="--tone: var(--color-gold)">
-            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Total Expenditure</dt>
+            <dt class="text-[12.5px] font-semibold text-slate-500">Total Expenditure</dt>
             <dd class="mt-4 flex items-baseline gap-0.5 text-slate-900">
                 <span class="font-display text-[1.4rem] text-slate-400">$</span><span class="stat-value text-[2.4rem]">{{ number_format($report->spending, 2) }}</span>
             </dd>
         </div>
         <div class="dash-stat-card col-span-2 sm:col-span-1" style="--tone: var(--color-slate-300)">
-            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Sponsoring Club</dt>
+            <dt class="text-[12.5px] font-semibold text-slate-500">Sponsoring Club</dt>
             <dd class="mt-4 font-display text-[1.25rem] leading-snug text-slate-900">{{ $report->club?->name }}</dd>
         </div>
     </dl>

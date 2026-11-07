@@ -36,7 +36,7 @@
         .cert-frame-inner {
             position: relative;
             border: 0.75px solid rgb(184 137 43 / .7);
-            outline: 0.75px solid rgb(165 28 48 / .35);
+            outline: 0.75px solid rgb(220 38 38 / .35);
             outline-offset: -7px;
             padding: 44px 52px 30px;
             overflow: hidden;
@@ -83,7 +83,7 @@
             display: grid;
             place-items: center;
             position: relative;
-            background: radial-gradient(circle at 38% 30%, #C52A40, var(--color-brand-deep) 75%);
+            background: radial-gradient(circle at 38% 30%, #EF4444, var(--color-brand-deep) 75%);
             box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 3px #FBF7EE, 0 0 0 4px var(--color-gold), 0 8px 18px -8px rgb(94 15 28 / .6);
         }
         .cert-seal::after {

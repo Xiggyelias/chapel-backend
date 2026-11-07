@@ -77,7 +77,7 @@
                         <tr>
                             <td class="whitespace-nowrap">
                                 <div class="font-semibold text-slate-900 tabular-nums">{{ $rec->service_date->format('M d, Y') }}</div>
-                                <div class="text-[11px] text-slate-500">{{ $rec->service_type }}</div>
+                                <div class="text-[12px] text-slate-500">{{ $rec->service_type }}</div>
                             </td>
                             <td class="min-w-[12rem] max-w-xs">
                                 <span class="font-display text-[14px] leading-snug text-slate-900">{{ $rec->theme ?: '—' }}</span>

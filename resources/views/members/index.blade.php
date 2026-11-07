@@ -32,7 +32,7 @@
         <section class="card card-body">
             <p class="card-kicker">Managing roster for</p>
             <div class="flex items-center gap-2.5 mt-2">
-                <span class="w-3 h-3 rounded-full shrink-0 ring-4 ring-slate-100" style="background-color: {{ $selectedClub->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                <span class="w-3 h-3 rounded-full shrink-0 ring-4 ring-slate-100" style="background-color: {{ $selectedClub->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                 <span class="card-title text-[1.125rem]">{{ $selectedClub->name }}</span>
             </div>
             @if(auth()->user()->isOffice())
@@ -92,7 +92,7 @@
                             <td class="whitespace-nowrap"><span class="badge badge-emerald badge-dot capitalize">{{ $m->status }}</span></td>
                             <td class="text-right whitespace-nowrap">
                                 <span class="font-display text-[1.125rem] text-slate-900 tabular-nums">{{ $m->present_count }}</span>
-                                <span class="text-[11.5px] text-slate-500 ml-0.5">meetings</span>
+                                <span class="text-[12.5px] text-slate-500 ml-0.5">meetings</span>
                             </td>
                         </tr>
                     @empty
@@ -212,7 +212,7 @@
                         <legend class="sr-only">{{ $m->full_name }}</legend>
                         <div class="min-w-0">
                             <span class="text-[13px] font-semibold text-slate-900 block truncate">{{ $m->full_name }}</span>
-                            <span class="text-[11px] text-slate-500 block">{{ $m->role_in_club }}</span>
+                            <span class="text-[12px] text-slate-500 block">{{ $m->role_in_club }}</span>
                         </div>
                         <div class="flex items-center gap-4 shrink-0">
                             <label class="flex items-center gap-1.5 cursor-pointer">

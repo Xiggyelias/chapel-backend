@@ -39,7 +39,7 @@
                     <div class="flex items-baseline gap-3">
                         <span class="font-display text-[1.5rem] leading-none text-gold tabular-nums" aria-hidden="true">{{ $i + 1 }}</span>
                         <div class="min-w-0">
-                            <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-brand">{{ $when }}</p>
+                            <p class="text-[12.5px] font-semibold text-brand">{{ $when }}</p>
                             <p class="mt-1 text-[13px] text-slate-600 leading-snug">{{ $what }}</p>
                         </div>
                     </div>
@@ -62,9 +62,9 @@
                     <div class="flex items-start gap-4 min-w-0">
                         {{-- Date, set like a hymn board card --}}
                         <div class="w-16 shrink-0 rounded-xl bg-white text-center py-2 ring-1 ring-slate-200 shadow-xs">
-                            <span class="block text-[10px] font-bold uppercase tracking-[0.14em] text-brand">{{ $sheet->service_date->format('M') }}</span>
+                            <span class="block text-[12.5px] font-semibold text-brand">{{ $sheet->service_date->format('M') }}</span>
                             <span class="block stat-value text-[1.75rem] text-slate-900 mt-1">{{ $sheet->service_date->format('d') }}</span>
-                            <span class="block text-[10px] font-medium text-slate-500 mt-1">{{ $sheet->service_date->format('D') }}</span>
+                            <span class="block text-[11px] font-medium text-slate-500 mt-1">{{ $sheet->service_date->format('D') }}</span>
                         </div>
 
                         <div class="min-w-0 space-y-1.5">

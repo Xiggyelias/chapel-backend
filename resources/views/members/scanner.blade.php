@@ -13,7 +13,7 @@
         .scanner-laser { position: absolute; left: 8%; width: 84%; top: 5%; height: 1.5px; border-radius: 9999px; background: linear-gradient(90deg, transparent, #F1D58F, transparent); box-shadow: 0 0 14px rgb(241 213 143 / .7); animation: scan 2.6s infinite ease-in-out; }
         @keyframes scan { 0% { top: 8%; } 50% { top: 92%; } 100% { top: 8%; } }
         .viewfinder-corner { position: absolute; width: 2.25rem; height: 2.25rem; border-color: #D9B76C; pointer-events: none; }
-        .scanner-light { background: radial-gradient(60% 40% at 50% 30%, rgb(217 183 108 / .10), transparent 70%), radial-gradient(50% 40% at 0% 0%, rgb(165 28 48 / .16), transparent 70%); }
+        .scanner-light { background: radial-gradient(60% 40% at 50% 30%, rgb(217 183 108 / .10), transparent 70%), radial-gradient(50% 40% at 0% 0%, rgb(220 38 38 / .16), transparent 70%); }
     </style>
 </head>
 <body class="min-h-full bg-ink text-white antialiased">

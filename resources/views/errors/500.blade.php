@@ -14,7 +14,7 @@
 
             {{-- Crest --}}
             <span class="mx-auto w-12 h-12 rounded-full grid place-items-center"
-                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .5), 0 10px 22px -10px rgb(165 28 48 / .6);">
+                  style="background: radial-gradient(circle at 35% 30%, #EF4444, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .5), 0 10px 22px -10px rgb(220 38 38 / .6);">
                 <x-umc-logo class="w-5 h-5" />
             </span>
 

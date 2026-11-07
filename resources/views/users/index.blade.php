@@ -24,12 +24,12 @@
             ['Campus Observers', $stats['campus_life'], 'Campus Life & SRC', 'var(--color-slate-300)', 'bg-slate-300'],
         ] as [$label, $value, $hint, $tone, $dot])
             <div class="dash-stat-card hover:!translate-y-0" style="--tone: {{ $tone }}">
-                <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500 min-w-0">
+                <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500 min-w-0">
                     <span class="w-1.5 h-1.5 rounded-full shrink-0 {{ $dot }}" aria-hidden="true"></span>
                     <span class="truncate">{{ $label }}</span>
                 </span>
                 <div class="mt-4 stat-value text-[2.4rem] text-slate-900">{{ $value }}</div>
-                <div class="mt-2 text-[11.5px] text-slate-500 leading-snug">{{ $hint }}</div>
+                <div class="mt-2 text-[12.5px] text-slate-500 leading-snug">{{ $hint }}</div>
             </div>
         @endforeach
     </div>
@@ -92,7 +92,7 @@
                                     </span>
                                     <div class="min-w-0">
                                         <div class="font-semibold text-slate-900">{{ $u->name }}</div>
-                                        <div class="text-[11.5px] text-slate-500">{{ $u->position ?: $u->getRoleDisplayName() }}</div>
+                                        <div class="text-[12.5px] text-slate-500">{{ $u->position ?: $u->getRoleDisplayName() }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -100,7 +100,7 @@
                             <td>
                                 <div class="font-mono text-[12px] text-slate-600">{{ $u->email }}</div>
                                 @if($u->phone)
-                                    <div class="text-[11px] text-slate-400">{{ $u->phone }}</div>
+                                    <div class="text-[12px] text-slate-400">{{ $u->phone }}</div>
                                 @endif
                             </td>
 
@@ -123,7 +123,7 @@
                             <td>
                                 @if($u->club)
                                     <div class="font-medium text-slate-800">{{ $u->club?->name }}</div>
-                                    <div class="text-[10.5px] font-mono text-slate-400">{{ $u->club?->code }}</div>
+                                    <div class="text-[12px] font-mono text-slate-400">{{ $u->club?->code }}</div>
                                 @else
                                     <span class="text-slate-400">Chapel Office</span>
                                 @endif

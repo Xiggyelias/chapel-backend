@@ -88,7 +88,7 @@
                     <div>
                         <div class="flex flex-wrap items-baseline justify-between gap-x-3">
                             <label for="ws-lyrics" class="field-label">Hymn & Praise Lyrics</label>
-                            <span class="text-[11px] text-slate-500 mb-1.5">Used for media projection slides & bulletin</span>
+                            <span class="text-[12px] text-slate-500 mb-1.5">Used for media projection slides & bulletin</span>
                         </div>
                         <textarea id="ws-lyrics" name="lyrics" rows="7" placeholder="Enter or paste hymn stanzas, praise chorus, and worship lyrics here...&#10;e.g.&#10;[Hymn: My Hope Is Built]&#10;Verse 1: My hope is built on nothing less than Jesus' blood and righteousness...&#10;&#10;[Praise Chorus]&#10;Refrain: Lord You reign forever and ever..." class="field font-display !text-[14px] !leading-[1.75]">{{ old('lyrics') }}</textarea>
                         <p class="field-hint">Leave a blank line between stanzas; each stanza becomes its own projection slide.</p>

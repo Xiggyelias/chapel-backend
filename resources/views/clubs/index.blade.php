@@ -29,19 +29,19 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <a href="{{ route('clubs.index', ['status' => 'active']) }}" class="group dash-stat-card focus:outline-none focus-visible:ring-2 focus-visible:ring-brand" style="--tone: #059669">
             <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
                     Active Fellowships
                 </span>
                 <svg class="w-4 h-4 text-slate-300 shrink-0 -translate-x-1 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"/></svg>
             </div>
             <div class="mt-4 stat-value text-[2.6rem] text-slate-900">{{ $activeCount }}</div>
-            <div class="mt-2 text-[11.5px] text-slate-500">Officially chartered fellowships</div>
+            <div class="mt-2 text-[12.5px] text-slate-500">Officially chartered fellowships</div>
         </a>
 
         <a href="{{ route('clubs.index', ['status' => 'pending']) }}" class="group dash-stat-card focus:outline-none focus-visible:ring-2 focus-visible:ring-brand {{ $pendingCount > 0 ? 'ring-1 ring-amber-500/25' : '' }}" style="--tone: {{ $pendingCount > 0 ? '#D97706' : 'var(--color-slate-300)' }}">
             <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500">
                     <span class="w-1.5 h-1.5 rounded-full {{ $pendingCount > 0 ? 'bg-amber-500' : 'bg-slate-300' }}" aria-hidden="true"></span>
                     Pending Charters
                 </span>
@@ -50,19 +50,19 @@
                 @endif
             </div>
             <div class="mt-4 stat-value text-[2.6rem] {{ $pendingCount > 0 ? 'text-amber-800' : 'text-slate-900' }}">{{ $pendingCount }}</div>
-            <div class="mt-2 text-[11.5px] text-slate-500">Awaiting Chaplaincy Office review &amp; constitution verification</div>
+            <div class="mt-2 text-[12.5px] text-slate-500">Awaiting Chaplaincy Office review &amp; constitution verification</div>
         </a>
 
         <a href="{{ route('clubs.index', ['status' => 'archived']) }}" class="group dash-stat-card focus:outline-none focus-visible:ring-2 focus-visible:ring-brand" style="--tone: var(--color-gold)">
             <div class="flex items-center justify-between gap-2">
-                <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <span class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-500">
                     <span class="w-1.5 h-1.5 rounded-full bg-gold" aria-hidden="true"></span>
                     Archived Records
                 </span>
                 <svg class="w-4 h-4 text-slate-300 shrink-0 -translate-x-1 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"/></svg>
             </div>
             <div class="mt-4 stat-value text-[2.6rem] text-slate-900">{{ $archivedCount }}</div>
-            <div class="mt-2 text-[11.5px] text-slate-500">Permanent institutional records retained per policy</div>
+            <div class="mt-2 text-[12.5px] text-slate-500">Permanent institutional records retained per policy</div>
         </a>
     </div>
 
@@ -103,15 +103,15 @@
                         <tr class="align-top">
                             <td class="!align-top !py-4">
                                 <div class="flex items-start gap-3">
-                                    <span class="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 ring-[3px] ring-white shadow-[0_0_0_1px_rgb(28_24_21/0.12)]" style="background-color: {{ $club->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 ring-[3px] ring-white shadow-[0_0_0_1px_rgb(28_24_21/0.12)]" style="background-color: {{ $club->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                                     <div class="min-w-0">
                                         <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                                             <h3 class="font-display text-[15px] leading-snug text-slate-900">{{ $club->name }}</h3>
-                                            <span class="font-mono text-[10.5px] font-semibold text-slate-500 tracking-wide">{{ $club->code }}</span>
+                                            <span class="font-mono text-[12px] font-semibold text-slate-500 tracking-wide">{{ $club->code }}</span>
                                         </div>
-                                        <p class="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">{{ ucfirst($club->type) }}</p>
+                                        <p class="mt-0.5 text-[12.5px] font-semibold text-gold">{{ ucfirst($club->type) }}</p>
                                         <p class="mt-1.5 text-[12.5px] text-slate-600 leading-relaxed max-w-md line-clamp-2">{{ $club->description }}</p>
-                                        <div class="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-semibold">
+                                        <div class="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12.5px] font-semibold">
                                             <a href="{{ route('vault.index', ['club_id' => $club->id]) }}" class="inline-flex items-center gap-1 text-slate-500 hover:text-brand transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                                                 Club Vault
@@ -136,15 +136,15 @@
                             </td>
 
                             <td class="!align-top !py-4">
-                                <p class="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-slate-400">President</p>
+                                <p class="text-[12.5px] font-semibold text-slate-500">President</p>
                                 <p class="mt-0.5 font-semibold text-slate-800">{{ $club->current_president ?: ($club->founding_president_name ?: 'Vacant') }}</p>
-                                <p class="mt-1.5 font-mono text-[11px] text-slate-500 break-words [overflow-wrap:anywhere]">{{ $club->official_email }}</p>
+                                <p class="mt-1.5 font-mono text-[12px] text-slate-500 break-words [overflow-wrap:anywhere]">{{ $club->official_email }}</p>
                             </td>
 
                             <td class="!align-top !py-4">
-                                <p class="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-slate-400">Schedule</p>
+                                <p class="text-[12.5px] font-semibold text-slate-500">Schedule</p>
                                 <p class="mt-0.5 text-slate-700">{{ $club->meeting_schedule ?: 'Not set' }}</p>
-                                <p class="mt-1.5 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-slate-400">Venue</p>
+                                <p class="mt-1.5 text-[12.5px] font-semibold text-slate-500">Venue</p>
                                 <p class="mt-0.5 text-slate-700">{{ $club->venue ?: 'Not set' }}</p>
                             </td>
 

@@ -56,7 +56,7 @@
                 <div class="min-w-0 space-y-2">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="inline-flex items-center gap-2 text-[12px] font-semibold text-slate-700">
-                            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: {{ $h->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                            <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: {{ $h->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                             {{ $h->club?->name }} ({{ $h->club?->code }})
                         </span>
                         <span class="text-slate-300" aria-hidden="true">/</span>

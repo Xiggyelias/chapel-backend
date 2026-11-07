@@ -38,6 +38,8 @@ Route::view('/welcome', 'welcome')->name('welcome');
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'requestPasswordHelp'])->name('password.email');
 });
 
 // Evaluator role switcher (404 unless APP_ENV=local and DEMO_LOGIN_ENABLED=true)
@@ -46,6 +48,7 @@ Route::match(['get', 'post'], '/demo-switch/{userId?}', [AuthController::class, 
 // Read-only calendar for Campus Life, SRC and external subscriptions
 Route::get('/calendar/public', [CalendarController::class, 'publicView'])->name('calendar.public');
 Route::get('/calendar/feed.ics', [CalendarController::class, 'icsFeed'])->name('calendar.feed_ics');
+Route::get('/calendar/events/{event}.ics', [CalendarController::class, 'eventIcs'])->whereNumber('event')->name('calendar.event_ics');
 
 // Gatekeeper pass verification & kiosk self check-in (token-validated)
 Route::get('/verify-pass/{code}', [ClearancePassController::class, 'verifyPublic'])->name('pass.verify');

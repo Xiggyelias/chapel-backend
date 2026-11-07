@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#120F15">
+    <meta name="theme-color" content="#FFFFFF">
     <meta name="description" content="Kwang-Lim Chapel Fellowship and Ministry Management System - Africa University">
     <meta name="view-transition" content="same-origin">
     <link rel="manifest" href="/manifest.json">
@@ -18,11 +18,14 @@
         [x-cloak] { display: none !important; }
         html.large-text { font-size: 112% !important; }
         html.high-contrast body { background-color: #000 !important; color: #fff !important; }
-        html.high-contrast .sidebar-shell { background: #0a0a0a !important; border-color: #A51C30 !important; }
-        html.high-contrast .card-elevation, html.high-contrast .bg-white, html.high-contrast .card { background: #080808 !important; color: #fff !important; border-color: #A51C30 !important; }
+        html.high-contrast .sidebar-shell { background: #0a0a0a !important; border-color: #DC2626 !important; color: #fff !important; }
+        html.high-contrast .sidebar-nav-item { color: #f1f5f9 !important; }
+        html.high-contrast .sidebar-nav-item.active { background: #DC2626 !important; color: #fff !important; }
+        html.high-contrast .topbar-search { background: #121212 !important; color: #fff !important; }
+        html.high-contrast .card-elevation, html.high-contrast .bg-white, html.high-contrast .card { background: #080808 !important; color: #fff !important; border-color: #DC2626 !important; }
         html.high-contrast .text-slate-900, html.high-contrast .text-slate-800, html.high-contrast .text-slate-700, html.high-contrast .page-title { color: #fff !important; }
         html.high-contrast .text-slate-600, html.high-contrast .text-slate-500, html.high-contrast .text-slate-400 { color: #f1f5f9 !important; }
-        html.high-contrast .bg-slate-50, html.high-contrast .bg-slate-100 { background: #121212 !important; border-color: #A51C30 !important; }
+        html.high-contrast .bg-slate-50, html.high-contrast .bg-slate-100 { background: #121212 !important; border-color: #DC2626 !important; }
         html.high-contrast .topbar { background: #000 !important; }
 
         #sidebarDrawer { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -39,7 +42,7 @@
         }
     </style>
 </head>
-<body class="h-full bg-paper text-slate-800 antialiased">
+<body class="workspace h-full bg-paper text-slate-800 antialiased">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-white focus:text-brand-dark focus:font-bold focus:text-xs focus:shadow-lg">Skip to main content</a>
 
     @php
@@ -72,49 +75,41 @@
             ]);
     @endphp
 
-    <div class="flex h-full overflow-hidden">
+    <div class="flex flex-col h-full overflow-hidden">
+    {{-- The altar-cloth strip: today's liturgical colour runs across the top of the workspace --}}
+    <div class="season-strip shrink-0" style="--season: {{ $liturgical['hex'] }}" aria-hidden="true"></div>
 
-        {{-- ═══════════════ THE NAVE (sidebar) ═══════════════ --}}
-        <div id="sidebarOverlay" class="hidden fixed inset-0 z-40 bg-ink/60 backdrop-blur-sm lg:hidden" onclick="closeSidebar()" aria-hidden="true"></div>
+    <div class="flex flex-1 min-h-0 overflow-hidden">
+
+        {{-- ═══════════════ SIDEBAR ═══════════════ --}}
+        <div id="sidebarOverlay" class="hidden fixed inset-0 z-40 bg-ink/40 backdrop-blur-[2px] lg:hidden" onclick="closeSidebar()" aria-hidden="true"></div>
 
         <aside id="sidebarDrawer"
-               class="sidebar-shell grain fixed lg:relative inset-y-0 left-0 z-50 flex flex-col w-[17rem] shrink-0 overflow-hidden"
+               class="sidebar-shell fixed lg:relative inset-y-0 left-0 z-50 flex flex-col w-[16.5rem] shrink-0 overflow-hidden"
                aria-label="Site navigation">
 
             {{-- Seal & name --}}
-            <div class="flex items-center gap-3 px-5 pt-5 pb-4">
+            <div class="flex items-center gap-3 px-5 h-16 shrink-0 border-b border-slate-100">
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group min-w-0">
-                    <span class="relative w-10 h-10 shrink-0 rounded-full grid place-items-center"
-                          style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px rgb(18 15 21), 0 0 0 4px rgb(217 183 108 / .45), 0 8px 18px -6px rgb(165 28 48 / .7);">
-                        <x-umc-logo class="w-[1.15rem] h-[1.15rem] transition-transform duration-500 group-hover:scale-110" />
+                    <span class="relative w-9 h-9 shrink-0 rounded-xl grid place-items-center bg-brand shadow-xs">
+                        <x-umc-logo class="w-[1.1rem] h-[1.1rem] transition-transform duration-500 group-hover:scale-110" />
                     </span>
                     <span class="min-w-0 leading-tight">
-                        <span class="block text-[9.5px] font-bold uppercase tracking-[0.24em] text-gold-light/90">Africa University</span>
-                        <span class="block font-display text-[16px] text-white leading-tight truncate" style="font-variation-settings: 'SOFT' 80, 'opsz' 30;">Kwang-Lim Chapel</span>
+                        <span class="block font-display text-[16px] text-slate-900 leading-tight truncate" style="font-variation-settings: 'SOFT' 60, 'opsz' 30;">Kwang-Lim Chapel</span>
+                        <span class="block text-[11.5px] font-medium text-slate-500 truncate">Africa University</span>
                     </span>
                 </a>
-                <button id="sidebarCloseBtn" onclick="closeSidebar()" class="ml-auto lg:hidden p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition shrink-0" aria-label="Close menu">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-
-            {{-- Search --}}
-            <div class="px-4 pb-3">
-                <button type="button" onclick="openCommandPalette()" class="nave-search" aria-label="Search the portal (Ctrl+K)">
-                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.2-5.2M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
-                    <span class="flex-1 text-left">Search or jump to…</span>
-                    <span class="kbd">Ctrl K</span>
+                <button id="sidebarCloseBtn" onclick="closeSidebar()" class="ml-auto lg:hidden topbar-action -mr-2 shrink-0" aria-label="Close menu">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
             </div>
 
             {{-- Nav --}}
-            <nav class="flex-1 overflow-y-auto pt-2 pb-4 px-3 space-y-6" aria-label="Primary" data-nave-scroll>
-                <div>
-                    <p class="sidebar-section-label">Overview</p>
-                    <div class="space-y-0.5">
-                        <x-sidebar-link route="dashboard" icon="home" label="Dashboard" :active="request()->routeIs('dashboard')" />
-                        <x-sidebar-link route="inbox.index" icon="inbox" label="Inbox" :active="request()->routeIs('inbox.*')" :badge="$unreadInboxCount ?? 0" />
-                    </div>
+            <nav class="flex-1 overflow-y-auto pt-4 pb-4 px-3 space-y-5" aria-label="Primary" data-nave-scroll>
+                <div class="space-y-0.5">
+                    <x-sidebar-link route="dashboard" icon="home" label="Dashboard" :active="request()->routeIs('dashboard')" />
+                    <x-sidebar-link route="inbox.index" icon="inbox" label="Inbox" :active="request()->routeIs('inbox.*')" :badge="$unreadInboxCount ?? 0" />
+                    <x-sidebar-link route="calendar.index" icon="calendar" label="Master Calendar" :active="request()->routeIs('calendar.*')" />
                 </div>
 
                 @if(!$isCampusLife)
@@ -122,9 +117,9 @@
                     <p class="sidebar-section-label">Ministry</p>
                     <div class="space-y-0.5">
                         <x-sidebar-link route="requests.index" icon="requests" label="Proposals & Requests" :active="request()->routeIs('requests.*')" />
-                        <x-sidebar-link route="calendar.index" icon="calendar" label="Master Calendar" :active="request()->routeIs('calendar.*')" />
                         <x-sidebar-link route="worship.index" icon="worship" label="Call to Services" :active="request()->routeIs('worship.*')" />
                         <x-sidebar-link route="equipment.index" icon="equipment" label="Sound & Equipment" :active="request()->routeIs('equipment.*')" />
+                        <x-sidebar-link route="members.index" icon="members" label="Members & Attendance" :active="request()->routeIs('members.*')" />
                     </div>
                 </div>
 
@@ -133,13 +128,6 @@
                     <div class="space-y-0.5">
                         <x-sidebar-link route="hymns.index" icon="hymns" label="Methodist Hymnal" :active="request()->routeIs('hymns.*')" />
                         <x-sidebar-link route="vault.index" icon="vault" label="Records Vault" :active="request()->routeIs('vault.*')" />
-                        <x-sidebar-link route="members.index" icon="members" label="Members & Attendance" :active="request()->routeIs('members.*')" />
-                    </div>
-                </div>
-
-                <div>
-                    <p class="sidebar-section-label">Operations</p>
-                    <div class="space-y-0.5">
                         <x-sidebar-link route="reports.index" icon="reports" label="Activity Reports" :active="request()->routeIs('reports.*')" />
                         <x-sidebar-link route="handover.index" icon="handover" label="Leadership Handover" :active="request()->routeIs('handover.*')" />
                         <x-sidebar-link route="guidelines.index" icon="guidelines" label="Policy & Guidelines" :active="request()->routeIs('guidelines.*')" />
@@ -148,54 +136,52 @@
 
                 @if($isOfficeUser)
                 <div>
-                    <p class="sidebar-section-label" style="color: rgb(217 183 108 / .6)">Administration</p>
+                    <p class="sidebar-section-label">Administration</p>
                     <div class="space-y-0.5">
                         <x-sidebar-link route="clubs.index" icon="clubs" label="Fellowships Registry" :active="request()->routeIs('clubs.*')" />
                         <x-sidebar-link route="users.index" icon="users" label="Staff & User Registry" :active="request()->routeIs('users.*')" />
-                        <x-sidebar-link route="audit.index" icon="audit" label="System Audit Log" :active="request()->routeIs('audit.*')" />
                         <x-sidebar-link route="notifications.index" icon="notifications" label="Dispatch Centre" :active="request()->routeIs('notifications.*')" />
+                        <x-sidebar-link route="audit.index" icon="audit" label="System Audit Log" :active="request()->routeIs('audit.*')" />
                     </div>
                 </div>
                 @endif
 
                 @else
                 <div>
-                    <p class="sidebar-section-label">Chapel Calendar</p>
+                    <p class="sidebar-section-label">Resources</p>
                     <div class="space-y-0.5">
-                        <x-sidebar-link route="calendar.index" icon="calendar" label="Master Calendar" :active="request()->routeIs('calendar.*')" />
                         <x-sidebar-link route="guidelines.index" icon="guidelines" label="Policy & Guidelines" :active="request()->routeIs('guidelines.*')" />
                     </div>
                 </div>
                 @endif
             </nav>
 
-            {{-- Season (mini liturgical dial) + account --}}
-            <div class="px-3 pb-3 pt-2 space-y-1.5 border-t border-white/[0.06]">
-                <button type="button" onclick="showLiturgicalInfo()" class="w-full flex items-center gap-3 px-2.5 py-2.5 rounded-xl hover:bg-white/[0.05] transition text-left group" aria-label="About the current liturgical season: {{ $liturgical['name'] }}">
-                    <span class="w-9 h-9 shrink-0" data-dial="mini"></span>
+            {{-- Season + account --}}
+            <div class="p-3 space-y-1 border-t border-slate-100">
+                <button type="button" onclick="showLiturgicalInfo()" class="w-full flex items-center gap-3 px-2.5 py-2 rounded-xl hover:bg-slate-100 transition text-left group" aria-label="About the current liturgical season: {{ $liturgical['name'] }}">
+                    <span class="w-8 h-8 shrink-0" data-dial="mini" data-tone="paper"></span>
                     <span class="min-w-0 flex-1">
-                        <span class="block text-[11.5px] font-semibold text-white/90 leading-tight truncate">{{ $liturgical['name'] }}</span>
-                        <span class="block text-[10px] text-white/40 leading-tight truncate mt-0.5" data-dial-mini-meta>{{ $liturgical['color'] }}</span>
+                        <span class="block text-[12.5px] font-semibold text-slate-800 leading-tight truncate">{{ $liturgical['name'] }}</span>
+                        <span class="block text-[11.5px] text-slate-500 leading-tight truncate mt-0.5" data-dial-mini-meta>{{ $liturgical['color'] }}</span>
                     </span>
-                    <svg class="w-3.5 h-3.5 text-white/25 group-hover:text-white/60 transition shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </button>
 
                 @auth
                 <div class="relative">
                     <button id="personaButton" type="button" onclick="togglePersonaDropdown(event)" aria-haspopup="true" aria-expanded="false" aria-controls="personaDropdown"
-                            class="w-full flex items-center gap-3 px-2.5 py-2 rounded-xl hover:bg-white/[0.05] transition text-left" aria-label="Account menu for {{ $userName }}">
-                        <span class="w-9 h-9 rounded-full grid place-items-center font-display text-sm text-white shrink-0" style="background: linear-gradient(145deg, #3A2E3A, #211A22); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12);">{{ $userInitial }}</span>
+                            class="w-full flex items-center gap-3 px-2.5 py-2 rounded-xl hover:bg-slate-100 transition text-left" aria-label="Account menu for {{ $userName }}">
+                        <span class="w-8 h-8 rounded-full grid place-items-center text-[13px] font-bold text-brand-dark bg-brand-soft ring-1 ring-brand/15 shrink-0">{{ $userInitial }}</span>
                         <span class="min-w-0 flex-1">
-                            <span class="block text-[12px] font-semibold text-white truncate">{{ $shortName }}</span>
-                            <span class="block text-[10px] text-white/40 truncate">{{ $userRole }}</span>
+                            <span class="block text-[12.5px] font-semibold text-slate-900 truncate">{{ $shortName }}</span>
+                            <span class="block text-[11.5px] text-slate-500 truncate">{{ $userRole }}</span>
                         </span>
-                        <svg class="w-3.5 h-3.5 text-white/30 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+                        <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
                     </button>
 
-                    <div id="personaDropdown" class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white text-slate-800 rounded-2xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50 text-xs modal-panel">
+                    <div id="personaDropdown" class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white text-slate-800 rounded-2xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50 text-[13px] modal-panel">
                         <div class="p-3.5 border-b border-slate-100">
                             <div class="font-semibold text-slate-900 truncate">{{ $userName }}</div>
-                            <div class="text-[11px] text-slate-500 truncate">{{ $user->email }}</div>
+                            <div class="text-[12px] text-slate-500 truncate">{{ $user->email }}</div>
                             <span class="badge badge-brand mt-2">{{ $userRole }}</span>
                         </div>
                         <div class="p-1.5 space-y-0.5">
@@ -233,44 +219,48 @@
         {{-- ═══════════════ MAIN ═══════════════ --}}
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-            <header class="topbar sticky top-0 z-30 flex items-center gap-3 px-4 sm:px-6 lg:px-9 h-[3.75rem] shrink-0">
-                <button onclick="openSidebar()" class="lg:hidden topbar-action -ml-1.5" aria-label="Open navigation menu">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 7h16M4 12h10M4 17h16"/></svg>
+            <header class="topbar sticky top-0 z-30 flex items-center gap-3 px-4 sm:px-6 lg:px-8 h-16 shrink-0">
+                <button onclick="openSidebar()" class="lg:hidden topbar-action -ml-2" aria-label="Open navigation menu">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 7h16M4 12h16M4 17h16"/></svg>
                 </button>
 
-                <div class="flex-1 min-w-0 flex items-center gap-2 text-[13px]">
-                    <span class="hidden sm:inline text-slate-400 font-medium">Kwang-Lim Chapel</span>
-                    <svg class="hidden sm:inline w-3.5 h-3.5 text-slate-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                    <span class="topbar-title font-semibold text-slate-800 truncate">@yield('title', 'Dashboard')</span>
+                <div class="min-w-0 flex items-center gap-2 text-[14px] lg:w-56 xl:w-64 shrink-0 lg:shrink">
+                    <span class="topbar-title font-semibold text-slate-900 truncate">@yield('title', 'Dashboard')</span>
                 </div>
 
-                <div class="ml-auto flex items-center gap-1">
-                    <span class="hidden xl:inline-flex items-center gap-2 mr-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-                        <span class="w-1.5 h-1.5 rounded-full breathe" style="background: {{ $liturgical['hex'] }}"></span>
-                        {{ now()->format('l, j F') }}
+                <button type="button" onclick="openCommandPalette()" class="topbar-search hidden md:flex mx-auto" aria-label="Search the portal (Ctrl+K)">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.2-5.2M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
+                    <span class="flex-1 text-left truncate">Search proposals, fellowships, hymns…</span>
+                    <span class="kbd">Ctrl K</span>
+                </button>
+
+                <div class="ml-auto md:ml-0 flex items-center gap-1">
+                    <span class="hidden xl:inline-flex items-center gap-2 mr-2 px-3 h-9 rounded-full bg-slate-100 text-[12.5px] font-semibold text-slate-600 whitespace-nowrap" title="{{ $liturgical['name'] }}">
+                        <span class="w-2 h-2 rounded-full" style="background: {{ $liturgical['hex'] }}"></span>
+                        {{ now()->format('D, j M') }}
                     </span>
 
-                    <button type="button" onclick="openCommandPalette()" class="topbar-action lg:hidden" title="Quick Search (Ctrl+K)" aria-label="Quick search">
-                        <svg class="w-[1.1rem] h-[1.1rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M21 21l-5.2-5.2M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
+                    <button type="button" onclick="openCommandPalette()" class="topbar-action md:hidden" title="Quick Search (Ctrl+K)" aria-label="Quick search">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M21 21l-5.2-5.2M17 10.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"/></svg>
                     </button>
 
                     <a href="{{ route('inbox.index') }}" class="topbar-action" title="Inbox" aria-label="Inbox{{ ($unreadInboxCount ?? 0) ? ' (' . $unreadInboxCount . ' unread)' : '' }}">
-                        <svg class="w-[1.1rem] h-[1.1rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
                         @if($unreadInboxCount ?? 0)
-                            <span class="absolute top-0.5 right-0.5 min-w-[1.05rem] h-[1.05rem] px-1 rounded-full bg-brand text-white text-[9px] font-bold leading-[1.05rem] text-center ring-2 ring-paper">{{ ($unreadInboxCount > 9) ? '9+' : $unreadInboxCount }}</span>
+                            <span class="absolute top-1 right-1 min-w-[1.1rem] h-[1.1rem] px-1 rounded-full bg-brand text-white text-[10px] font-bold leading-[1.1rem] text-center ring-2 ring-white">{{ ($unreadInboxCount > 9) ? '9+' : $unreadInboxCount }}</span>
                         @endif
                     </a>
 
                     <div class="relative">
                         <button id="notificationButton" type="button" onclick="toggleNotificationDrawer(event)" aria-haspopup="true" aria-expanded="false" class="topbar-action" aria-label="Chapel notices ({{ $activeAnnouncements->count() }})">
-                            <svg class="w-[1.1rem] h-[1.1rem]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                             @if($activeAnnouncements->isNotEmpty())
-                                <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand ring-2 ring-paper"></span>
+                                <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand ring-2 ring-white"></span>
                             @endif
                         </button>
-                        <div id="notificationDrawer" class="hidden absolute right-0 mt-2 w-[22rem] max-w-[calc(100vw-2rem)] bg-white text-slate-800 rounded-2xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50 text-xs modal-panel">
+                        <div id="notificationDrawer" class="hidden absolute right-0 mt-2 w-[22rem] max-w-[calc(100vw-2rem)] bg-white text-slate-800 rounded-2xl shadow-lg ring-1 ring-black/5 overflow-hidden z-50 text-[13px] modal-panel">
                             <div class="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between">
-                                <span class="font-display text-[15px] text-slate-900">Chapel notices</span>
+                                <span class="font-bold text-[14px] text-slate-900">Chapel notices</span>
                                 <span class="badge">Latest {{ $activeAnnouncements->count() }}</span>
                             </div>
                             <div class="p-1.5 max-h-80 overflow-y-auto">
@@ -282,7 +272,7 @@
                                                 <span class="badge badge-brand shrink-0">Policy</span>
                                             @endif
                                         </div>
-                                        <p class="text-[11.5px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">{{ Str::limit($ann->message, 95) }}</p>
+                                        <p class="text-[12.5px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">{{ Str::limit($ann->message, 95) }}</p>
                                     </a>
                                 @empty
                                     <div class="empty-state py-8">
@@ -290,28 +280,28 @@
                                     </div>
                                 @endforelse
                             </div>
-                            <div class="px-4 py-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/60">
+                            <div class="px-4 py-2.5 border-t border-slate-100 flex items-center justify-between bg-slate-50">
                                 @if($isOfficeUser)
                                     <a href="{{ route('notifications.index') }}" class="card-link">Dispatch Centre</a>
                                 @else
                                     <a href="{{ route('guidelines.index') }}" class="card-link">View guidelines</a>
                                 @endif
-                                <button type="button" onclick="document.getElementById('notificationDrawer').classList.add('hidden')" class="text-[11px] font-semibold text-slate-500 hover:text-slate-800 px-2 py-1 rounded-lg hover:bg-slate-100 transition cursor-pointer">Close</button>
+                                <button type="button" onclick="document.getElementById('notificationDrawer').classList.add('hidden')" class="text-[12px] font-semibold text-slate-500 hover:text-slate-800 px-2 py-1 rounded-lg hover:bg-slate-100 transition cursor-pointer">Close</button>
                             </div>
                         </div>
                     </div>
 
-                    <button type="button" onclick="openAccessibilityModal()" class="topbar-action" aria-label="Accessibility preferences">
-                        <svg class="w-[1.05rem] h-[1.05rem]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
+                    <button type="button" onclick="openAccessibilityModal()" class="topbar-action hidden sm:inline-flex" aria-label="Accessibility preferences">
+                        <svg class="w-[1.15rem] h-[1.15rem]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>
                     </button>
 
-                    <a href="{{ route('profile.index') }}" class="lg:hidden ml-1 w-8 h-8 rounded-full grid place-items-center font-display text-sm text-white shrink-0" style="background: linear-gradient(145deg, #3A2E3A, #211A22);" aria-label="Your profile">{{ $userInitial }}</a>
+                    <a href="{{ route('profile.index') }}" class="lg:hidden ml-1 w-9 h-9 rounded-full grid place-items-center text-[13px] font-bold text-brand-dark bg-brand-soft ring-1 ring-brand/15 shrink-0" aria-label="Your profile">{{ $userInitial }}</a>
                 </div>
             </header>
 
             <main id="main-content" tabindex="-1" class="flex-1 overflow-y-auto focus:outline-none pb-16">
                 @if(session('success') || session('warning') || session('error') || session('info') || ($errors->any() && !request()->routeIs('clubs.register', 'profile.index')))
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-9 pt-5 space-y-2" data-no-reveal>
+                <div class="max-w-[84rem] mx-auto px-4 sm:px-6 lg:px-10 pt-6 space-y-2" data-no-reveal>
                     @if(session('success'))
                         <div class="flash-success" role="alert">
                             <svg class="w-4 h-4 shrink-0 mt-px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -353,6 +343,7 @@
                 @yield('content')
             </main>
         </div>
+    </div>
     </div>
 
     {{-- ═══════════════ GLOBAL MODALS ═══════════════ --}}

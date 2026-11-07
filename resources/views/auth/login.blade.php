@@ -42,7 +42,7 @@
         .glow-text { text-shadow: 0 0 calc(var(--flame) * 28px) rgb(255 190 110 / .18); }
     </style>
 </head>
-<body class="min-h-full bg-paper antialiased text-slate-800 selection:bg-brand selection:text-white">
+<body class="classic min-h-full bg-paper antialiased text-slate-800 selection:bg-brand selection:text-white">
 @php $currentSeason = \App\Services\LiturgicalCalendarService::getCurrentSeason(); @endphp
 
 <div class="min-h-screen grid lg:grid-cols-[minmax(0,1.1fr)_minmax(26rem,0.9fr)]">

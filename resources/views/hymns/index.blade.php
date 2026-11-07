@@ -5,7 +5,7 @@
 @section('content')
 @php
     $hymnalMeta = [
-        'UMH'   => ['label' => 'The United Methodist Hymnal', 'short' => 'UMH', 'range' => '1–734',  'color' => 'brand',  'dot' => '#A51C30'],
+        'UMH'   => ['label' => 'The United Methodist Hymnal', 'short' => 'UMH', 'range' => '1–734',  'color' => 'brand',  'dot' => '#DC2626'],
         'MHB'   => ['label' => 'Methodist Hymn Book',         'short' => 'MHB', 'range' => '1–984',  'color' => 'sky',    'dot' => '#0369A1'],
         'SHONA' => ['label' => 'Shona Methodist Hymnal',      'short' => 'SHO', 'range' => '1–311',  'color' => 'amber',  'dot' => '#B45309'],
     ];
@@ -66,7 +66,7 @@
                     </div>
                     <div class="mt-auto pt-4">
                         <div class="progress"><span style="width: {{ $pct }}%"></span></div>
-                        <p class="mt-2 text-[11.5px] text-slate-500 tabular-nums">{{ number_format($haveL) }} / {{ number_format($total) }} texts entered</p>
+                        <p class="mt-2 text-[12.5px] text-slate-500 tabular-nums">{{ number_format($haveL) }} / {{ number_format($total) }} texts entered</p>
                     </div>
                 </a>
             @endforeach
@@ -153,14 +153,14 @@
                     'updateUrl' => auth()->user()?->isOffice() ? route('hymns.update', $hymn->id) : '',
                     'source' => $hymn->lyrics_source,
                 ];
-                $dot = $hymnalMeta[$hymn->hymnal_code]['dot'] ?? '#A51C30';
+                $dot = $hymnalMeta[$hymn->hymnal_code]['dot'] ?? '#DC2626';
             @endphp
             <article class="card group flex flex-col hover:shadow-md" data-hymn="{{ json_encode($hymnPayload) }}">
 
                 {{-- Number · title · meta --}}
                 <div class="flex items-start gap-4 px-5 pt-5 pb-4">
                     <div class="w-16 shrink-0 text-center">
-                        <p class="text-[9.5px] font-bold uppercase tracking-[0.18em] text-slate-400 inline-flex items-center gap-1">
+                        <p class="text-[12.5px] font-semibold text-slate-500 inline-flex items-center gap-1">
                             <span class="w-1 h-1 rounded-full" style="background: {{ $dot }}" aria-hidden="true"></span>{{ $hymn->hymnal_code }}
                         </p>
                         <p class="font-display text-[2rem] leading-none text-slate-900 tabular-nums tracking-[-0.03em] mt-1" style="font-variation-settings: 'SOFT' 30, 'opsz' 72;">{{ $hymn->number }}</p>
@@ -171,7 +171,7 @@
                                 {{ $hymn->title }}
                             </h3>
                             @if($hymn->tune)
-                                <span class="shrink-0 mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-gold">{{ $hymn->tune }}</span>
+                                <span class="shrink-0 mt-0.5 text-[12.5px] font-semibold text-gold">{{ $hymn->tune }}</span>
                             @endif
                         </div>
                         <p class="mt-1 text-[12px] text-slate-500">{{ $hymn->author ?: 'Traditional' }}</p>
@@ -179,7 +179,7 @@
                             <p class="mt-1 font-display italic text-[12.5px] leading-snug text-slate-500 line-clamp-2" title="{{ $hymn->scripture_ref }}">{{ $hymn->scripture_ref }}</p>
                         @endif
                         @if($hymn->category)
-                            <span class="mt-2 inline-block text-[10px] font-semibold text-slate-400 uppercase tracking-[0.14em]">{{ $hymn->category }}</span>
+                            <span class="mt-2 inline-block text-[12px] font-semibold text-slate-500">{{ $hymn->category }}</span>
                         @endif
                     </div>
                 </div>
@@ -263,7 +263,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <span id="readerBadge" class="sr-only"></span>
-            <span id="readerHymnal" class="inline-block text-[10px] font-bold uppercase tracking-[0.24em] text-brand" aria-hidden="true"></span>
+            <span id="readerHymnal" class="inline-block text-[12.5px] font-semibold text-brand" aria-hidden="true"></span>
             <div id="readerNumber" class="mt-2 font-display text-[3.5rem] leading-none text-slate-900 tabular-nums tracking-[-0.03em]" style="font-weight: 400 !important; font-variation-settings: 'SOFT' 30, 'opsz' 144;"></div>
             <h3 id="readerTitle" class="mt-4 font-display text-[1.6rem] leading-tight text-slate-900 text-balance"></h3>
             <p id="readerMeta" class="mt-1.5 text-[12.5px] text-slate-500"></p>

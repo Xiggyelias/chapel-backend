@@ -132,8 +132,8 @@
                             <tr>
                                 <td class="!pl-5 whitespace-nowrap">
                                     <div class="font-semibold text-slate-900 tabular-nums tracking-tight">{{ $req->reference_no }}</div>
-                                    <div class="mt-1 inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500">
-                                        <span class="w-2 h-2 rounded-full ring-2 ring-white shadow-xs" style="background-color: {{ $req->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                                    <div class="mt-1 inline-flex items-center gap-1.5 text-[12px] font-semibold text-slate-500">
+                                        <span class="w-2 h-2 rounded-full ring-2 ring-white shadow-xs" style="background-color: {{ $req->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                                         {{ $req->club?->code }}
                                     </div>
                                 </td>
@@ -142,7 +142,7 @@
                                     <a href="{{ route('requests.show', $req->id) }}" class="font-semibold text-slate-900 hover:text-brand transition-colors leading-snug">
                                         {{ $req->title }}
                                     </a>
-                                    <div class="mt-1 flex flex-wrap items-center gap-1.5 text-[11.5px] text-slate-500">
+                                    <div class="mt-1 flex flex-wrap items-center gap-1.5 text-[12.5px] text-slate-500">
                                         <span>{{ ucfirst($req->category) }}</span>
                                         @if($req->vc_go_ahead_needed)
                                             <span class="text-slate-300" aria-hidden="true">&middot;</span>
@@ -153,7 +153,7 @@
 
                                 <td class="whitespace-nowrap">
                                     <div class="font-medium text-slate-900">{{ $req->event_date->format('M d, Y') }}</div>
-                                    <div class="text-[11.5px] text-slate-500 tabular-nums">{{ substr($req->start_time, 0, 5) }} – {{ substr($req->end_time, 0, 5) }}</div>
+                                    <div class="text-[12.5px] text-slate-500 tabular-nums">{{ substr($req->start_time, 0, 5) }} – {{ substr($req->end_time, 0, 5) }}</div>
                                 </td>
 
                                 <td>
@@ -161,7 +161,7 @@
                                         {{ $req->venue ? $req->venue?->name : ($req->venue_other ?: 'To be announced') }}
                                     </div>
                                     @if($req->expected_attendance)
-                                        <div class="text-[11.5px] text-slate-500">Exp. Attendance: <span class="tabular-nums">{{ $req->expected_attendance }}</span></div>
+                                        <div class="text-[12.5px] text-slate-500">Exp. Attendance: <span class="tabular-nums">{{ $req->expected_attendance }}</span></div>
                                     @endif
                                 </td>
 
@@ -170,7 +170,7 @@
                                     @if($req->is_late_submission)
                                         <span class="badge badge-rose">Late (&lt;14d)</span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-slate-500">
+                                        <span class="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-slate-500">
                                             <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                             On Time (&ge;14d)
                                         </span>
@@ -201,8 +201,8 @@
                     <li>
                         <a href="{{ route('requests.show', $req->id) }}" class="block px-4 py-4 transition-colors hover:bg-slate-50/70">
                             <div class="flex items-center justify-between gap-3">
-                                <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-500 tabular-nums">
-                                    <span class="w-2 h-2 rounded-full" style="background-color: {{ $req->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                                <span class="inline-flex items-center gap-1.5 text-[12px] font-semibold text-slate-500 tabular-nums">
+                                    <span class="w-2 h-2 rounded-full" style="background-color: {{ $req->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                                     {{ $req->club?->code }} &middot; {{ $req->reference_no }}
                                 </span>
                                 <span class="badge badge-dot {{ $s['badge'] }}">{{ $s['label'] }}</span>
@@ -223,7 +223,7 @@
                                     <span class="badge badge-emerald">On Time (&ge;14d)</span>
                                 @endif
                                 @if($req->expected_attendance)
-                                    <span class="text-[11.5px] text-slate-500">Exp. Attendance: {{ $req->expected_attendance }}</span>
+                                    <span class="text-[12.5px] text-slate-500">Exp. Attendance: {{ $req->expected_attendance }}</span>
                                 @endif
                             </div>
                         </a>

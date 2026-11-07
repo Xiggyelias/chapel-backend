@@ -86,7 +86,7 @@
             <h1 class="page-title">{{ $requestItem->title }}</h1>
             <p class="page-lede flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span class="inline-flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full" style="background-color: {{ $requestItem->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                    <span class="w-2 h-2 rounded-full" style="background-color: {{ $requestItem->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                     {{ $requestItem->club?->name }}
                 </span>
                 <span class="text-slate-300" aria-hidden="true">&middot;</span>
@@ -141,7 +141,7 @@
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     @break
                                 @case('current')
-                                    <span class="w-2 h-2 rounded-full bg-brand breathe" style="--breathe: 165 28 48"></span>
+                                    <span class="w-2 h-2 rounded-full bg-brand breathe" style="--breathe: 220 38 38"></span>
                                     @break
                                 @case('warn')
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg>
@@ -157,7 +157,7 @@
                             <p class="text-[12.5px] font-semibold leading-snug {{ in_array($step['state'], ['upcoming', 'skipped']) ? 'text-slate-400' : 'text-slate-900' }}">
                                 {{ $step['label'] }}<span class="sr-only"> — {{ $stateText[$step['state']] }}</span>
                             </p>
-                            <p class="text-[11.5px] mt-0.5 {{ $step['state'] === 'warn' ? 'text-amber-700' : ($step['state'] === 'danger' ? 'text-rose-700' : 'text-slate-500') }}">{{ $step['meta'] }}</p>
+                            <p class="text-[12.5px] mt-0.5 {{ $step['state'] === 'warn' ? 'text-amber-700' : ($step['state'] === 'danger' ? 'text-rose-700' : 'text-slate-500') }}">{{ $step['meta'] }}</p>
                         </div>
                     </li>
                 @endforeach
@@ -204,8 +204,8 @@
                         <p class="card-kicker">Activity Dossier</p>
                         <h2 id="dossier-heading" class="card-title mt-0.5">Purpose &amp; Objectives</h2>
                     </div>
-                    <span class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1 text-[11.5px] font-semibold text-slate-700 ring-1 ring-black/5 min-w-0">
-                        <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $requestItem->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                    <span class="inline-flex items-center gap-2 rounded-full bg-slate-50 px-3 py-1 text-[12.5px] font-semibold text-slate-700 ring-1 ring-black/5 min-w-0">
+                        <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $requestItem->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                         <span class="truncate">{{ $requestItem->club?->name }} ({{ $requestItem->club?->code }})</span>
                     </span>
                 </div>
@@ -217,27 +217,27 @@
 
                     <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6">
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Event Date</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Event Date</dt>
                             <dd class="mt-1 text-[14px] font-semibold text-slate-900">{{ $requestItem->event_date->format('M d, Y') }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Time Schedule</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Time Schedule</dt>
                             <dd class="mt-1 text-[14px] font-semibold text-slate-900 tabular-nums">{{ substr($requestItem->start_time, 0, 5) }} – {{ substr($requestItem->end_time, 0, 5) }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Venue</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Venue</dt>
                             <dd class="mt-1 text-[14px] font-semibold text-slate-900">{{ $venueName }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Expected Attendance</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Expected Attendance</dt>
                             <dd class="mt-1 text-[14px] font-semibold text-slate-900"><span class="tabular-nums">{{ $requestItem->expected_attendance ?: 'N/A' }}</span> <span class="font-normal text-slate-500">attendees</span></dd>
                         </div>
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Estimated Budget</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Estimated Budget</dt>
                             <dd class="mt-1 text-[14px] font-semibold text-slate-900 tabular-nums">${{ number_format($requestItem->budget, 2) }}</dd>
                         </div>
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Submitted By</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Submitted By</dt>
                             <dd class="mt-1 text-[14px] font-semibold text-slate-900">{{ $requestItem->requester?->name }}</dd>
                         </div>
                     </dl>
@@ -309,7 +309,7 @@
                     <div class="card-body sm:px-7">
                         @if($requestItem->vc_go_ahead_status === 'received')
                             <figure class="border-l-2 border-gold pl-4">
-                                <figcaption class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Recorded Go-Ahead Note</figcaption>
+                                <figcaption class="text-[12.5px] font-semibold text-slate-500">Recorded Go-Ahead Note</figcaption>
                                 <blockquote class="mt-1.5 font-display text-[15px] leading-relaxed text-slate-800">{{ $requestItem->vc_go_ahead_note }}</blockquote>
                             </figure>
                             @if($requestItem->vc_go_ahead_attachment)
@@ -355,7 +355,7 @@
                         </h3>
                         <p class="mt-3 font-display text-[15px] leading-relaxed text-slate-800 whitespace-pre-line">{{ $requestItem->decision_reason }}</p>
                         @if($requestItem->decidedBy)
-                            <p class="mt-4 text-[11.5px] text-slate-500">
+                            <p class="mt-4 text-[12.5px] text-slate-500">
                                 Recorded by <span class="font-semibold text-slate-700">{{ $requestItem->decidedBy?->name }}</span> &middot; <span class="tabular-nums">{{ $requestItem->decided_at?->format('M d, Y H:i') }}</span>
                             </p>
                         @endif
@@ -422,7 +422,7 @@
                 <div class="card-header">
                     <div class="min-w-0">
                         <h3 id="audit-heading" class="card-title">Audit Log &amp; History</h3>
-                        <p class="text-[11.5px] text-slate-500 mt-0.5">Tamper-evident compliance trail</p>
+                        <p class="text-[12.5px] text-slate-500 mt-0.5">Tamper-evident compliance trail</p>
                     </div>
                     <a href="{{ route('audit') }}" class="card-link">Full Ledger</a>
                 </div>
@@ -435,10 +435,10 @@
                             <span class="absolute left-0 top-1 w-[11px] h-[11px] rounded-full bg-white ring-2 {{ $loop->first ? 'ring-brand' : 'ring-slate-300' }}" aria-hidden="true"></span>
                             <div class="flex items-baseline justify-between gap-3">
                                 <span class="text-[12px] font-semibold text-slate-900 capitalize">{{ str_replace('_', ' ', $log->action) }}</span>
-                                <span class="text-[11px] text-slate-400 tabular-nums whitespace-nowrap">{{ $log->created_at->format('M d, H:i') }}</span>
+                                <span class="text-[12px] text-slate-400 tabular-nums whitespace-nowrap">{{ $log->created_at->format('M d, H:i') }}</span>
                             </div>
                             <div class="mt-0.5 text-[12.5px] text-slate-600 leading-relaxed">{{ $log->notes }}</div>
-                            <div class="mt-1 text-[11px] text-slate-400">By {{ $log->user_name }}</div>
+                            <div class="mt-1 text-[12px] text-slate-400">By {{ $log->user_name }}</div>
                         </div>
                     @empty
                         <p class="py-4 text-center text-[12.5px] text-slate-400">No previous audit logs.</p>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#A51C30">
+    <meta name="theme-color" content="#DC2626">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Charter Application Receipt | Kwang-Lim Chapel - Africa University</title>
 
@@ -28,7 +28,7 @@
         <!-- Header & Crest -->
         <header class="text-center">
             <span class="inline-grid place-items-center w-14 h-14 rounded-full"
-                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .5), 0 10px 22px -8px rgb(165 28 48 / .6);">
+                  style="background: radial-gradient(circle at 35% 30%, #EF4444, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .5), 0 10px 22px -8px rgb(220 38 38 / .6);">
                 <x-umc-logo class="w-[1.4rem] h-[1.4rem]" />
             </span>
             <p class="mt-5 text-[10.5px] font-bold uppercase tracking-[0.22em] text-brand">Africa University Chaplaincy</p>

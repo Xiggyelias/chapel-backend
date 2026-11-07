@@ -89,7 +89,7 @@
                     <div>
                         <div class="flex flex-wrap items-baseline justify-between gap-x-3">
                             <label for="ws-lyrics" class="field-label">Hymn & Praise Lyrics</label>
-                            <span class="text-[11px] text-slate-500 mb-1.5">Used for media projection slides & bulletin</span>
+                            <span class="text-[12px] text-slate-500 mb-1.5">Used for media projection slides & bulletin</span>
                         </div>
                         <textarea id="ws-lyrics" name="lyrics" rows="7" class="field font-display !text-[14px] !leading-[1.75]" placeholder="Enter or paste hymn stanzas, praise chorus, and worship lyrics here...">{{ old('lyrics', $sheet->lyrics) }}</textarea>
                         <p class="field-hint">Leave a blank line between stanzas; each stanza becomes its own projection slide.</p>
@@ -155,7 +155,7 @@
                     <!-- Worship Policy Checklist Status -->
                     <fieldset class="rounded-xl ring-1 ring-gold/25 bg-gold-soft/40 p-4">
                         <legend class="sr-only">Worship Policy Status Confirmations</legend>
-                        <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-brand mb-3" aria-hidden="true">Worship Policy Status Confirmations</p>
+                        <p class="text-[12.5px] font-semibold text-brand mb-3" aria-hidden="true">Worship Policy Status Confirmations</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <label class="flex items-start gap-3 text-[13px] text-slate-800 font-medium leading-snug">
                                 <input type="checkbox" name="preacher_submitted_materials" value="1" {{ $sheet->preacher_submitted_materials ? 'checked' : '' }} class="mt-0.5 w-4 h-4 rounded shrink-0">

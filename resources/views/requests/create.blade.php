@@ -40,7 +40,7 @@
         <!-- Suggested Alternatives -->
         <div id="smartSuggestionsContainer" class="hidden rounded-xl bg-slate-50 p-4 ring-1 ring-black/5 space-y-2.5">
             <div class="flex flex-wrap items-center gap-2">
-                <span class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-500">Available Alternative Venues &amp; Slots</span>
+                <span class="text-[12.5px] font-semibold text-slate-500">Available Alternative Venues &amp; Slots</span>
                 <span class="badge badge-gold">1-Click Auto-Fix</span>
             </div>
             <div id="suggestionsList" class="space-y-2 text-xs"></div>
@@ -134,7 +134,7 @@
                             Proposed Event Date <span class="text-brand">*</span>
                         </label>
                         <input type="date" name="event_date" id="event_date" min="{{ date('Y-m-d') }}" value="{{ old('event_date', date('Y-m-d', strtotime('+15 days'))) }}" required class="field">
-                        <div id="dateNoticeSpan" class="text-[11px] text-emerald-700 font-semibold mt-1.5" aria-live="polite">15 days notice (Compliant)</div>
+                        <div id="dateNoticeSpan" class="text-[12px] text-emerald-700 font-semibold mt-1.5" aria-live="polite">15 days notice (Compliant)</div>
                     </div>
 
                     <div>
@@ -240,7 +240,7 @@
 
         <!-- Submission Footer -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-b-[var(--radius-card)] border-t border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-7">
-            <p class="flex items-start gap-2 text-[11.5px] text-slate-500 leading-relaxed">
+            <p class="flex items-start gap-2 text-[12.5px] text-slate-500 leading-relaxed">
                 <svg class="w-4 h-4 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
                 Your request will be logged in the permanent audit trail with your verified email signature.
             </p>

@@ -11,8 +11,8 @@
     @include('partials.head')
     <style>
         :root {
-            --crimson: #A51C30;
-            --crimson-deep: #5E0F1C;
+            --crimson: #DC2626;
+            --crimson-deep: #7F1D1D;
             --gold: #B8892B;
             --ink: #1C1815;
             --muted: #5D564E;
@@ -190,13 +190,13 @@
             background-color: var(--crimson);
             background-image: linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0) 60%);
             padding: 9px 16px;
-            border: 1px solid #861527;
+            border: 1px solid #B91C1C;
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(94 15 28 / 0.25), 0 6px 14px -6px rgb(165 28 48 / 0.5);
+            box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(94 15 28 / 0.25), 0 6px 14px -6px rgb(220 38 38 / 0.5);
             transition: background-color 0.18s;
         }
-        .print-btn:hover { background-color: #861527; }
+        .print-btn:hover { background-color: #B91C1C; }
         .print-btn:focus-visible { outline: 2px solid var(--crimson); outline-offset: 2px; }
         .print-btn svg { width: 16px; height: 16px; }
 

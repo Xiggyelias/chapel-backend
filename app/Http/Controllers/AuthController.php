@@ -22,6 +22,51 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    /**
+     * "Forgot your password?" Accounts are issued by the Chapel Office, so a reset is a
+     * request to the office: they issue a temporary password from the user registry and
+     * the portal emails it to the account holder.
+     */
+    public function showForgotPassword()
+    {
+        if (Auth::check()) {
+            return redirect()->route('profile.index');
+        }
+
+        return view('auth.forgot-password');
+    }
+
+    public function requestPasswordHelp(Request $request)
+    {
+        $data = $request->validate([
+            'email' => ['required', 'email', 'max:190'],
+        ]);
+        $email = Str::lower(trim($data['email']));
+
+        // Generous enough for a genuine person, useless for flooding the office
+        $throttleKey = 'pw-help|' . $request->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            $minutes = (int) ceil(RateLimiter::availableIn($throttleKey) / 60);
+            throw ValidationException::withMessages([
+                'email' => "You have already sent a few requests. Please try again in {$minutes} minute" . ($minutes === 1 ? '' : 's') . ', or visit the Chaplaincy Office.',
+            ]);
+        }
+        RateLimiter::hit($throttleKey, 3600);
+
+        $user = User::whereRaw('LOWER(email) = ?', [$email])->first();
+        if ($user && $user->isActive()) {
+            \App\Services\PortalNotifier::office(
+                'Password reset requested',
+                "{$user->name} ({$user->email}) asked for a new temporary password from the sign-in page. Issue one from the Staff & User Registry.",
+                route('users.index', ['search' => $user->email]),
+                'warning'
+            );
+        }
+
+        // Same answer whether or not the account exists, so the form cannot be used to probe emails
+        return back()->with('status', 'Thank you. If that address belongs to a portal account, the Chapel Office has been asked to issue a new temporary password. It will arrive by email, usually within one working day.');
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([

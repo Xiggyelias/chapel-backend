@@ -42,11 +42,11 @@
                         <tr>
                             <td>
                                 <div class="font-semibold text-slate-900">{{ $item->item_name }}</div>
-                                <div class="text-[11.5px] text-slate-500 mt-0.5">Qty: <span class="tabular-nums">{{ $item->quantity }}</span> &bull; By {{ $item->requester?->name ?? 'Chapel Requester' }}</div>
+                                <div class="text-[12.5px] text-slate-500 mt-0.5">Qty: <span class="tabular-nums">{{ $item->quantity }}</span> &bull; By {{ $item->requester?->name ?? 'Chapel Requester' }}</div>
                             </td>
 
                             <td class="whitespace-nowrap">
-                                <span class="badge badge-dot" style="color: {{ $item->club?->color_hex ?? '#A51C30' }}">
+                                <span class="badge badge-dot" style="color: {{ $item->club?->color_hex ?? '#DC2626' }}">
                                     <span class="text-slate-700">{{ $item->club?->code }}</span>
                                 </span>
                             </td>
@@ -57,7 +57,7 @@
 
                             <td class="whitespace-nowrap">
                                 <div class="font-semibold text-slate-800 tabular-nums">{{ $item->needed_date->format('M d, Y') }}</div>
-                                <div class="text-[11.5px] text-slate-400 tabular-nums mt-0.5">Return: {{ $item->return_date ? $item->return_date->format('M d, Y') : 'Same Day' }}</div>
+                                <div class="text-[12.5px] text-slate-400 tabular-nums mt-0.5">Return: {{ $item->return_date ? $item->return_date->format('M d, Y') : 'Same Day' }}</div>
                             </td>
 
                             <td class="whitespace-nowrap">
@@ -79,7 +79,7 @@
                                     <form method="POST" action="{{ route('equipment.status', $item->id) }}" class="inline-flex items-center">
                                         @csrf
                                         <label for="eqStatus{{ $item->id }}" class="sr-only">Update status for {{ $item->item_name }}</label>
-                                        <select id="eqStatus{{ $item->id }}" name="status" onchange="this.form.submit()" class="field !w-auto !py-1.5 !pl-2.5 !text-[11.5px]">
+                                        <select id="eqStatus{{ $item->id }}" name="status" onchange="this.form.submit()" class="field !w-auto !py-1.5 !pl-2.5 !text-[12.5px]">
                                             <option value="requested" {{ $item->status === 'requested' ? 'selected' : '' }}>Requested</option>
                                             <option value="approved" {{ $item->status === 'approved' ? 'selected' : '' }}>Approve</option>
                                             <option value="issued" {{ $item->status === 'issued' ? 'selected' : '' }}>Issue Out</option>
@@ -88,7 +88,7 @@
                                         </select>
                                     </form>
                                 @else
-                                    <span class="text-slate-400 text-[11.5px]">View Only</span>
+                                    <span class="text-slate-400 text-[12.5px]">View Only</span>
                                 @endif
                             </td>
                         </tr>

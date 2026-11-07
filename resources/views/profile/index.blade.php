@@ -92,7 +92,7 @@
                         </div>
 
                         <div class="rounded-xl bg-paper/70 ring-1 ring-black/5 px-4 py-3.5">
-                            <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500">Password Requirements:</p>
+                            <p class="text-[12.5px] font-semibold text-slate-500">Password Requirements:</p>
                             <ul class="mt-2 space-y-1.5 text-[12.5px] text-slate-600">
                                 @foreach(['Must be at least 8 characters in length', 'Must differ from your initial default password', 'Will be required for all future sign-ins to your account'] as $rule)
                                     <li class="flex items-start gap-2.5">
@@ -120,7 +120,7 @@
             <section class="card overflow-hidden" aria-label="Profile summary">
                 <div class="card-body text-center pt-7">
                     <span class="w-16 h-16 mx-auto rounded-full grid place-items-center font-display text-[1.6rem] text-white"
-                          style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px #fff, 0 0 0 4px rgb(184 137 43 / .45), 0 10px 22px -8px rgb(165 28 48 / .55);"
+                          style="background: radial-gradient(circle at 35% 30%, #EF4444, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px #fff, 0 0 0 4px rgb(184 137 43 / .45), 0 10px 22px -8px rgb(220 38 38 / .55);"
                           aria-hidden="true">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </span>
@@ -130,26 +130,26 @@
 
                 <dl class="border-t border-slate-100 px-5 py-4 space-y-3.5 text-[13px]">
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Official Email</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Official Email</dt>
                         <dd class="mt-0.5 text-slate-800 font-medium break-all">{{ $user->email }}</dd>
                     </div>
 
                     @if($user->club)
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Assigned Fellowship</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Assigned Fellowship</dt>
                             <dd class="mt-0.5 text-slate-800 font-medium">{{ $user->club?->name }} ({{ $user->club?->code }})</dd>
                         </div>
                     @endif
 
                     @if($user->position)
                         <div>
-                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Official Position</dt>
+                            <dt class="text-[12.5px] font-semibold text-slate-500">Official Position</dt>
                             <dd class="mt-0.5 text-slate-800 font-medium">{{ $user->position }}</dd>
                         </div>
                     @endif
 
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Account Status</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Account Status</dt>
                         <dd class="mt-1">
                             <span class="badge badge-emerald badge-dot capitalize">{{ $user->status ?? 'Active' }}</span>
                         </dd>
@@ -161,7 +161,7 @@
             <section class="card" aria-labelledby="contact-heading">
                 <div class="card-header">
                     <h3 id="contact-heading" class="card-title">Contact Phone</h3>
-                    <span class="text-[11px] text-slate-400">Optional</span>
+                    <span class="text-[12px] text-slate-400">Optional</span>
                 </div>
                 <form method="POST" action="{{ route('profile.update') }}" class="card-body space-y-3">
                     @csrf

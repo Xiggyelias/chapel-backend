@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="relative grain bg-nave p-4 sm:p-8 flex flex-col items-center justify-center min-h-screen text-slate-100 on-dark"
-      style="background-image: radial-gradient(90% 55% at 50% 0%, rgb(165 28 48 / 0.28), transparent 70%), radial-gradient(70% 40% at 50% 100%, rgb(184 137 43 / 0.10), transparent 70%);">
+      style="background-image: radial-gradient(90% 55% at 50% 0%, rgb(220 38 38 / 0.28), transparent 70%), radial-gradient(70% 40% at 50% 100%, rgb(184 137 43 / 0.10), transparent 70%);">
 
     <div class="max-w-md w-full space-y-6">
 

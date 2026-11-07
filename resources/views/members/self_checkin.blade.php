@@ -16,7 +16,7 @@
 
         <div class="text-center" data-reveal>
             <span class="inline-grid place-items-center w-14 h-14 rounded-full mb-5"
-                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .45), 0 12px 24px -12px rgb(94 15 28 / .6);">
+                  style="background: radial-gradient(circle at 35% 30%, #EF4444, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .45), 0 12px 24px -12px rgb(94 15 28 / .6);">
                 <x-umc-logo class="w-6 h-6" />
             </span>
             <p class="text-[10.5px] uppercase tracking-[0.24em] text-brand font-bold">Africa University Chaplaincy</p>

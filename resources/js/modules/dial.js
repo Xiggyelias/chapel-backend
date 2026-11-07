@@ -205,21 +205,22 @@ function mountFull(host, reduce) {
 
 function mountMini(host, reduce) {
     const ly = liturgicalYear();
+    const onPaper = host.dataset.tone === 'paper';
     const C = 20;
     const svg = el('svg', { viewBox: '0 0 40 40', 'aria-hidden': 'true' });
     const g = el('g', { transform: `rotate(${-ly.position * 360} ${C} ${C})` }, svg);
     ly.segments.forEach((s) => {
         const span = Math.max(s.to - s.from - 0.012, 0.01);
         const p = el('path', {
-            d: arcPath(C, 15, s.from + 0.006, s.from + 0.006 + span), fill: 'none', stroke: s.ink,
-            'stroke-width': s === ly.current ? 4.5 : 3, opacity: s === ly.current ? 1 : 0.35,
+            d: arcPath(C, 15, s.from + 0.006, s.from + 0.006 + span), fill: 'none', stroke: onPaper ? s.paper : s.ink,
+            'stroke-width': s === ly.current ? 4.5 : 3, opacity: s === ly.current ? 1 : (onPaper ? 0.25 : 0.35),
         }, g);
         if (!reduce) {
             const len = p.getTotalLength();
             p.animate([{ strokeDasharray: `0 ${len}` }, { strokeDasharray: `${len} 0` }], { duration: 900, delay: 200, easing: 'cubic-bezier(.65,0,.35,1)' });
         }
     });
-    el('circle', { cx: C, cy: 5, r: 2.4, fill: '#F1D58F' }, svg);
+    el('circle', { cx: C, cy: 5, r: 2.4, fill: onPaper ? '#B8892B' : '#F1D58F' }, svg);
     host.prepend(svg);
     const meta = host.parentElement?.querySelector('[data-dial-mini-meta]');
     if (meta) meta.textContent = ly.current.key === 'pentecost' ? 'Today' : `Week ${ly.weekOfSeason} · ${ly.next.name} in ${ly.daysToNext}d`;

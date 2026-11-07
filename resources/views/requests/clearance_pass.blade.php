@@ -44,7 +44,7 @@
 
         <!-- Badge Header -->
         <div class="relative grain bg-ink text-white px-6 pt-7 pb-6 text-center"
-             style="background-image: radial-gradient(120% 90% at 50% 0%, rgb(165 28 48 / 0.55), transparent 65%);">
+             style="background-image: radial-gradient(120% 90% at 50% 0%, rgb(220 38 38 / 0.55), transparent 65%);">
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand p-2 mb-3 ring-1 ring-white/15 shadow-md">
                 <x-umc-logo class="w-full h-full" />
             </div>
@@ -73,7 +73,7 @@
                 <div class="text-right min-w-0">
                     <span class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 block">Authorized Club</span>
                     <span class="mt-1 inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-slate-800">
-                        <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $requestItem->club?->color_hex ?? '#A51C30' }}" aria-hidden="true"></span>
+                        <span class="w-2 h-2 rounded-full shrink-0" style="background-color: {{ $requestItem->club?->color_hex ?? '#DC2626' }}" aria-hidden="true"></span>
                         {{ $requestItem->club?->name }}
                     </span>
                 </div>

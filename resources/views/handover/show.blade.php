@@ -54,17 +54,17 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                             </span>
                         @elseif($step['state'] === 'current')
-                            <span class="relative z-10 grid place-items-center w-9 h-9 rounded-full bg-white text-brand font-display text-[15px] ring-2 ring-brand breathe" style="--breathe: 165 28 48">{{ $i + 1 }}</span>
+                            <span class="relative z-10 grid place-items-center w-9 h-9 rounded-full bg-white text-brand font-display text-[15px] ring-2 ring-brand breathe" style="--breathe: 220 38 38">{{ $i + 1 }}</span>
                         @else
                             <span class="relative z-10 grid place-items-center w-9 h-9 rounded-full bg-white text-slate-400 font-display text-[15px] ring-1 ring-slate-200">{{ $i + 1 }}</span>
                         @endif
 
-                        <span class="mt-3 text-[11px] sm:text-[12.5px] font-semibold leading-tight {{ $step['state'] === 'upcoming' ? 'text-slate-400' : 'text-slate-900' }}">
+                        <span class="mt-3 text-[12px] sm:text-[12.5px] font-semibold leading-tight {{ $step['state'] === 'upcoming' ? 'text-slate-400' : 'text-slate-900' }}">
                             <span class="hidden sm:inline">{{ $i + 1 }}. </span>{{ $step['label'] }}
                         </span>
                         <span class="sr-only">({{ $stateLabel[$step['state']] }})</span>
                         @if($step['state'] === 'current')
-                            <span class="hidden sm:block mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-brand" aria-hidden="true">In progress</span>
+                            <span class="hidden sm:block mt-1 text-[12.5px] font-semibold text-brand" aria-hidden="true">In progress</span>
                         @endif
                     </li>
                 @endforeach
@@ -91,19 +91,19 @@
             @if($handover->checklist_running_activities)
                 <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Currently Running Activities &amp; Projects</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Currently Running Activities &amp; Projects</dt>
                         <dd class="mt-1.5 text-[13.5px] text-slate-800 whitespace-pre-line leading-relaxed">{{ $handover->checklist_running_activities }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Pending Logistics &amp; Liabilities</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Pending Logistics &amp; Liabilities</dt>
                         <dd class="mt-1.5 text-[13.5px] text-slate-800 whitespace-pre-line leading-relaxed">{{ $handover->checklist_pending_items }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Key Institutional Contacts &amp; Advisors</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Key Institutional Contacts &amp; Advisors</dt>
                         <dd class="mt-1.5 text-[13.5px] text-slate-800 whitespace-pre-line leading-relaxed">{{ $handover->checklist_key_contacts }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Yearly Calendar Highlights &amp; Traditions</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Yearly Calendar Highlights &amp; Traditions</dt>
                         <dd class="mt-1.5 text-[13.5px] text-slate-800 whitespace-pre-line leading-relaxed">{{ $handover->checklist_yearly_calendar }}</dd>
                     </div>
                 </dl>
@@ -174,7 +174,7 @@
             </div>
 
             <div class="rounded-2xl bg-slate-50 ring-1 ring-slate-200/70 p-4">
-                <p class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Vault Sentinel Health Score</p>
+                <p class="text-[12.5px] font-semibold text-slate-500">Vault Sentinel Health Score</p>
                 <p class="mt-2 flex items-baseline gap-2">
                     <span class="stat-value text-[2rem] text-slate-900">{{ $vaultHealth['score'] }}</span><span class="font-display text-slate-400">%</span>
                     <span class="ml-auto badge badge-gold"><span class="sr-only">{{ $vaultHealth['score'] }}% &bull; </span>{{ $vaultHealth['grade'] }}</span>
@@ -204,11 +204,11 @@
             @if($handover->meeting_date)
                 <dl class="grid grid-cols-1 sm:grid-cols-[12rem_minmax(0,1fr)] gap-x-8 gap-y-4">
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Meeting Date:</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Meeting Date:</dt>
                         <dd class="mt-1.5 font-display text-[1.05rem] text-slate-900">{{ $handover->meeting_date->format('l, F j, Y') }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Meeting Minutes &amp; Notes:</dt>
+                        <dt class="text-[12.5px] font-semibold text-slate-500">Meeting Minutes &amp; Notes:</dt>
                         <dd class="mt-1.5 text-[13.5px] text-slate-700 whitespace-pre-line leading-relaxed">{{ $handover->meeting_notes }}</dd>
                     </div>
                 </dl>
@@ -241,12 +241,12 @@
     {{-- ═══ Step 5 · Transfer of access ═══ --}}
     @if(auth()->user()->isOffice() && $handover->meeting_date && $handover->status !== 'completed')
         <section class="card card-ink grain overflow-hidden on-dark" aria-labelledby="step5Title"
-                 style="background-image: radial-gradient(90% 120% at 100% 0%, rgb(165 28 48 / .35), transparent 60%), radial-gradient(60% 80% at 0% 100%, rgb(217 183 108 / .12), transparent 70%);">
+                 style="background-image: radial-gradient(90% 120% at 100% 0%, rgb(220 38 38 / .35), transparent 60%), radial-gradient(60% 80% at 0% 100%, rgb(217 183 108 / .12), transparent 70%);">
             <div class="relative p-6 sm:p-8 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                 <div class="flex items-start gap-4 min-w-0">
                     <span class="font-display text-[1.6rem] leading-none text-gold-light tabular-nums pt-0.5" aria-hidden="true">05</span>
                     <div class="min-w-0">
-                        <p class="text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold-light/80">Step 5</p>
+                        <p class="text-[12.5px] font-semibold text-gold-light/80">Step 5</p>
                         <h2 id="step5Title" class="mt-1 font-display text-[1.4rem] leading-tight text-white">Executive Credential &amp; Email Access Transfer</h2>
                         <p class="mt-3 max-w-2xl text-[13.5px] leading-relaxed text-white/65">
                             Clicking the button below will officially transfer club executive permissions to <strong class="font-semibold text-white">{{ $handover->incoming_president_name }}</strong> ({{ $handover->incoming_president_email }}), bind the official email <strong class="font-semibold text-white">{{ $handover->club?->official_email }}</strong> to the new term, and archive previous leadership into the permanent university history.
@@ -272,7 +272,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     </span>
                     <div class="min-w-0">
-                        <p class="text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold">HANDOVER FULLY EXECUTED &amp; SEALED</p>
+                        <p class="text-[12.5px] font-semibold text-gold">HANDOVER FULLY EXECUTED &amp; SEALED</p>
                         <p class="mt-1.5 text-[13.5px] leading-relaxed text-slate-600">Official executive authority conferred upon <strong class="font-semibold text-slate-900">{{ $handover->incoming_president_name }}</strong>. All records archived in permanent history.</p>
                     </div>
                 </div>

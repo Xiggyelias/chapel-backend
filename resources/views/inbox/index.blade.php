@@ -37,7 +37,7 @@
                     </p>
                     <p class="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">{{ $note->data['message'] ?? '' }}</p>
                 </div>
-                <time class="text-[11px] font-medium text-slate-400 shrink-0 mt-0.5 tabular-nums" datetime="{{ $note->created_at->toIso8601String() }}">{{ $note->created_at->diffForHumans() }}</time>
+                <time class="text-[12px] font-medium text-slate-400 shrink-0 mt-0.5 tabular-nums" datetime="{{ $note->created_at->toIso8601String() }}">{{ $note->created_at->diffForHumans() }}</time>
             </a>
         @empty
             <div class="empty-state">
