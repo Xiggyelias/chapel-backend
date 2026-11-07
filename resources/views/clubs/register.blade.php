@@ -3,151 +3,133 @@
 @section('title', 'Register a Fellowship or Chapel Club')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<div class="page-shell max-w-4xl space-y-6">
 
-    <!-- Breadcrumb & Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 pb-4">
-        <div>
-            <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-                <a href="{{ route('dashboard') }}" class="hover:underline text-brand font-semibold">Dashboard</a>
-                <span>/</span>
-                <a href="{{ route('clubs.index') }}" class="hover:underline text-brand font-semibold">Fellowships Registry</a>
-                <span>/</span>
-                <span class="text-slate-700 font-bold">New Fellowship Charter</span>
-            </div>
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">
-                Register a Fellowship or Chapel Ministry
-            </h1>
-            <p class="text-xs text-slate-500 mt-1">
-                Apply for official chartering and portal access under Chaplaincy oversight (Chapel Manual §2.3)
-            </p>
+    <header class="page-header">
+        <div class="min-w-0">
+            <nav aria-label="Breadcrumb" class="eyebrow">
+                <a href="{{ route('dashboard') }}" class="hover:underline underline-offset-4">Dashboard</a>
+                <span class="text-slate-300" aria-hidden="true">/</span>
+                <a href="{{ route('clubs.index') }}" class="hover:underline underline-offset-4">Fellowships Registry</a>
+                <span class="text-slate-300" aria-hidden="true">/</span>
+                <span class="text-slate-500" aria-current="page">New Fellowship Charter</span>
+            </nav>
+            <h1 class="page-title">Register a Fellowship or Chapel Ministry</h1>
+            <p class="page-lede">Apply for official chartering and portal access under Chaplaincy oversight (Chapel Manual §2.3)</p>
         </div>
-        <a href="{{ route('clubs.index') }}" class="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-xs transition self-start sm:self-auto hover:border-slate-300">
-            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back to Registry</span>
-        </a>
-    </div>
+        <div class="page-actions">
+            <a href="{{ route('clubs.index') }}" class="btn btn-secondary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to Registry
+            </a>
+        </div>
+    </header>
 
     <!-- Institutional Guidelines Protocol Card -->
-    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs relative overflow-hidden">
-        <div class="flex items-start space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-brand border border-white/20 flex items-center justify-center shrink-0 shadow-sm text-white">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-            </div>
-            <div class="space-y-1.5 flex-1">
-                <div class="flex flex-wrap items-center justify-between gap-2">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-brand">
-                        Fellowship Chartering Protocol
-                    </h2>
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand/10 text-brand font-bold border border-brand/20">
-                        Chapel Manual §2.3
-                    </span>
+    <section class="card overflow-hidden" aria-labelledby="protocol-heading">
+        <div class="card-body flex flex-col sm:flex-row gap-5">
+            <span class="w-11 h-11 rounded-full grid place-items-center shrink-0 text-gold bg-gold-soft ring-1 ring-gold/25" aria-hidden="true">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </span>
+            <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h2 id="protocol-heading" class="card-title">Fellowship Chartering Protocol</h2>
+                    <span class="badge badge-gold font-mono">Chapel Manual §2.3</span>
                 </div>
-                <p class="text-xs text-slate-600 leading-relaxed">
+                <p class="mt-2 text-[13px] text-slate-600 leading-relaxed">
                     All student religious fellowships, choir groups, and ministry societies must maintain active chartering through the Chaplaincy Office. Newly registered groups receive permanent records vault storage, master calendar booking rights, and official representation on the Chapel Committee.
                 </p>
-                <div class="pt-2 flex flex-wrap items-center gap-4 text-[11px] text-slate-700">
-                    <span class="flex items-center space-x-1.5 font-medium text-emerald-800">
-                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span>Permanent Vault Retention</span>
-                    </span>
-                    <span class="flex items-center space-x-1.5 font-medium text-emerald-800">
-                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span>Sanctuary & Venue Access</span>
-                    </span>
-                    <span class="flex items-center space-x-1.5 font-medium text-emerald-800">
-                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-                        <span>Chapel Committee Seat</span>
-                    </span>
-                </div>
+                <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[12px] font-medium text-slate-700">
+                    @foreach(['Permanent Vault Retention', 'Sanctuary & Venue Access', 'Chapel Committee Seat'] as $benefit)
+                        <li class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 13l4 4L19 7"/></svg>
+                            {{ $benefit }}
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
-    </div>
+    </section>
 
     @if ($errors->any())
-        <div class="p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 text-xs space-y-1">
-            <div class="font-bold flex items-center space-x-1.5 text-rose-950">
-                <svg class="w-4 h-4 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <span>Please correct the errors below:</span>
+        <div class="flash-error" role="alert">
+            <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div class="text-[12.5px]">
+                <p class="font-semibold">Please correct the errors below:</p>
+                <ul class="mt-1 list-disc pl-4 space-y-0.5 opacity-90">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-            <ul class="list-disc list-inside space-y-0.5 text-rose-800">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
         </div>
     @endif
 
     <!-- Registration Form -->
-    <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 overflow-hidden relative border-t-4 border-t-brand">
-        <form method="POST" action="{{ route('clubs.store') }}" enctype="multipart/form-data" class="space-y-6 text-xs">
+    <section class="card" aria-label="Charter application form">
+        <form method="POST" action="{{ route('clubs.store') }}" enctype="multipart/form-data" class="divide-y divide-slate-100">
             @csrf
 
             <!-- Section 1: Fellowship Identity -->
-            <div class="space-y-4">
-                <div class="border-b border-slate-100 pb-2">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-brand"></span>
-                        <span>1. Fellowship Identity & Categorization</span>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Official university name, classification, and ministry scope</p>
+            <fieldset class="min-w-0 p-5 sm:p-7 grid grid-cols-1 md:grid-cols-[13rem_minmax(0,1fr)] gap-x-8 gap-y-5">
+                <legend class="sr-only">1. Fellowship Identity &amp; Categorization</legend>
+                <div aria-hidden="true">
+                    <span class="font-display text-[1.75rem] leading-none text-gold">I</span>
+                    <h3 class="mt-2 card-title">Fellowship Identity &amp; Categorization</h3>
+                    <p class="mt-1 text-[12px] text-slate-500 leading-relaxed">Official university name, classification, and ministry scope</p>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="sm:col-span-2 space-y-1">
-                        <label class="block font-bold text-slate-700">Official Fellowship Name <span class="text-rose-500">*</span></label>
-                        <input type="text" name="name" value="{{ old('name') }}" required placeholder="e.g. Anglican Student Society" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="sm:col-span-2">
+                            <label for="reg_name" class="field-label">Official Fellowship Name <span class="text-brand">*</span></label>
+                            <input type="text" id="reg_name" name="name" value="{{ old('name') }}" required placeholder="e.g. Anglican Student Society" class="field">
+                        </div>
+                        <div>
+                            <label for="reg_code" class="field-label">Acronym / Short Code <span class="text-brand">*</span></label>
+                            <input type="text" id="reg_code" name="code" value="{{ old('code') }}" required placeholder="e.g. ANGLICAN" class="field font-mono uppercase">
+                        </div>
                     </div>
 
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">Acronym / Short Code <span class="text-rose-500">*</span></label>
-                        <input type="text" name="code" value="{{ old('code') }}" required placeholder="e.g. ANGLICAN" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white font-mono uppercase text-xs transition">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="reg_type" class="field-label">Ministry Classification <span class="text-brand">*</span></label>
+                            <select id="reg_type" name="type" required class="field">
+                                <option value="">-- Select Category --</option>
+                                <option value="fellowship" {{ old('type') == 'fellowship' ? 'selected' : '' }}>Campus Fellowship / Denominational Movement</option>
+                                <option value="prayer group" {{ old('type') == 'prayer group' ? 'selected' : '' }}>Intercessory Prayer & Revival Group</option>
+                                <option value="choir or worship team" {{ old('type') == 'choir or worship team' ? 'selected' : '' }}>Choral Ensemble or Worship Team</option>
+                                <option value="service" {{ old('type') == 'service' ? 'selected' : '' }}>Humanitarian, Volunteer & Service Ministry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="reg_official_email" class="field-label">Official Club Email <span class="text-brand">*</span></label>
+                            <input type="email" id="reg_official_email" name="official_email" value="{{ old('official_email') }}" required placeholder="e.g. anglican@africau.edu" class="field">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reg_description" class="field-label">Purpose & Statement of Ministry <span class="text-brand">*</span></label>
+                        <textarea id="reg_description" name="description" rows="4" required placeholder="Detail the core biblical mission, aims, and anticipated impact of this fellowship within the Kwang-Lim Chapel community..." class="field leading-relaxed">{{ old('description') }}</textarea>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">Ministry Classification <span class="text-rose-500">*</span></label>
-                        <select name="type" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
-                            <option value="">-- Select Category --</option>
-                            <option value="fellowship" {{ old('type') == 'fellowship' ? 'selected' : '' }}>Campus Fellowship / Denominational Movement</option>
-                            <option value="prayer group" {{ old('type') == 'prayer group' ? 'selected' : '' }}>Intercessory Prayer & Revival Group</option>
-                            <option value="choir or worship team" {{ old('type') == 'choir or worship team' ? 'selected' : '' }}>Choral Ensemble or Worship Team</option>
-                            <option value="service" {{ old('type') == 'service' ? 'selected' : '' }}>Humanitarian, Volunteer & Service Ministry</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">Official Club Email <span class="text-rose-500">*</span></label>
-                        <input type="email" name="official_email" value="{{ old('official_email') }}" required placeholder="e.g. anglican@africau.edu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
-                    </div>
-                </div>
-
-                <div class="space-y-1">
-                    <label class="block font-bold text-slate-700">Purpose & Statement of Ministry <span class="text-rose-500">*</span></label>
-                    <textarea name="description" rows="3" required placeholder="Detail the core biblical mission, aims, and anticipated impact of this fellowship within the Kwang-Lim Chapel community..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">{{ old('description') }}</textarea>
-                </div>
-            </div>
+            </fieldset>
 
             <!-- Section 2: Meeting Schedule & Venue -->
-            <div class="space-y-4 pt-4 border-t border-slate-100">
-                <div class="border-b border-slate-100 pb-2">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-brand"></span>
-                        <span>2. Proposed Schedule & Preferred Campus Venue</span>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Regular campus gathering hours subject to Assistant Chaplain coordination</p>
+            <fieldset class="min-w-0 p-5 sm:p-7 grid grid-cols-1 md:grid-cols-[13rem_minmax(0,1fr)] gap-x-8 gap-y-5">
+                <legend class="sr-only">2. Proposed Schedule &amp; Preferred Campus Venue</legend>
+                <div aria-hidden="true">
+                    <span class="font-display text-[1.75rem] leading-none text-gold">II</span>
+                    <h3 class="mt-2 card-title">Proposed Schedule &amp; Preferred Campus Venue</h3>
+                    <p class="mt-1 text-[12px] text-slate-500 leading-relaxed">Regular campus gathering hours subject to Assistant Chaplain coordination</p>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">Proposed Meeting Schedule <span class="text-rose-500">*</span></label>
-                        <input type="text" name="meeting_schedule" value="{{ old('meeting_schedule') }}" required placeholder="e.g. Mondays 17:30 - 19:00" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
+                    <div>
+                        <label for="reg_meeting_schedule" class="field-label">Proposed Meeting Schedule <span class="text-brand">*</span></label>
+                        <input type="text" id="reg_meeting_schedule" name="meeting_schedule" value="{{ old('meeting_schedule') }}" required placeholder="e.g. Mondays 17:30 - 19:00" class="field">
                     </div>
-
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">Preferred Campus Venue <span class="text-rose-500">*</span></label>
-                        <select name="venue" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                    <div>
+                        <label for="reg_venue" class="field-label">Preferred Campus Venue <span class="text-brand">*</span></label>
+                        <select id="reg_venue" name="venue" required class="field">
                             <option value="">-- Select Preferred Venue --</option>
                             @foreach($venues as $v)
                                 <option value="{{ $v->name }}" {{ old('venue') == $v->name ? 'selected' : '' }}>
@@ -159,58 +141,55 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </fieldset>
 
             <!-- Section 3: Executive Leadership & Governance -->
-            <div class="space-y-4 pt-4 border-t border-slate-100">
-                <div class="border-b border-slate-100 pb-2">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-brand flex items-center space-x-2">
-                        <span class="w-2 h-2 rounded-full bg-brand"></span>
-                        <span>3. Founding Executive Leadership & Constitution</span>
-                    </h3>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Contact information for initial portal provision and permanent vault archive</p>
+            <fieldset class="min-w-0 p-5 sm:p-7 grid grid-cols-1 md:grid-cols-[13rem_minmax(0,1fr)] gap-x-8 gap-y-5">
+                <legend class="sr-only">3. Founding Executive Leadership &amp; Constitution</legend>
+                <div aria-hidden="true">
+                    <span class="font-display text-[1.75rem] leading-none text-gold">III</span>
+                    <h3 class="mt-2 card-title">Founding Executive Leadership &amp; Constitution</h3>
+                    <p class="mt-1 text-[12px] text-slate-500 leading-relaxed">Contact information for initial portal provision and permanent vault archive</p>
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">Founding President Name <span class="text-rose-500">*</span></label>
-                        <input type="text" name="founding_president_name" value="{{ old('founding_president_name') }}" required placeholder="e.g. Farai Makoni" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="reg_president_name" class="field-label">Founding President Name <span class="text-brand">*</span></label>
+                            <input type="text" id="reg_president_name" name="founding_president_name" value="{{ old('founding_president_name') }}" required placeholder="e.g. Farai Makoni" class="field">
+                        </div>
+                        <div>
+                            <label for="reg_president_email" class="field-label">President Official Email <span class="text-brand">*</span></label>
+                            <input type="email" id="reg_president_email" name="founding_president_email" value="{{ old('founding_president_email') }}" required placeholder="e.g. fmakoni@africau.edu" class="field">
+                        </div>
+                        <div class="sm:col-span-2 sm:max-w-[calc(50%-0.5rem)]">
+                            <label for="reg_contact_phone" class="field-label">WhatsApp / Phone Contact <span class="text-brand">*</span></label>
+                            <input type="text" id="reg_contact_phone" name="contact_phone" value="{{ old('contact_phone') }}" required placeholder="e.g. +263 77 123 4567" class="field">
+                        </div>
                     </div>
 
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">President Official Email <span class="text-rose-500">*</span></label>
-                        <input type="email" name="founding_president_email" value="{{ old('founding_president_email') }}" required placeholder="e.g. fmakoni@africau.edu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
-                    </div>
-
-                    <div class="space-y-1">
-                        <label class="block font-bold text-slate-700">WhatsApp / Phone Contact <span class="text-rose-500">*</span></label>
-                        <input type="text" name="contact_phone" value="{{ old('contact_phone') }}" required placeholder="e.g. +263 77 123 4567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-900 bg-slate-50/50 focus:bg-white text-xs transition">
+                    <div>
+                        <label for="reg_constitution" class="field-label">Draft Constitution / Bye-Laws (PDF or DOC)</label>
+                        <input type="file" id="reg_constitution" name="constitution" accept=".pdf,.doc,.docx" aria-describedby="reg_constitution_hint"
+                               class="field !py-2 text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-vellum file:px-3 file:py-1.5 file:text-[12px] file:font-semibold file:text-slate-700 hover:file:bg-slate-200 file:cursor-pointer">
+                        <p id="reg_constitution_hint" class="field-hint">Optional during application. An approved constitution is required for complete Vault record compliance.</p>
                     </div>
                 </div>
-
-                <div class="space-y-1">
-                    <label class="block font-bold text-slate-700">
-                        Draft Constitution / Bye-Laws (PDF or DOC)
-                    </label>
-                    <input type="file" name="constitution" accept=".pdf,.doc,.docx" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/15 focus:border-brand text-slate-700 bg-slate-50 text-xs transition">
-                    <p class="text-[10px] text-slate-500">Optional during application. An approved constitution is required for complete Vault record compliance.</p>
-                </div>
-            </div>
+            </fieldset>
 
             <!-- Submission Actions -->
-            <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <span class="text-[11px] text-slate-500 italic">
+            <div class="p-5 sm:px-7 bg-slate-50/70 rounded-b-[var(--radius-card)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <p class="text-[12px] text-slate-500 italic max-w-sm">
                     By submitting, the executive leadership agrees to adhere to the Chapel Manual and ministry guidelines.
-                </span>
-                <div class="flex items-center space-x-2.5 w-full sm:w-auto">
-                    <a href="{{ route('clubs.index') }}" class="w-1/2 sm:w-auto text-center px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition active:scale-95">Cancel</a>
-                    <button type="submit" class="w-1/2 sm:w-auto px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark active:scale-95 text-white font-bold tracking-wide transition shadow-sm">
+                </p>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <a href="{{ route('clubs.index') }}" class="btn btn-ghost flex-1 sm:flex-none">Cancel</a>
+                    <button type="submit" class="btn btn-primary flex-1 sm:flex-none">
                         Submit Charter Application
                     </button>
                 </div>
             </div>
         </form>
-    </div>
+    </section>
 
 </div>
 @endsection

@@ -1,13 +1,16 @@
-@props(['title', 'link' => null, 'linkLabel' => 'View all'])
+@props(['title', 'link' => null, 'linkLabel' => 'View all', 'kicker' => null])
 
-<section {{ $attributes->merge(['class' => 'bg-white rounded-2xl border border-slate-200/80 shadow-sm']) }}>
-    <div class="flex items-center justify-between gap-3 px-5 py-3.5 border-b border-slate-100">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-700">{{ $title }}</h2>
+<section {{ $attributes->merge(['class' => 'card']) }}>
+    <div class="card-header">
+        <div class="min-w-0">
+            @if($kicker)<p class="card-kicker">{{ $kicker }}</p>@endif
+            <h2 class="card-title truncate">{{ $title }}</h2>
+        </div>
         @if($link)
-            <a href="{{ $link }}" class="text-xs font-semibold text-brand hover:underline shrink-0">{{ $linkLabel }} &rarr;</a>
+            <a href="{{ $link }}" class="card-link shrink-0">{{ $linkLabel }}</a>
         @endif
     </div>
-    <div class="p-5">
+    <div class="card-body">
         {{ $slot }}
     </div>
 </section>

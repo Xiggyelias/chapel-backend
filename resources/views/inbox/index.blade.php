@@ -11,36 +11,41 @@
         'info' => 'bg-sky-500',
     ];
 @endphp
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-        <div>
-            <h1 class="text-2xl font-bold text-slate-900">Inbox</h1>
-            <p class="text-xs text-slate-500 mt-0.5">Decisions, reviews and requests that concern you.</p>
-        </div>
+<div class="page-shell max-w-3xl space-y-6">
+    <x-page-header eyebrow="Correspondence" title="Inbox" description="Decisions, reviews and requests that concern you.">
         @if(auth()->user()->unreadNotifications()->exists())
             <form method="POST" action="{{ route('inbox.read_all') }}">
                 @csrf
-                <button type="submit" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">Mark all as read</button>
+                <button type="submit" class="btn btn-secondary btn-sm">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                    Mark all as read
+                </button>
             </form>
         @endif
-    </div>
+    </x-page-header>
 
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+    <div class="card overflow-hidden">
         @forelse($notifications as $note)
-            <a href="{{ route('inbox.open', $note->id) }}" class="flex items-start gap-3 px-5 py-4 border-b last:border-0 border-slate-100 hover:bg-slate-50 transition {{ $note->read_at ? '' : 'bg-red-50/40' }}">
-                <span class="mt-1.5 w-2 h-2 rounded-full shrink-0 {{ $tones[$note->data['tone'] ?? 'info'] ?? 'bg-sky-500' }}" aria-hidden="true"></span>
+            <a href="{{ route('inbox.open', $note->id) }}" class="group relative flex items-start gap-3.5 px-5 py-4 border-b last:border-0 border-slate-100 transition-colors {{ $note->read_at ? 'hover:bg-slate-50/70' : 'bg-brand-soft/40 hover:bg-brand-soft/70' }}">
+                @unless($note->read_at)
+                    <span class="absolute left-0 top-3 bottom-3 w-[3px] rounded-r bg-brand" aria-hidden="true"></span>
+                @endunless
+                <span class="mt-[7px] w-2 h-2 rounded-full shrink-0 {{ $tones[$note->data['tone'] ?? 'info'] ?? 'bg-sky-500' }} {{ $note->read_at ? 'opacity-50' : '' }}" aria-hidden="true"></span>
                 <div class="min-w-0 flex-1">
-                    <p class="text-sm {{ $note->read_at ? 'font-medium text-slate-700' : 'font-bold text-slate-900' }}">
+                    <p class="text-[13.5px] leading-snug {{ $note->read_at ? 'font-medium text-slate-600' : 'font-semibold text-slate-900' }} group-hover:text-brand transition-colors">
                         @unless($note->read_at)<span class="sr-only">Unread: </span>@endunless{{ $note->data['title'] ?? 'Notification' }}
                     </p>
-                    <p class="text-xs text-slate-500 mt-0.5">{{ $note->data['message'] ?? '' }}</p>
+                    <p class="text-[12.5px] text-slate-500 mt-0.5 leading-relaxed">{{ $note->data['message'] ?? '' }}</p>
                 </div>
-                <time class="text-[11px] text-slate-400 shrink-0" datetime="{{ $note->created_at->toIso8601String() }}">{{ $note->created_at->diffForHumans() }}</time>
+                <time class="text-[11px] font-medium text-slate-400 shrink-0 mt-0.5 tabular-nums" datetime="{{ $note->created_at->toIso8601String() }}">{{ $note->created_at->diffForHumans() }}</time>
             </a>
         @empty
-            <div class="px-5 py-12 text-center">
-                <p class="text-sm font-semibold text-slate-800">No notifications yet</p>
-                <p class="text-xs text-slate-500 mt-1">You'll be told here when proposals are decided, reports reviewed or action is needed.</p>
+            <div class="empty-state">
+                <div class="empty-state-mark">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M2.25 13.5V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.5M2.25 13.5l2.4-7.2A2.25 2.25 0 016.785 4.75h10.43a2.25 2.25 0 012.135 1.55l2.4 7.2"/></svg>
+                </div>
+                <p class="empty-state-title">No notifications yet</p>
+                <p class="empty-state-text">You'll be told here when proposals are decided, reports reviewed or action is needed.</p>
             </div>
         @endforelse
     </div>

@@ -3,188 +3,177 @@
 @section('title', 'Profile & Password')
 
 @section('content')
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<div class="page-shell max-w-5xl space-y-6">
 
-    <!-- Header Title -->
-    <div class="border-b border-slate-200 pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                Account Profile &amp; Security
-            </h1>
-            <p class="text-xs text-slate-500 mt-0.5">
-                Manage your official staff details and update your private login password.
-            </p>
-        </div>
-        <a href="{{ route('dashboard') }}" class="inline-flex items-center space-x-1.5 text-xs text-slate-500 hover:text-slate-800 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back to Dashboard</span>
+    <x-page-header eyebrow="Your account" title="Account Profile & Security"
+                   description="Manage your official staff details and update your private login password.">
+        <a href="{{ route('dashboard') }}" class="btn btn-ghost">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Back to Dashboard
         </a>
-    </div>
+    </x-page-header>
 
     <!-- Default Password Notice (if applicable) -->
     @if($user->mustChangePassword())
-        <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex items-start space-x-3.5 shadow-xs animate-fade-in">
-            <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            </div>
+        <div class="flash-warning" role="status">
+            <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
             <div>
-                <h4 class="text-xs font-bold text-amber-950">Action Recommended: Update Default Password</h4>
-                <p class="text-xs text-amber-800 mt-0.5 leading-relaxed">
+                <h4 class="text-[13px] font-semibold">Action Recommended: Update Default Password</h4>
+                <p class="text-[12.5px] mt-0.5 leading-relaxed opacity-90">
                     Your account is using a temporary password issued by the Chaplaincy Office. You must set your own private password below before you can use the rest of the portal.
                 </p>
             </div>
         </div>
     @endif
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
         <!-- PRIMARY: Change Password Card (order-1 on mobile so it is immediately visible without scrolling) -->
         <div class="lg:col-span-2 order-1 lg:order-2">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 sm:p-7 space-y-5">
-                <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900">
-                            Change Account Password
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            Set a secure private password known only to you.
-                        </p>
+            <section class="card" aria-labelledby="password-heading">
+                <div class="card-header">
+                    <div class="min-w-0">
+                        <p class="card-kicker">Security</p>
+                        <h2 id="password-heading" class="card-title mt-0.5">Change Account Password</h2>
+                        <p class="text-[12.5px] text-slate-500 mt-0.5">Set a secure private password known only to you.</p>
                     </div>
-                    <span class="w-8 h-8 rounded-xl bg-red-50 text-brand flex items-center justify-center shrink-0">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span class="w-9 h-9 rounded-full grid place-items-center shrink-0 text-gold bg-gold-soft ring-1 ring-gold/25" aria-hidden="true">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </span>
                 </div>
 
-                @if ($errors->any())
-                    <div class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs space-y-1">
-                        @foreach ($errors->all() as $err)
-                            <div class="flex items-center space-x-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-brand shrink-0"></span>
-                                <span>{{ $err }}</span>
+                <div class="card-body space-y-5">
+                    @if ($errors->any())
+                        <div class="flash-error !animate-none" role="alert">
+                            <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <ul class="text-[12.5px] space-y-1">
+                                @foreach ($errors->all() as $err)
+                                    <li>{{ $err }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('profile.password') }}" class="space-y-5">
+                        @csrf
+
+                        <!-- Current / Default Password -->
+                        <div>
+                            <label for="current_password" class="field-label">Current / Default Password</label>
+                            <div class="relative">
+                                <input type="password" id="current_password" name="current_password" required placeholder="Enter your current or temporary password" class="field pr-10">
+                                <button type="button" onclick="togglePassVisibility('current_password', this)" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer rounded-r-xl" title="Toggle password visibility" aria-label="Toggle password visibility">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                </button>
                             </div>
-                        @endforeach
-                    </div>
-                @endif
+                        </div>
 
-                <form method="POST" action="{{ route('profile.password') }}" class="space-y-4">
-                    @csrf
+                        <!-- New Password & Confirmation -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="new_password" class="field-label">New Password</label>
+                                <div class="relative">
+                                    <input type="password" id="new_password" name="password" required placeholder="Minimum 8 characters" class="field pr-10">
+                                    <button type="button" onclick="togglePassVisibility('new_password', this)" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer rounded-r-xl" title="Toggle password visibility" aria-label="Toggle password visibility">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
 
-                    <!-- Current / Default Password -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Current / Default Password</label>
-                        <div class="relative">
-                            <input type="password" id="current_password" name="current_password" required placeholder="Enter your current or temporary password" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white transition">
-                            <button type="button" onclick="togglePassVisibility('current_password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer" title="Toggle password visibility">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            <div>
+                                <label for="new_password_confirmation" class="field-label">Confirm New Password</label>
+                                <div class="relative">
+                                    <input type="password" id="new_password_confirmation" name="password_confirmation" required placeholder="Re-type new password" class="field pr-10">
+                                    <button type="button" onclick="togglePassVisibility('new_password_confirmation', this)" class="absolute inset-y-0 right-0 px-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer rounded-r-xl" title="Toggle password visibility" aria-label="Toggle password visibility">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-xl bg-paper/70 ring-1 ring-black/5 px-4 py-3.5">
+                            <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500">Password Requirements:</p>
+                            <ul class="mt-2 space-y-1.5 text-[12.5px] text-slate-600">
+                                @foreach(['Must be at least 8 characters in length', 'Must differ from your initial default password', 'Will be required for all future sign-ins to your account'] as $rule)
+                                    <li class="flex items-start gap-2.5">
+                                        <span class="mt-[0.45rem] w-1 h-1 rotate-45 bg-gold shrink-0" aria-hidden="true"></span>
+                                        <span>{{ $rule }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+
+                        <div class="pt-1">
+                            <button type="submit" class="btn btn-primary w-full sm:w-auto">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Save New Password
                             </button>
                         </div>
-                    </div>
-
-                    <!-- New Password & Confirmation -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">New Password</label>
-                            <div class="relative">
-                                <input type="password" id="new_password" name="password" required placeholder="Minimum 8 characters" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white transition">
-                                <button type="button" onclick="togglePassVisibility('new_password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer" title="Toggle password visibility">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Confirm New Password</label>
-                            <div class="relative">
-                                <input type="password" id="new_password_confirmation" name="password_confirmation" required placeholder="Re-type new password" class="w-full pl-3.5 pr-10 py-2.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white transition">
-                                <button type="button" onclick="togglePassVisibility('new_password_confirmation', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer" title="Toggle password visibility">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-[11px] space-y-1">
-                        <div class="font-semibold text-slate-800">Password Requirements:</div>
-                        <ul class="list-disc list-inside space-y-0.5 text-slate-500">
-                            <li>Must be at least 8 characters in length</li>
-                            <li>Must differ from your initial default password</li>
-                            <li>Will be required for all future sign-ins to your account</li>
-                        </ul>
-                    </div>
-
-                    <div class="pt-2">
-                        <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold shadow-xs transition active:scale-95 cursor-pointer">
-                            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                            <span>Save New Password</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+            </section>
         </div>
 
         <!-- SECONDARY: Official Profile Summary & Phone (order-2 on mobile, sidebar on desktop) -->
-        <div class="lg:col-span-1 order-2 lg:order-1 space-y-5">
+        <div class="lg:col-span-1 order-2 lg:order-1 space-y-6">
             <!-- Profile Identity Card -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 space-y-4">
-                <div class="text-center space-y-2">
-                    <div class="w-16 h-16 rounded-full bg-brand text-white flex items-center justify-center font-bold text-xl mx-auto shadow-sm">
+            <section class="card overflow-hidden" aria-label="Profile summary">
+                <div class="card-body text-center pt-7">
+                    <span class="w-16 h-16 mx-auto rounded-full grid place-items-center font-display text-[1.6rem] text-white"
+                          style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px #fff, 0 0 0 4px rgb(184 137 43 / .45), 0 10px 22px -8px rgb(165 28 48 / .55);"
+                          aria-hidden="true">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900">{{ $user->name }}</h2>
-                        <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-50 text-brand border border-red-100">
-                            {{ $user->getRoleDisplayName() }}
-                        </span>
-                    </div>
+                    </span>
+                    <h2 class="mt-4 font-display text-[1.25rem] leading-tight text-slate-900">{{ $user->name }}</h2>
+                    <span class="badge badge-brand mt-2">{{ $user->getRoleDisplayName() }}</span>
                 </div>
 
-                <div class="border-t border-slate-100 pt-3 space-y-2.5 text-xs">
+                <dl class="border-t border-slate-100 px-5 py-4 space-y-3.5 text-[13px]">
                     <div>
-                        <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Official Email</span>
-                        <span class="text-slate-800 font-medium break-all">{{ $user->email }}</span>
+                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Official Email</dt>
+                        <dd class="mt-0.5 text-slate-800 font-medium break-all">{{ $user->email }}</dd>
                     </div>
 
                     @if($user->club)
                         <div>
-                            <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Assigned Fellowship</span>
-                            <span class="text-slate-800 font-medium">{{ $user->club?->name }} ({{ $user->club?->code }})</span>
+                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Assigned Fellowship</dt>
+                            <dd class="mt-0.5 text-slate-800 font-medium">{{ $user->club?->name }} ({{ $user->club?->code }})</dd>
                         </div>
                     @endif
 
                     @if($user->position)
                         <div>
-                            <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Official Position</span>
-                            <span class="text-slate-800 font-medium">{{ $user->position }}</span>
+                            <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Official Position</dt>
+                            <dd class="mt-0.5 text-slate-800 font-medium">{{ $user->position }}</dd>
                         </div>
                     @endif
 
                     <div>
-                        <span class="text-slate-400 block text-[10px] uppercase font-bold tracking-wider">Account Status</span>
-                        <span class="inline-flex items-center space-x-1.5 text-emerald-700 font-semibold">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            <span class="capitalize">{{ $user->status ?? 'Active' }}</span>
-                        </span>
+                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Account Status</dt>
+                        <dd class="mt-1">
+                            <span class="badge badge-emerald badge-dot capitalize">{{ $user->status ?? 'Active' }}</span>
+                        </dd>
                     </div>
-                </div>
-            </div>
+                </dl>
+            </section>
 
             <!-- Contact Phone Form -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs p-5 space-y-3">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center justify-between">
-                    <span>Contact Phone</span>
-                    <span class="text-[10px] text-slate-400 font-normal">Optional</span>
-                </h3>
-                <form method="POST" action="{{ route('profile.update') }}" class="space-y-3">
+            <section class="card" aria-labelledby="contact-heading">
+                <div class="card-header">
+                    <h3 id="contact-heading" class="card-title">Contact Phone</h3>
+                    <span class="text-[11px] text-slate-400">Optional</span>
+                </div>
+                <form method="POST" action="{{ route('profile.update') }}" class="card-body space-y-3">
                     @csrf
                     <div>
-                        <label class="block text-[11px] font-medium text-slate-600 mb-1">Mobile / WhatsApp</label>
-                        <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="+263 77 123 4567" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 bg-white">
+                        <label for="profile_phone" class="field-label">Mobile / WhatsApp</label>
+                        <input type="text" id="profile_phone" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="+263 77 123 4567" class="field">
                     </div>
-                    <button type="submit" class="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-[0.99] text-slate-800 text-xs font-semibold transition cursor-pointer">
+                    <button type="submit" class="btn btn-secondary btn-block">
                         Update Contact
                     </button>
                 </form>
-            </div>
+            </section>
         </div>
 
     </div>

@@ -23,6 +23,10 @@ import {
     initAccessibility
 } from './modules/accessibility';
 
+import { initMotion } from './modules/motion';
+import { initDials, initSeasonProgress } from './modules/dial';
+import { initFlames } from './modules/flame';
+
 // layouts/app.blade.php ships its own role-aware handlers (and sets window.__chapelLayoutUi).
 // Only expose the module versions where the page has not already defined them, so the
 // module never silently overrides the layout's handlers or double-binds listeners.
@@ -50,6 +54,13 @@ const boot = () => {
         initCommandPaletteShortcuts();
         initAccessibility();
     }
+
+    // Motion is decorative: a failure here must never take the page down with it
+    try { initMotion(); } catch (e) { /* noop */ }
+    try { initDials(); initSeasonProgress(); } catch (e) { /* noop */ }
+    try { initFlames(); } catch (e) { /* noop */ }
+    document.documentElement.classList.add('motion-ready');
+    document.dispatchEvent(new CustomEvent('chapel:ready'));
 
     // Register Service Worker for PWA (single registration point for every page)
     if ('serviceWorker' in navigator) {

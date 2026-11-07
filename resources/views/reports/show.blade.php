@@ -3,87 +3,105 @@
 @section('title', $report->title)
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<div class="page-shell max-w-4xl space-y-6">
 
-    <div>
-        <div class="flex items-center space-x-2 text-xs text-slate-500 mb-1">
-            <a href="{{ route('reports.index') }}" class="hover:underline text-brand font-bold">Reports</a>
-            <span>/</span>
-            <span class="text-slate-700 font-mono">Report #{{ $report->id }}</span>
-        </div>
-        <div class="flex items-center justify-between">
-            <h2 class="text-xl sm:text-2xl font-bold font-cinzel text-slate-900 tracking-tight">
-                {{ $report->title }}
-            </h2>
-            <span class="text-xs font-bold px-3 py-1 rounded-full uppercase
-                {{ $report->status === 'reviewed' ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800' }}">
-                {{ $report->status }}
-            </span>
-        </div>
-        <div class="text-xs text-slate-500 mt-0.5">
-            Submitted by {{ $report->submitter?->name }} ({{ $report->club?->name }}) on {{ $report->created_at->format('M d, Y') }}
-        </div>
+    <x-page-header eyebrow="Post-activity report" :title="$report->title">
+        <span class="badge badge-dot capitalize {{ $report->status === 'reviewed' ? 'badge-emerald' : 'badge-sky' }}">{{ $report->status }}</span>
+    </x-page-header>
+
+    {{-- Provenance --}}
+    <div class="-mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-slate-500">
+        <nav aria-label="Breadcrumb" class="flex items-center gap-2">
+            <a href="{{ route('reports.index') }}" class="font-semibold text-brand hover:text-brand-dark">Reports</a>
+            <span class="text-slate-300" aria-hidden="true">/</span>
+            <span class="text-slate-700 tabular-nums" aria-current="page">Report #{{ $report->id }}</span>
+        </nav>
+        <span class="text-slate-300" aria-hidden="true">·</span>
+        <span>Submitted by {{ $report->submitter?->name }} ({{ $report->club?->name }}) on {{ $report->created_at->format('M d, Y') }}</span>
     </div>
 
-    <!-- Stats summary card -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <div class="bg-white p-5 rounded-3xl card-elevation border border-slate-200/80">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-cinzel">Actual Attendance</span>
-            <span class="text-2xl font-black font-cinzel text-brand mt-0.5 block">{{ $report->attendance }} attendees</span>
+    {{-- Summary --}}
+    <dl class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div class="dash-stat-card" style="--tone: var(--color-brand)">
+            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Actual Attendance</dt>
+            <dd class="mt-4 flex items-baseline gap-2">
+                <span class="stat-value text-[2.4rem] text-slate-900">{{ $report->attendance }}</span>
+                <span class="text-[12px] text-slate-500">attendees</span>
+            </dd>
         </div>
-        <div class="bg-white p-5 rounded-3xl card-elevation border border-slate-200/80">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-cinzel">Total Expenditure</span>
-            <span class="text-2xl font-black font-cinzel text-emerald-700 mt-0.5 block font-mono">${{ number_format($report->spending, 2) }}</span>
+        <div class="dash-stat-card" style="--tone: var(--color-gold)">
+            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Total Expenditure</dt>
+            <dd class="mt-4 flex items-baseline gap-0.5 text-slate-900">
+                <span class="font-display text-[1.4rem] text-slate-400">$</span><span class="stat-value text-[2.4rem]">{{ number_format($report->spending, 2) }}</span>
+            </dd>
         </div>
-        <div class="bg-white p-5 rounded-3xl card-elevation border border-slate-200/80 col-span-2 sm:col-span-1">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-cinzel">Sponsoring Club</span>
-            <span class="text-sm font-bold text-slate-900 mt-0.5 block">{{ $report->club?->name }}</span>
+        <div class="dash-stat-card col-span-2 sm:col-span-1" style="--tone: var(--color-slate-300)">
+            <dt class="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">Sponsoring Club</dt>
+            <dd class="mt-4 font-display text-[1.25rem] leading-snug text-slate-900">{{ $report->club?->name }}</dd>
         </div>
-    </div>
+    </dl>
 
-    <!-- Narrative Outcome -->
-    <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 p-6 sm:p-7 space-y-2 text-xs">
-        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider font-cinzel">Outcomes & Spiritual Impact Narrative</h3>
-        <p class="text-slate-800 whitespace-pre-line leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
-            {{ $report->outcome }}
-        </p>
-    </div>
-
-    <!-- Photos Gallery (if any) -->
-    @if(!empty($report->photos) && is_array($report->photos))
-        <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 p-6 sm:p-7 space-y-3">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider font-cinzel">Activity Photo Gallery</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                @foreach($report->photos as $photoIndex => $photo)
-                    <a href="{{ route('reports.photo', [$report->id, $photoIndex]) }}" target="_blank" rel="noopener" class="block rounded-2xl overflow-hidden border border-slate-200 aspect-video hover:opacity-90 shadow-sm transition">
-                        <img src="{{ route('reports.photo', [$report->id, $photoIndex]) }}" alt="Event photo {{ $photoIndex + 1 }}" loading="lazy" class="w-full h-full object-cover">
-                    </a>
-                @endforeach
+    {{-- Narrative --}}
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <p class="card-kicker">In their own words</p>
+                <h2 class="card-title mt-0.5">Outcomes &amp; spiritual impact narrative</h2>
             </div>
         </div>
+        <div class="card-body">
+            <p class="font-display text-[15px] leading-[1.8] text-slate-800 whitespace-pre-line max-w-prose" style="font-variation-settings: 'SOFT' 50, 'opsz' 14;">{{ $report->outcome }}</p>
+        </div>
+    </section>
+
+    {{-- Photos --}}
+    @if(!empty($report->photos) && is_array($report->photos))
+        <section class="card">
+            <div class="card-header">
+                <h2 class="card-title">Activity photo gallery</h2>
+                <span class="text-[12px] text-slate-400 tabular-nums">{{ count($report->photos) }}</span>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    @foreach($report->photos as $photoIndex => $photo)
+                        <a href="{{ route('reports.photo', [$report->id, $photoIndex]) }}" target="_blank" rel="noopener" class="block rounded-xl overflow-hidden ring-1 ring-slate-200 aspect-video bg-slate-100 transition hover:ring-gold-light hover:shadow-md">
+                            <img src="{{ route('reports.photo', [$report->id, $photoIndex]) }}" alt="Event photo {{ $photoIndex + 1 }}" loading="lazy" class="w-full h-full object-cover">
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        </section>
     @endif
 
-    <!-- Chaplaincy Office Remarks -->
-    <div class="bg-white rounded-3xl card-elevation border border-slate-200/80 p-6 sm:p-7 space-y-3 text-xs">
-        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider font-cinzel">Chaplaincy Office Review Remarks</h3>
-        @if($report->chaplaincy_remarks)
-            <p class="p-4 bg-rose-50/60 rounded-2xl border border-rose-200/80 text-rose-950 whitespace-pre-line leading-relaxed">
-                {{ $report->chaplaincy_remarks }}
-            </p>
-        @else
-            <p class="text-slate-500 italic">No formal review remarks recorded yet.</p>
-        @endif
+    {{-- Chaplaincy remarks --}}
+    <section class="card">
+        <div class="card-header">
+            <div>
+                <p class="card-kicker">Office of the Chaplain</p>
+                <h2 class="card-title mt-0.5">Chaplaincy office review remarks</h2>
+            </div>
+        </div>
+        <div class="card-body space-y-5">
+            @if($report->chaplaincy_remarks)
+                <blockquote class="relative pl-5 border-l-2 border-gold">
+                    <p class="font-display italic text-[15px] leading-relaxed text-slate-800 whitespace-pre-line">{{ $report->chaplaincy_remarks }}</p>
+                </blockquote>
+            @else
+                <p class="text-[13px] text-slate-500 italic">No formal review remarks recorded yet.</p>
+            @endif
 
-        @if(auth()->user()->isOffice())
-            <form method="POST" action="{{ route('reports.remarks', $report->id) }}" class="space-y-3 pt-3 border-t border-slate-100">
-                @csrf
-                <textarea name="chaplaincy_remarks" rows="2" required placeholder="Add chaplaincy commendation or follow-up note..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">{{ $report->chaplaincy_remarks }}</textarea>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand to-brand-dark hover:brightness-110 text-white font-bold text-xs shadow-md active:scale-95">
-                    Save Chaplaincy Remarks
-                </button>
-            </form>
-        @endif
-    </div>
+            @if(auth()->user()->isOffice())
+                <form method="POST" action="{{ route('reports.remarks', $report->id) }}" class="space-y-3 pt-5 border-t border-slate-100">
+                    @csrf
+                    <label for="chaplaincy_remarks_field" class="field-label">Commendation or follow-up note</label>
+                    <textarea id="chaplaincy_remarks_field" name="chaplaincy_remarks" rows="3" required placeholder="Add chaplaincy commendation or follow-up note..." class="field leading-relaxed">{{ $report->chaplaincy_remarks }}</textarea>
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn btn-primary">Save Chaplaincy Remarks</button>
+                    </div>
+                </form>
+            @endif
+        </div>
+    </section>
 
 </div>
 @endsection

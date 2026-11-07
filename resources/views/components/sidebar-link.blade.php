@@ -31,6 +31,7 @@ $svg = $icons[$icon] ?? $icons['home'];
 <a href="{{ route($route) }}"
    class="sidebar-nav-item {{ $active ? 'active' : '' }}"
    @if($active) aria-current="page" @endif>
+    @if($active)<span class="nav-marker" aria-hidden="true"></span>@endif
     <svg class="sidebar-nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">{!! $svg !!}</svg>
     <span class="flex-1 truncate nav-label">{{ $label }}</span>
     @if($badge > 0)

@@ -1,42 +1,42 @@
 <!-- The United Methodist Hymnal (UMH), MHB & Shona Interactive Picker & Lyrics Auto-Fill -->
-<div class="bg-gradient-to-r from-red-50/70 via-slate-50 to-red-50/40 p-4 sm:p-5 rounded-2xl border-2 border-red-200/80 shadow-xs space-y-3.5">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-        <div class="flex items-center space-x-2.5">
-            <div class="w-8 h-8 rounded-lg bg-brand text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+<div class="rounded-2xl bg-paper/70 ring-1 ring-slate-200/80 p-4 sm:p-5 space-y-4">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+        <div class="flex items-start gap-3 min-w-0">
+            <div class="w-9 h-9 rounded-xl grid place-items-center shrink-0 text-gold bg-white ring-1 ring-gold/25 shadow-xs" aria-hidden="true">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
             </div>
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 font-cinzel">The Chapel Hymnals (UMH &bull; MHB &bull; Shona)</h4>
-                <p class="text-[11px] text-slate-500">Complete hymns from #1 to the end (UMH 1–734, MHB 1–984, Shona 1–311)</p>
+            <div class="min-w-0">
+                <h4 class="font-display text-[15px] leading-tight text-slate-900">The Chapel Hymnals <span class="text-slate-400">(UMH &bull; MHB &bull; Shona)</span></h4>
+                <p class="mt-0.5 text-[11.5px] text-slate-500">Complete hymns from #1 to the end (UMH 1–734, MHB 1–984, Shona 1–311)</p>
             </div>
         </div>
-        <div class="flex items-center space-x-2">
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 uppercase">2,029 Complete Hymns</span>
-            <a href="{{ route('hymns.index') }}" target="_blank" class="text-[11px] font-semibold text-brand hover:underline flex items-center space-x-1" title="Open full digital hymnal in new tab">
+        <div class="flex items-center gap-3">
+            <span class="badge badge-gold">2,029 Complete Hymns</span>
+            <a href="{{ route('hymns.index') }}" target="_blank" class="inline-flex items-center gap-1 text-[12px] font-semibold text-brand hover:text-brand-dark" title="Open full digital hymnal in new tab">
                 <span>Digital Hymnal</span>
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
             </a>
         </div>
     </div>
 
     <!-- Hymn Number Input / Quick Selector -->
-    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-        <div class="sm:col-span-5 relative">
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Pick Hymn # (e.g. 1, 57, 140, 378, 734)</label>
+    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+        <div class="sm:col-span-5">
+            <label for="hymnNumberInput" class="field-label">Pick Hymn # (e.g. 1, 57, 140, 378, 734)</label>
             <div class="relative">
-                <input type="text" id="hymnNumberInput" placeholder="Type hymn no. (e.g. 1, 57, 378, MHB 1)..." class="w-full text-xs pl-8 pr-20 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand bg-white font-medium" oninput="handleHymnNumberInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); fetchHymnByNumber();}">
-                <div class="absolute left-2.5 top-2.5 text-slate-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="hymnNumberInput" placeholder="Type hymn no. (e.g. 1, 57, 378, MHB 1)..." class="field pl-9 pr-24" oninput="handleHymnNumberInput(this.value)" onkeydown="if(event.key==='Enter'){event.preventDefault(); fetchHymnByNumber();}">
+                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
-                <button type="button" onclick="fetchHymnByNumber()" class="absolute right-1.5 top-1 px-2.5 py-1.5 bg-brand hover:bg-brand-dark text-white rounded-lg text-[10px] font-bold transition cursor-pointer">
+                <button type="button" onclick="fetchHymnByNumber()" class="btn btn-primary btn-sm absolute right-1.5 top-1/2 -translate-y-1/2 !py-1">
                     Lookup
                 </button>
             </div>
         </div>
 
         <div class="sm:col-span-7">
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Or Choose from Index</label>
-            <select id="hymnQuickSelect" onchange="if(this.value){ const parts = this.value.split(' '); document.getElementById('hymnNumberInput').value = this.value; fetchHymnByNumber(parts[1], parts[0]); }" class="w-full text-xs py-2.5 px-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand bg-white text-slate-800 font-medium">
+            <label for="hymnQuickSelect" class="field-label">Or Choose from Index</label>
+            <select id="hymnQuickSelect" onchange="if(this.value){ const parts = this.value.split(' '); document.getElementById('hymnNumberInput').value = this.value; fetchHymnByNumber(parts[1], parts[0]); }" class="field">
                 <option value="">-- Choose from Complete Hymnal Registry --</option>
                 <optgroup label="Chapel Classics & Standards">
                     <option value="UMH 57">UMH 57: O For a Thousand Tongues to Sing</option>
@@ -67,56 +67,60 @@
     </div>
 
     <!-- Live Preview Card (Hidden until hymn chosen or loaded) -->
-    <div id="hymnPreviewCard" class="hidden bg-white p-4 rounded-xl border border-red-200/90 shadow-sm space-y-3 transition-all animate-fade-in">
+    <div id="hymnPreviewCard" class="hidden bg-white rounded-xl ring-1 ring-slate-200 shadow-sm p-4 sm:p-5 space-y-4" aria-live="polite">
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-            <div>
-                <div class="flex items-center space-x-2">
-                    <span id="hymnBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand text-white">UMH 57</span>
-                    <h5 id="hymnTitle" class="text-sm font-bold text-slate-900 font-cinzel">O For a Thousand Tongues to Sing</h5>
+            <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span id="hymnBadge" class="badge badge-brand">UMH 57</span>
+                    <h5 id="hymnTitle" class="font-display text-[17px] leading-snug text-slate-900">O For a Thousand Tongues to Sing</h5>
                 </div>
-                <div class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <div class="text-[11.5px] text-slate-500 mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
                     <span id="hymnAuthor">Charles Wesley, 1739</span>
-                    <span>&bull;</span>
-                    <span id="hymnTune" class="font-mono text-slate-600">Tune: AZMON</span>
-                    <span>&bull;</span>
-                    <span id="hymnCategory" class="text-emerald-700 font-semibold">Praise & Thanksgiving</span>
-                    <span id="hymnScriptureDot">&bull;</span>
+                    <span class="text-slate-300" aria-hidden="true">&bull;</span>
+                    <span id="hymnTune" class="text-slate-600">Tune: AZMON</span>
+                    <span class="text-slate-300" aria-hidden="true">&bull;</span>
+                    <span id="hymnCategory" class="text-gold font-semibold">Praise & Thanksgiving</span>
+                    <span id="hymnScriptureDot" class="text-slate-300" aria-hidden="true">&bull;</span>
                     <span id="hymnScripture" class="text-slate-600 italic"></span>
                 </div>
             </div>
-            <div class="flex items-center space-x-2 shrink-0">
-                <button type="button" onclick="insertSelectedHymn()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1.5 cursor-pointer shadow-xs active:scale-95">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <div class="shrink-0">
+                <button type="button" onclick="insertSelectedHymn()" class="btn btn-primary btn-sm">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                     <span>Insert Title & Lyrics</span>
                 </button>
             </div>
         </div>
 
         <!-- Alternates Bar if same number exists in multiple hymnals -->
-        <div id="hymnAlternatesContainer" class="hidden p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-xs">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-1.5">Also available in other chapel hymnals with this number:</span>
+        <div id="hymnAlternatesContainer" class="hidden rounded-lg bg-paper/70 ring-1 ring-slate-200/70 p-3">
+            <span class="text-[10.5px] font-bold uppercase tracking-[0.1em] text-slate-500 block mb-2">Also available in other chapel hymnals with this number:</span>
             <div id="hymnAlternatesList" class="flex flex-wrap gap-1.5"></div>
         </div>
 
-        <div class="border-t border-slate-100 pt-2.5">
-            <div class="flex items-center justify-between mb-1.5">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Full Hymn Stanzas & Verses</span>
-                <span class="text-[10px] text-slate-400 font-mono">Will be placed into Hymns & Lyrics fields</span>
+        <div class="border-t border-slate-100 pt-3">
+            <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 mb-2">
+                <span class="card-kicker">Full Hymn Stanzas & Verses</span>
+                <span class="text-[11px] text-slate-400">Will be placed into Hymns & Lyrics fields</span>
             </div>
-            <div id="hymnLyricsContent" class="bg-slate-50 p-3 rounded-lg border border-slate-200/80 font-mono text-xs text-slate-800 leading-relaxed whitespace-pre-wrap max-h-56 overflow-y-auto select-all"></div>
+            <div id="hymnLyricsContent" class="hymn-lyrics-block !text-[14px] rounded-lg bg-paper/60 px-4 py-3 max-h-56 overflow-y-auto select-all"></div>
         </div>
     </div>
 
     <!-- Error/Notice box -->
-    <div id="hymnLookupError" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-center space-x-2">
-        <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        <span id="hymnLookupErrorMsg">Hymn number not found.</span>
+    <div id="hymnLookupError" class="hidden" role="status">
+        <div class="flex items-start gap-2.5 rounded-xl bg-amber-50 ring-1 ring-amber-600/20 px-3.5 py-3 text-[12.5px] text-amber-900">
+            <svg class="w-4 h-4 text-amber-600 shrink-0 mt-px" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span id="hymnLookupErrorMsg">Hymn number not found.</span>
+        </div>
     </div>
 
     <!-- Toast Confirmation box -->
-    <div id="hymnInsertSuccess" class="hidden p-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-semibold flex items-center space-x-2 animate-fade-in">
-        <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        <span id="hymnInsertSuccessMsg">Hymn title and full lyrics have been added to the fields below!</span>
+    <div id="hymnInsertSuccess" class="hidden" role="status">
+        <div class="flex items-start gap-2.5 rounded-xl bg-emerald-50 ring-1 ring-emerald-600/20 px-3.5 py-3 text-[12.5px] font-semibold text-emerald-900">
+            <svg class="w-4 h-4 text-emerald-600 shrink-0 mt-px" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <span id="hymnInsertSuccessMsg">Hymn title and full lyrics have been added to the fields below!</span>
+        </div>
     </div>
 </div>
 
@@ -162,8 +166,8 @@
                     const h = data.hymn;
                     window.currentSelectedHymn = h;
                     document.getElementById('hymnBadge').textContent = `${h.hymnal_code} ${h.number}`;
-                    document.getElementById('hymnBadge').className = 'px-2 py-0.5 rounded text-[10px] font-bold ' + 
-                        (h.hymnal_code === 'SHONA' ? 'bg-amber-100 text-amber-800' : (h.hymnal_code === 'MHB' ? 'bg-blue-100 text-blue-800' : 'bg-brand text-white'));
+                    document.getElementById('hymnBadge').className = 'badge ' +
+                        (h.hymnal_code === 'SHONA' ? 'badge-gold' : (h.hymnal_code === 'MHB' ? 'badge-sky' : 'badge-brand'));
                     document.getElementById('hymnTitle').textContent = h.title;
                     document.getElementById('hymnAuthor').textContent = h.author || 'Author Unspecified';
                     document.getElementById('hymnTune').textContent = h.tune ? `Tune: ${h.tune}` : '';
@@ -192,7 +196,7 @@
                         altList.replaceChildren(...data.alternates.map(alt => {
                             const btn = document.createElement('button');
                             btn.type = 'button';
-                            btn.className = 'px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-semibold border border-slate-200 transition cursor-pointer';
+                            btn.className = 'px-2.5 py-1 rounded-lg bg-white text-left text-slate-700 text-[11.5px] font-semibold ring-1 ring-slate-200 hover:ring-slate-300 hover:text-slate-900 transition cursor-pointer';
                             btn.textContent = `Switch to ${alt.hymnal_code} #${alt.number}: ${alt.title}`;
                             btn.addEventListener('click', () => fetchHymnByNumber(String(alt.number), alt.hymnal_code));
                             return btn;

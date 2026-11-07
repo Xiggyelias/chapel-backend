@@ -20,20 +20,20 @@
             <x-dash.panel title="Ministry pulse ({{ now()->year }})" :link="route('reports.annual_report')" link-label="Annual report">
                 <dl class="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                        <dt class="text-xs text-slate-500">Activities held</dt>
-                        <dd class="text-xl font-extrabold text-slate-900">{{ $pulse['activities'] }}</dd>
+                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Activities held</dt>
+                        <dd class="mt-1.5 stat-value text-[1.9rem] text-slate-900">{{ $pulse['activities'] }}</dd>
                     </div>
                     <div>
-                        <dt class="text-xs text-slate-500">Reported attendance</dt>
-                        <dd class="text-xl font-extrabold text-slate-900">{{ number_format($pulse['attendance']) }}</dd>
+                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Reported attendance</dt>
+                        <dd class="mt-1.5 stat-value text-[1.9rem] text-slate-900">{{ number_format($pulse['attendance']) }}</dd>
                     </div>
                     <div>
-                        <dt class="text-xs text-slate-500">Reports filed</dt>
-                        <dd class="text-xl font-extrabold {{ $pulse['reportRate'] < 70 ? 'text-amber-700' : 'text-slate-900' }}">{{ $pulse['reportRate'] }}%</dd>
+                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Reports filed</dt>
+                        <dd class="mt-1.5 stat-value text-[1.9rem] {{ $pulse['reportRate'] < 70 ? 'text-amber-700' : 'text-slate-900' }}">{{ $pulse['reportRate'] }}%</dd>
                     </div>
                     <div>
-                        <dt class="text-xs text-slate-500">Active fellowships</dt>
-                        <dd class="text-xl font-extrabold text-slate-900">{{ $pulse['activeClubs'] }}</dd>
+                        <dt class="text-[10.5px] font-bold uppercase tracking-[0.12em] text-slate-400">Active fellowships</dt>
+                        <dd class="mt-1.5 stat-value text-[1.9rem] text-slate-900">{{ $pulse['activeClubs'] }}</dd>
                     </div>
                 </dl>
                 @php $used = $pulse['budget'] > 0 ? min(100, round($pulse['spent'] / $pulse['budget'] * 100)) : 0; @endphp
@@ -42,8 +42,8 @@
                         <span>Spent ${{ number_format($pulse['spent'], 2) }}</span>
                         <span>of ${{ number_format($pulse['budget'], 2) }} approved</span>
                     </div>
-                    <div class="mt-1 h-2 rounded-full bg-slate-100 overflow-hidden" role="progressbar" aria-valuenow="{{ $used }}" aria-valuemin="0" aria-valuemax="100" aria-label="Budget used">
-                        <div class="h-full {{ $pulse['spent'] > $pulse['budget'] ? 'bg-rose-500' : 'bg-emerald-500' }}" style="width: {{ $used }}%"></div>
+                    <div class="mt-2 progress" role="progressbar" aria-valuenow="{{ $used }}" aria-valuemin="0" aria-valuemax="100" aria-label="Budget used">
+                        <span class="block h-full rounded-full {{ $pulse['spent'] > $pulse['budget'] ? 'bg-rose-500' : '' }}" style="width: {{ $used }}%"></span>
                     </div>
                 </div>
             </x-dash.panel>

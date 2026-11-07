@@ -3,93 +3,83 @@
 @section('title', 'Sound and Equipment')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<div class="page-shell space-y-6">
 
-    <!-- Header Section -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-brand tracking-wider uppercase">
-                <span>Kwang-Lim Chapel</span>
-                <span>&bull;</span>
-                <span class="text-slate-400 font-medium">Inventory & Logistics</span>
-            </div>
-            <h2 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-                Sound and Equipment
-            </h2>
-            <p class="text-xs text-slate-500 mt-0.5">
-                Centralized register of audiovisual, sound, musical, and equipment requests and dispatch statuses
-            </p>
-        </div>
-
+    <x-page-header eyebrow="Kwang-Lim Chapel · Inventory & Logistics" title="Sound and Equipment"
+                   description="Centralized register of audiovisual, sound, musical, and equipment requests and dispatch statuses">
         @if(!auth()->user()->isCampusLifeSrc())
-            <button type="button" onclick="document.getElementById('equipmentModal').classList.toggle('hidden')" class="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold uppercase tracking-wider transition shadow-sm self-start sm:self-auto active:scale-95 cursor-pointer">
-                <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                <span>Request Equipment</span>
+            <button type="button" onclick="document.getElementById('equipmentModal').classList.toggle('hidden')" class="btn btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Request Equipment
             </button>
         @endif
-    </div>
+    </x-page-header>
 
-    <!-- Equipment Register Table -->
-    <div class="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
-            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Equipment Dispatch Log</h3>
-            <span class="text-xs text-slate-500 font-semibold">{{ $equipmentRequests->total() }} Total Requests</span>
+    {{-- Equipment register --}}
+    <section class="card overflow-hidden">
+        <div class="card-header">
+            <div>
+                <p class="card-kicker">Register</p>
+                <h2 class="card-title mt-0.5">Equipment Dispatch Log</h2>
+            </div>
+            <span class="text-[12px] text-slate-500 font-medium"><span class="font-display text-[1.05rem] text-slate-900 tabular-nums">{{ $equipmentRequests->total() }}</span> Total Requests</span>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse text-xs">
+        <div class="table-wrap">
+            <table class="table">
                 <thead>
-                    <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-600 font-cinzel">
-                        <th class="p-4">Item & Qty</th>
-                        <th class="p-4">Requesting Club</th>
-                        <th class="p-4">Owner Department</th>
-                        <th class="p-4">Schedule</th>
-                        <th class="p-4">Status</th>
-                        <th class="p-4 text-right">Actions</th>
+                    <tr>
+                        <th>Item & Qty</th>
+                        <th>Requesting Club</th>
+                        <th>Owner Department</th>
+                        <th>Schedule</th>
+                        <th>Status</th>
+                        <th class="text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody>
                     @forelse($equipmentRequests as $item)
-                        <tr class="hover:bg-slate-50/70 transition">
-                            <td class="p-4">
-                                <div class="font-bold text-slate-900">{{ $item->item_name }}</div>
-                                <div class="text-[11px] text-slate-500">Qty: {{ $item->quantity }} &bull; By {{ $item->requester?->name ?? 'Chapel Requester' }}</div>
+                        <tr>
+                            <td>
+                                <div class="font-semibold text-slate-900">{{ $item->item_name }}</div>
+                                <div class="text-[11.5px] text-slate-500 mt-0.5">Qty: <span class="tabular-nums">{{ $item->quantity }}</span> &bull; By {{ $item->requester?->name ?? 'Chapel Requester' }}</div>
                             </td>
 
-                            <td class="p-4 whitespace-nowrap">
-                                <span class="text-xs font-bold px-2.5 py-0.5 rounded text-white" style="background-color: {{ $item->club?->color_hex ?? '#A51C30' }}">
-                                    {{ $item->club?->code }}
+                            <td class="whitespace-nowrap">
+                                <span class="badge badge-dot" style="color: {{ $item->club?->color_hex ?? '#A51C30' }}">
+                                    <span class="text-slate-700">{{ $item->club?->code }}</span>
                                 </span>
                             </td>
 
-                            <td class="p-4 text-slate-600 font-medium">
+                            <td class="text-slate-600">
                                 {{ $item->owner }}
                             </td>
 
-                            <td class="p-4 whitespace-nowrap">
-                                <div class="font-bold text-slate-800">{{ $item->needed_date->format('M d, Y') }}</div>
-                                <div class="text-[11px] text-slate-400 font-mono">Return: {{ $item->return_date ? $item->return_date->format('M d, Y') : 'Same Day' }}</div>
+                            <td class="whitespace-nowrap">
+                                <div class="font-semibold text-slate-800 tabular-nums">{{ $item->needed_date->format('M d, Y') }}</div>
+                                <div class="text-[11.5px] text-slate-400 tabular-nums mt-0.5">Return: {{ $item->return_date ? $item->return_date->format('M d, Y') : 'Same Day' }}</div>
                             </td>
 
-                            <td class="p-4 whitespace-nowrap">
+                            <td class="whitespace-nowrap">
                                 @if($item->status === 'approved')
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-800">Approved</span>
+                                    <span class="badge badge-sky badge-dot">Approved</span>
                                 @elseif($item->status === 'issued')
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Issued / In Use</span>
+                                    <span class="badge badge-amber badge-dot">Issued / In Use</span>
                                 @elseif($item->status === 'returned')
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">Returned Clean</span>
+                                    <span class="badge badge-emerald badge-dot">Returned Clean</span>
                                 @elseif($item->status === 'rejected')
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800">Rejected</span>
+                                    <span class="badge badge-rose badge-dot">Rejected</span>
                                 @else
-                                    <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700">Requested</span>
+                                    <span class="badge badge-dot">Requested</span>
                                 @endif
                             </td>
 
-                            <td class="p-4 text-right whitespace-nowrap">
+                            <td class="text-right whitespace-nowrap">
                                 @if(auth()->user()->isOffice())
-                                    <form method="POST" action="{{ route('equipment.status', $item->id) }}" class="inline-flex items-center space-x-1">
+                                    <form method="POST" action="{{ route('equipment.status', $item->id) }}" class="inline-flex items-center">
                                         @csrf
-                                        <select name="status" onchange="this.form.submit()" class="text-[11px] px-2.5 py-1 rounded-xl border border-slate-300 bg-slate-50/50">
+                                        <label for="eqStatus{{ $item->id }}" class="sr-only">Update status for {{ $item->item_name }}</label>
+                                        <select id="eqStatus{{ $item->id }}" name="status" onchange="this.form.submit()" class="field !w-auto !py-1.5 !pl-2.5 !text-[11.5px]">
                                             <option value="requested" {{ $item->status === 'requested' ? 'selected' : '' }}>Requested</option>
                                             <option value="approved" {{ $item->status === 'approved' ? 'selected' : '' }}>Approve</option>
                                             <option value="issued" {{ $item->status === 'issued' ? 'selected' : '' }}>Issue Out</option>
@@ -98,22 +88,23 @@
                                         </select>
                                     </form>
                                 @else
-                                    <span class="text-slate-400 text-[11px]">View Only</span>
+                                    <span class="text-slate-400 text-[11.5px]">View Only</span>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="p-12 text-center text-slate-500">
-                                <div class="max-w-sm mx-auto space-y-3">
-                                    <div class="w-12 h-12 rounded-2xl bg-rose-50 text-brand flex items-center justify-center mx-auto">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                            <td colspan="6" class="!p-0">
+                                <div class="empty-state">
+                                    <div class="empty-state-mark">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
                                     </div>
-                                    <h4 class="text-sm font-bold text-slate-800">No Equipment Requests Logged</h4>
-                                    <p class="text-xs text-slate-400">Request sound systems, wireless microphones, projectors, and instruments for events.</p>
+                                    <h3 class="empty-state-title">No Equipment Requests Logged</h3>
+                                    <p class="empty-state-text">Request sound systems, wireless microphones, projectors, and instruments for events.</p>
                                     @if(!auth()->user()->isCampusLifeSrc())
-                                        <button type="button" onclick="document.getElementById('equipmentModal').classList.toggle('hidden')" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-semibold shadow-xs cursor-pointer">
-                                            <span>+ Request Equipment</span>
+                                        <button type="button" onclick="document.getElementById('equipmentModal').classList.toggle('hidden')" class="btn btn-secondary btn-sm mt-4">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                            Request Equipment
                                         </button>
                                     @endif
                                 </div>
@@ -125,34 +116,34 @@
         </div>
 
         @if($equipmentRequests->hasPages())
-            <div class="p-4 border-t border-slate-200">
+            <div class="px-5 py-4 border-t border-slate-100">
                 {{ $equipmentRequests->links() }}
             </div>
         @endif
-    </div>
+    </section>
 
 </div>
 
-<!-- Equipment Loan Request Modal -->
-<div id="equipmentModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full border border-slate-200 overflow-hidden card-elevation">
-        <div class="bg-brand p-5 text-white flex items-center justify-between border-b border-white/10">
+{{-- Equipment loan request modal --}}
+<div id="equipmentModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-ink/50 backdrop-blur-sm p-4 modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="equipmentModalTitle">
+    <div class="bg-white rounded-3xl shadow-lg max-w-md w-full ring-1 ring-black/5 overflow-hidden modal-panel max-h-[calc(100vh-2rem)] overflow-y-auto">
+        <div class="px-6 pt-6 pb-4 flex items-start justify-between gap-4">
             <div>
-                <span class="text-[10px] uppercase font-bold text-rose-200 tracking-wider">Sound & Media Department</span>
-                <h3 class="text-base font-bold text-white mt-0.5">Request Equipment Loan</h3>
+                <p class="eyebrow">Sound &amp; Media Department</p>
+                <h3 id="equipmentModalTitle" class="font-display text-xl text-slate-900">Request Equipment Loan</h3>
             </div>
-            <button type="button" onclick="document.getElementById('equipmentModal').classList.add('hidden')" class="text-white/80 hover:text-white p-1 cursor-pointer">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <button type="button" onclick="document.getElementById('equipmentModal').classList.add('hidden')" class="topbar-action -mr-2 -mt-1 cursor-pointer" aria-label="Close">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
 
-        <form method="POST" action="{{ route('equipment.store') }}" class="p-6 space-y-4 text-xs">
+        <form method="POST" action="{{ route('equipment.store') }}" class="px-6 pb-6 space-y-4">
             @csrf
 
             @if(auth()->user()->isOffice())
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Requesting Club</label>
-                    <select name="club_id" class="w-full text-xs p-3 rounded-xl border border-slate-300 bg-slate-50/50">
+                    <label for="eqClubId" class="field-label">Requesting Club</label>
+                    <select id="eqClubId" name="club_id" class="field">
                         @foreach($clubs as $c)
                             <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->code }})</option>
                         @endforeach
@@ -163,8 +154,8 @@
             @endif
 
             <div>
-                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Equipment Item Needed <span class="text-rose-600">*</span></label>
-                <select name="item_name" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">
+                <label for="eqItemName" class="field-label">Equipment Item Needed <span class="text-brand">*</span></label>
+                <select id="eqItemName" name="item_name" required class="field">
                     <option value="Wireless Shure Microphones (Pair)">Wireless Shure Microphones (Pair)</option>
                     <option value="Yamaha Portable Sound PA System">Yamaha Portable Sound PA System</option>
                     <option value="Epson Multimedia Projector & Screen">Epson Multimedia Projector & Screen</option>
@@ -177,28 +168,28 @@
 
             <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Quantity <span class="text-rose-600">*</span></label>
-                    <input type="number" name="quantity" value="1" min="1" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">
+                    <label for="eqQuantity" class="field-label">Quantity <span class="text-brand">*</span></label>
+                    <input id="eqQuantity" type="number" name="quantity" value="1" min="1" required class="field">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Date Needed <span class="text-rose-600">*</span></label>
-                    <input type="date" name="needed_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" required class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">
+                    <label for="eqNeededDate" class="field-label">Date Needed <span class="text-brand">*</span></label>
+                    <input id="eqNeededDate" type="date" name="needed_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" required class="field">
                 </div>
             </div>
 
             <div>
-                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Expected Return Date</label>
-                <input type="date" name="return_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand">
+                <label for="eqReturnDate" class="field-label">Expected Return Date</label>
+                <input id="eqReturnDate" type="date" name="return_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}" class="field">
             </div>
 
             <div>
-                <label class="block text-xs font-bold uppercase text-slate-700 mb-1">Purpose / Service <span class="text-rose-600">*</span></label>
-                <textarea name="purpose" rows="2" required placeholder="Explain where and for what service this item will be utilized..." class="w-full text-xs p-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand"></textarea>
+                <label for="eqPurpose" class="field-label">Purpose / Service <span class="text-brand">*</span></label>
+                <textarea id="eqPurpose" name="purpose" rows="2" required placeholder="Explain where and for what service this item will be utilized..." class="field"></textarea>
             </div>
 
-            <div class="pt-3 border-t border-slate-200 flex justify-end space-x-2">
-                <button type="button" onclick="document.getElementById('equipmentModal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-100 text-xs font-semibold hover:bg-slate-200 transition">Cancel</button>
-                <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand to-brand-dark hover:brightness-110 text-white text-xs font-bold shadow-md active:scale-95">Submit Request</button>
+            <div class="pt-4 border-t border-slate-100 flex justify-end gap-2">
+                <button type="button" onclick="document.getElementById('equipmentModal').classList.add('hidden')" class="btn btn-ghost">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
             </div>
         </form>
     </div>

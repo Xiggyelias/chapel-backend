@@ -4,40 +4,51 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Session Expired | Kwang-Lim Chapel - Africa University</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @include('partials.head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        body { font-family: 'Inter', system-ui, sans-serif; background-color: #F8FAFC; }
-    </style>
 </head>
-<body class="min-h-full flex flex-col justify-center items-center p-4 sm:p-6 bg-[#F8FAFC] text-slate-800 relative">
-    
-    <div class="max-w-md w-full text-center space-y-6 relative z-10 bg-white border border-slate-200/80 p-8 rounded-3xl shadow-sm">
-        <div class="w-16 h-16 mx-auto rounded-2xl bg-brand flex items-center justify-center text-white shadow-md shadow-red-200">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
+<body class="min-h-full bg-paper text-slate-800 flex flex-col">
 
-        <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-brand">Africa University Chaplaincy</span>
-            <h1 class="text-2xl font-bold text-slate-900 mt-1">Session Expired</h1>
-            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+    <main class="flex-1 grid place-items-center px-4 py-12 sm:py-16">
+        <div class="w-full max-w-md text-center">
+
+            {{-- Crest --}}
+            <span class="mx-auto w-12 h-12 rounded-full grid place-items-center"
+                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .5), 0 10px 22px -10px rgb(165 28 48 / .6);">
+                <x-umc-logo class="w-5 h-5" />
+            </span>
+
+            <p class="mt-7 text-[10px] font-bold uppercase tracking-[0.26em] text-brand">Africa University Chaplaincy</p>
+            <p class="mt-4 inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 tabular-nums">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Error 419
+            </p>
+            <h1 class="mt-2 font-display text-[2rem] leading-tight text-slate-900" style="font-variation-settings: 'SOFT' 80, 'opsz' 96;" data-ink>Session Expired</h1>
+            <p class="mt-3 text-[13.5px] text-slate-500 leading-relaxed">
                 For security reasons, your session has timed out. Please sign in again to continue.
             </p>
-        </div>
 
-        <div class="pt-2">
-            <a href="{{ route('login') }}" class="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold uppercase tracking-wider shadow-sm transition active:scale-95">
-                <span>Sign In Again</span>
-                <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-            </a>
-        </div>
+            <div class="rule-ornament my-7 text-[8px] max-w-[12rem] mx-auto" aria-hidden="true">◆</div>
 
-        <div class="text-[11px] text-slate-400 pt-2">
-            Redirecting automatically in <span id="countdown" class="font-bold text-slate-700">3</span> seconds...
+            <blockquote class="font-display italic text-[15px] leading-relaxed text-slate-600">
+                “They that wait upon the Lord shall renew their strength.”
+                <footer class="mt-1.5 not-italic font-sans text-[10.5px] font-semibold uppercase tracking-[0.18em] text-gold">Isaiah 40:31</footer>
+            </blockquote>
+
+            <div class="mt-9">
+                <a href="{{ route('login') }}" class="btn btn-primary">
+                    Sign In Again
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
+                </a>
+            </div>
+
+            <p class="mt-4 text-[11.5px] text-slate-400" aria-live="polite">
+                Redirecting automatically in <span id="countdown" class="font-semibold text-slate-700 tabular-nums">3</span> seconds...
+            </p>
         </div>
-    </div>
+    </main>
+
+    <footer class="pb-6 text-center text-[10.5px] uppercase tracking-[0.2em] text-slate-400">Kwang-Lim Chapel · Africa University</footer>
 
     <script>
         let seconds = 3;

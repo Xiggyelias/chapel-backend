@@ -4,189 +4,229 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Handover Certificate - {{ $handover->club?->name }} ({{ $handover->academic_year }}) - Africa University Chaplaincy</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+    @include('partials.head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body {
-            font-family: 'EB Garamond', Georgia, serif;
-            background-color: #f1f5f9;
-            color: #0f172a;
-            margin: 0;
-            padding: 30px;
-        }
-        .font-cinzel { font-family: 'Cinzel', Georgia, serif; }
-        .font-sans { font-family: 'Inter', sans-serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        @page { size: A4 portrait; margin: 9mm; }
 
+        .cert-desk {
+            background:
+                radial-gradient(70% 50% at 50% 0%, rgb(217 183 108 / .14), transparent 70%),
+                var(--color-vellum);
+        }
+
+        /* The sheet: warm laid paper, a gold double rule, a crimson hairline */
         .cert-outer {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            border: 12px double #A51C30;
-            outline: 2px solid #0B0F17;
-            outline-offset: -6px;
-            padding: 48px;
             position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 22px;
+            background:
+                radial-gradient(120% 80% at 50% 0%, #FFFDF8, #FBF7EE 60%, #F6F0E2);
+            box-shadow: 0 1px 2px rgb(28 24 21 / .06), 0 30px 60px -25px rgb(28 24 21 / .35);
+            color: var(--color-slate-900);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .cert-frame {
+            position: relative;
+            border: 1.5px solid var(--color-gold);
+            padding: 6px;
+        }
+        .cert-frame-inner {
+            position: relative;
+            border: 0.75px solid rgb(184 137 43 / .7);
+            outline: 0.75px solid rgb(165 28 48 / .35);
+            outline-offset: -7px;
+            padding: 44px 52px 30px;
+            overflow: hidden;
         }
 
+        /* Corner lozenges sit on the gold rule */
         .cert-corner {
             position: absolute;
-            width: 32px;
-            height: 32px;
-            border-color: #A51C30;
+            width: 11px;
+            height: 11px;
+            background: var(--color-gold);
+            transform: rotate(45deg);
+            z-index: 2;
         }
-        .cert-tl { top: 12px; left: 12px; border-top: 3px solid #A51C30; border-left: 3px solid #A51C30; }
-        .cert-tr { top: 12px; right: 12px; border-top: 3px solid #A51C30; border-right: 3px solid #A51C30; }
-        .cert-bl { bottom: 12px; left: 12px; border-bottom: 3px solid #A51C30; border-left: 3px solid #A51C30; }
-        .cert-br { bottom: 12px; right: 12px; border-bottom: 3px solid #A51C30; border-right: 3px solid #A51C30; }
+        .cert-tl { top: -6px; left: -6px; }
+        .cert-tr { top: -6px; right: -6px; }
+        .cert-bl { bottom: -6px; left: -6px; }
+        .cert-br { bottom: -6px; right: -6px; }
 
         .watermark {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 360px;
-            height: 360px;
-            opacity: 0.04;
+            transform: translate(-50%, -46%);
+            height: 74%;
+            width: auto;
+            opacity: 0.045;
             pointer-events: none;
             z-index: 0;
+            color: var(--color-brand);
+        }
+
+        .cert-serif { font-family: var(--font-display); font-optical-sizing: auto; }
+        .cert-title { font-variation-settings: 'SOFT' 100, 'opsz' 144; letter-spacing: -0.02em; }
+        .cert-name { font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144; letter-spacing: -0.025em; }
+        .cert-caps { font-family: var(--font-sans); font-size: 9.5px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; }
+
+        .gold-rule { height: 1px; background: linear-gradient(90deg, transparent, var(--color-gold) 20%, var(--color-gold) 80%, transparent); }
+
+        .cert-seal {
+            width: 84px;
+            height: 84px;
+            border-radius: 9999px;
+            display: grid;
+            place-items: center;
+            position: relative;
+            background: radial-gradient(circle at 38% 30%, #C52A40, var(--color-brand-deep) 75%);
+            box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), 0 0 0 3px #FBF7EE, 0 0 0 4px var(--color-gold), 0 8px 18px -8px rgb(94 15 28 / .6);
+        }
+        .cert-seal::after {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 9999px;
+            border: 0.75px dashed rgb(241 213 143 / .6);
         }
 
         @media print {
-            body { padding: 0; background: #ffffff !important; }
+            html, body { background: #fff !important; }
+            .cert-desk { background: #fff !important; padding: 0 !important; min-height: 0 !important; }
             .no-print { display: none !important; }
-            .cert-outer { box-shadow: none !important; border-width: 8px !important; margin: 0 auto !important; width: 100% !important; padding: 32px !important; }
+            .cert-outer { box-shadow: none !important; max-width: none !important; width: 100% !important; margin: 0 !important; padding: 0 !important; background: #fff !important; break-inside: avoid; page-break-inside: avoid; }
+            .cert-frame-inner { padding: 34px 40px 22px !important; }
         }
     </style>
 </head>
-<body>
+<body class="bg-vellum">
+<div class="cert-desk min-h-screen px-4 py-6 sm:py-10">
 
-    <!-- Top Action Toolbar -->
-    <div class="no-print max-w-4xl mx-auto mb-6 flex items-center justify-between font-sans text-xs">
-        <a href="{{ route('handover.show', $handover->id) }}" class="text-brand font-bold hover:underline flex items-center space-x-1">
-            <span>&larr; Back to Handover Dossier</span>
+    {{-- Toolbar --}}
+    <div class="no-print max-w-[820px] mx-auto mb-6 flex flex-wrap items-center justify-between gap-3">
+        <a href="{{ route('handover.show', $handover->id) }}" class="btn btn-ghost -ml-3">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10.5 19.5L3 12l7.5-7.5M3 12h18"/></svg>
+            Back to Handover Dossier
         </a>
-        <div class="flex items-center space-x-3">
-            <span class="text-slate-500 font-mono">Academic Year: {{ $handover->academic_year }}</span>
-            <button onclick="window.print()" class="px-5 py-2.5 bg-brand hover:bg-brand-dark text-white font-bold rounded-xl shadow-sm transition flex items-center space-x-2">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                <span>Print Official Certificate</span>
+        <div class="flex items-center gap-3">
+            <span class="text-[12px] text-slate-500 tabular-nums">Academic Year: {{ $handover->academic_year }}</span>
+            <button type="button" onclick="window.print()" class="btn btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                Print Official Certificate
             </button>
         </div>
     </div>
 
-    <!-- Official Certificate Frame -->
-    <div class="cert-outer relative text-center">
-        <!-- Corner Flourishes -->
-        <div class="cert-corner cert-tl"></div>
-        <div class="cert-corner cert-tr"></div>
-        <div class="cert-corner cert-bl"></div>
-        <div class="cert-corner cert-br"></div>
+    {{-- The certificate --}}
+    <article class="cert-outer text-center" aria-label="Certificate of Leadership Stewardship">
+        <div class="cert-frame">
+            <span class="cert-corner cert-tl" aria-hidden="true"></span>
+            <span class="cert-corner cert-tr" aria-hidden="true"></span>
+            <span class="cert-corner cert-bl" aria-hidden="true"></span>
+            <span class="cert-corner cert-br" aria-hidden="true"></span>
 
-        <!-- Watermark -->
-        <svg class="watermark text-brand" viewBox="0 0 100 100" fill="currentColor">
-            <rect x="45" y="10" width="10" height="80" rx="3" />
-            <rect x="20" y="32" width="60" height="10" rx="3" />
-        </svg>
+            <div class="cert-frame-inner">
+                <x-umc-logo variant="monochrome" class="watermark" aria-hidden="true" />
 
-        <div class="relative z-10 space-y-6">
+                <div class="relative z-10">
 
-            <!-- Institutional Header -->
-            <div class="space-y-1">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-brand border border-white/20 flex items-center justify-center p-2.5 shadow-md mb-2">
-                    <x-umc-logo class="w-full h-full" />
-                </div>
-                <div class="font-cinzel text-xs font-bold uppercase tracking-widest text-brand">
-                    Africa University &bull; Office of the University Chaplain
-                </div>
-                <div class="font-cinzel text-sm font-semibold tracking-wider text-slate-600 uppercase">
-                    Kwang-Lim Chapel Fellowship & Ministry Governance
-                </div>
-            </div>
+                    {{-- Institution --}}
+                    <header>
+                        <x-umc-logo variant="official" class="h-[68px] w-auto mx-auto" />
+                        <p class="cert-caps text-brand mt-4">Africa University &bull; Office of the University Chaplain</p>
+                        <p class="cert-serif italic text-[14px] text-slate-600 mt-1.5">Kwang-Lim Chapel Fellowship &amp; Ministry Governance</p>
+                    </header>
 
-            <!-- Title Decree -->
-            <div class="py-2 border-y-2 border-brand/30 my-4 space-y-1">
-                <h1 class="font-cinzel text-2xl sm:text-3xl font-extrabold text-brand tracking-wide uppercase">
-                    Certificate of Leadership Stewardship & Institutional Transition
-                </h1>
-                <div class="text-xs font-sans text-slate-500 font-mono tracking-widest">
-                    ATTESTATION REF: AU-CHAPEL-HDV-{{ $handover->id }}-{{ str_replace('/', '-', $handover->academic_year) }}
-                </div>
-            </div>
-
-            <!-- Recipient & Attestation Text -->
-            <div class="space-y-4 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed text-slate-800">
-                <p>
-                    This is to solemnly attest that under the regulations of the Africa University Chaplaincy Office and the Kwang-Lim Chapel Fellowship Manual, the formal leadership transition for:
-                </p>
-
-                <div class="font-cinzel text-2xl sm:text-3xl font-black text-brand py-1 tracking-wider border-b border-dashed border-brand max-w-lg mx-auto">
-                    {{ $handover->club?->name }}
-                </div>
-
-                <p class="text-sm sm:text-base leading-relaxed text-slate-700">
-                    has been fully and faithfully executed for the <strong>Academic Year {{ $handover->academic_year }}</strong>.
-                    Outgoing Executive <strong>{{ $handover->outgoing_president_name }}</strong> has formally surrendered institutional archives, permanent minutes, equipment registers, and financial accountabilities.
-                </p>
-
-                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-sans grid grid-cols-2 gap-4 text-left">
-                    <div>
-                        <span class="text-slate-400 uppercase font-bold text-[10px] block">Vault Sentinel Record Audit</span>
-                        <span class="font-bold text-slate-900 text-sm">100% Institutional Compliance</span>
-                        <span class="text-[10px] text-emerald-700 block font-semibold">Grade A &bull; Verified by Chaplaincy Office</span>
+                    <div class="flex items-center justify-center gap-3 text-gold mt-6" aria-hidden="true">
+                        <span class="gold-rule w-28"></span><span class="text-[8px]">&#9670;</span><span class="gold-rule w-28"></span>
                     </div>
-                    <div>
-                        <span class="text-slate-400 uppercase font-bold text-[10px] block">Conferred Executive Authority</span>
-                        <span class="font-bold text-brand text-sm">{{ $handover->incoming_president_name }}</span>
-                        <span class="text-[10px] text-slate-600 block">President & Chapel Committee Member</span>
+
+                    {{-- Title --}}
+                    <h1 class="cert-serif cert-title mt-5 text-[30px] sm:text-[34px] leading-[1.12] font-normal text-slate-900 max-w-[34rem] mx-auto">
+                        Certificate of Leadership Stewardship &amp; Institutional Transition
+                    </h1>
+                    <p class="mt-3 font-mono text-[9.5px] tracking-[0.2em] text-slate-400">
+                        ATTESTATION REF: AU-CHAPEL-HDV-{{ $handover->id }}-{{ str_replace('/', '-', $handover->academic_year) }}
+                    </p>
+
+                    {{-- Attestation --}}
+                    <div class="cert-serif mt-7 max-w-[36rem] mx-auto text-[15px] leading-[1.7] text-slate-700">
+                        <p>
+                            This is to solemnly attest that under the regulations of the Africa University Chaplaincy Office and the Kwang-Lim Chapel Fellowship Manual, the formal leadership transition for:
+                        </p>
+
+                        <p class="cert-name mt-5 text-[38px] sm:text-[42px] leading-[1.08] text-brand">
+                            {{ $handover->club?->name }}
+                        </p>
+                        <div class="gold-rule w-72 max-w-full mx-auto mt-3" aria-hidden="true"></div>
+
+                        <p class="mt-5 text-[14.5px]">
+                            has been fully and faithfully executed for the <strong class="font-semibold text-slate-900">Academic Year {{ $handover->academic_year }}</strong>.
+                            Outgoing Executive <strong class="font-semibold text-slate-900">{{ $handover->outgoing_president_name }}</strong> has formally surrendered institutional archives, permanent minutes, equipment registers, and financial accountabilities.
+                        </p>
                     </div>
-                </div>
 
-                <p class="text-xs sm:text-sm text-slate-600 italic">
-                    "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters." &mdash; Colossians 3:23
-                </p>
-            </div>
+                    {{-- Particulars --}}
+                    <dl class="mt-7 max-w-[34rem] mx-auto grid grid-cols-2 border-y border-gold/40 text-left">
+                        <div class="py-3.5 pr-5 border-r border-gold/30">
+                            <dt class="cert-caps text-slate-400 !text-[8.5px]">Vault Sentinel Record Audit</dt>
+                            <dd class="cert-serif mt-1 text-[16px] text-slate-900">100% Institutional Compliance</dd>
+                            <dd class="mt-0.5 text-[10.5px] text-slate-500">Grade A &bull; Verified by Chaplaincy Office</dd>
+                        </div>
+                        <div class="py-3.5 pl-5">
+                            <dt class="cert-caps text-slate-400 !text-[8.5px]">Conferred Executive Authority</dt>
+                            <dd class="cert-serif mt-1 text-[16px] text-brand">{{ $handover->incoming_president_name }}</dd>
+                            <dd class="mt-0.5 text-[10.5px] text-slate-500">President &amp; Chapel Committee Member</dd>
+                        </div>
+                    </dl>
 
-            <!-- Signature & Seal Blocks -->
-            <div class="pt-8 grid grid-cols-3 gap-6 text-xs font-sans text-slate-700">
-                <div class="text-center space-y-2">
-                    <div class="h-10 border-b border-slate-400 flex items-end justify-center font-cinzel font-bold text-sm text-slate-800 pb-1">
-                        {{ $handover->outgoing_president_name }}
-                    </div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Outgoing President</span>
-                    <span class="text-[10px] text-slate-500">{{ $handover->club?->name }}</span>
-                </div>
+                    <blockquote class="cert-serif italic mt-6 max-w-[32rem] mx-auto text-[13.5px] leading-relaxed text-slate-600">
+                        "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters." &mdash; Colossians 3:23
+                    </blockquote>
 
-                <div class="text-center space-y-1 flex flex-col items-center justify-center">
-                    <div class="w-16 h-16 rounded-full border-2 border-brand bg-red-50/40 flex items-center justify-center p-1 shadow-inner">
-                        <div class="w-14 h-14 rounded-full border border-dashed border-brand flex flex-col items-center justify-center text-[8px] font-cinzel font-bold text-brand uppercase text-center leading-tight">
-                            <span>Chapel</span>
-                            <span>Seal</span>
-                            <span>Affixed</span>
+                    {{-- Signatures & seal --}}
+                    <div class="mt-9 grid grid-cols-[1fr_auto_1fr] items-end gap-8">
+                        <div class="text-center">
+                            <div class="cert-serif italic text-[17px] text-slate-800 pb-1.5 border-b border-slate-400/70">
+                                {{ $handover->outgoing_president_name }}
+                            </div>
+                            <span class="cert-caps text-slate-500 !text-[8.5px] block mt-2">Outgoing President</span>
+                            <span class="text-[10.5px] text-slate-500">{{ $handover->club?->name }}</span>
+                        </div>
+
+                        <div class="flex flex-col items-center">
+                            <div class="cert-seal" role="img" aria-label="Chapel Seal Affixed">
+                                <div class="relative z-10 flex flex-col items-center text-gold-bright">
+                                    <x-umc-logo variant="monochrome" class="h-6 w-auto" aria-hidden="true" />
+                                    <span class="mt-1 font-sans text-[6.5px] font-bold uppercase tracking-[0.18em] leading-[1.35] text-center text-gold-bright/90">Chapel<br>Seal<br>Affixed</span>
+                                </div>
+                            </div>
+                            <span class="mt-2.5 text-[9.5px] text-slate-400 tabular-nums">{{ date('M d, Y') }}</span>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="cert-serif italic text-[17px] text-brand pb-1.5 border-b border-slate-400/70">
+                                {{ $handover->completer ? $handover->completer?->name : 'Rev. Supt. Eunice Marima' }}
+                            </div>
+                            <span class="cert-caps text-slate-500 !text-[8.5px] block mt-2">University Chaplain</span>
+                            <span class="text-[10.5px] text-slate-500">Africa University</span>
                         </div>
                     </div>
-                    <span class="text-[9px] font-mono text-slate-400">{{ date('M d, Y') }}</span>
-                </div>
 
-                <div class="text-center space-y-2">
-                    <div class="h-10 border-b border-slate-400 flex items-end justify-center font-cinzel font-bold text-sm text-brand pb-1">
-                        {{ $handover->completer ? $handover->completer?->name : 'Rev. Supt. Eunice Marima' }}
-                    </div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">University Chaplain</span>
-                    <span class="text-[10px] text-slate-500">Africa University</span>
+                    <footer class="mt-8 pt-3 border-t border-gold/30 flex items-center justify-between text-[9.5px] text-slate-400">
+                        <span>Kwang-Lim Chapel &bull; Ministry Records</span>
+                        <span class="tracking-[0.18em]">VERIFIED OFFICIAL DOCUMENT</span>
+                    </footer>
+
                 </div>
             </div>
-
-            <div class="pt-6 border-t border-slate-200 text-[10px] font-sans text-slate-400 flex items-center justify-between">
-                <span>Kwang-Lim Chapel &bull; Ministry Records</span>
-                <span class="font-mono">VERIFIED OFFICIAL DOCUMENT</span>
-            </div>
-
         </div>
-    </div>
+    </article>
 
+</div>
 </body>
 </html>

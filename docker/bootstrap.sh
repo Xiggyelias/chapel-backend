@@ -30,6 +30,9 @@ USER_COUNT=$(timeout 60 $ARTISAN tinker --execute="echo \App\Models\User::count(
 if [ "${SEED_ON_DEPLOY}" = "true" ] || [ "${USER_COUNT:-0}" = "0" ]; then
     echo "[bootstrap] Seeding (current users: ${USER_COUNT:-0})..."
     timeout 600 $ARTISAN db:seed --force || echo "[bootstrap] WARNING: seeding failed or timed out."
+else
+    echo "[bootstrap] Refreshing complete hymnal catalogue (2,029 hymns)..."
+    timeout 300 $ARTISAN db:seed --class=HymnSeeder --force || echo "[bootstrap] WARNING: HymnSeeder failed or timed out."
 fi
 
 echo "[bootstrap] Done."

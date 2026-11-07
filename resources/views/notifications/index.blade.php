@@ -3,258 +3,223 @@
 @section('title', 'Chaplaincy Notification & Dispatch Center')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
+<div class="page-shell space-y-6">
 
-    <!-- Header Banner -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0B0F17] via-[#1A0B12] to-brand p-8 text-white shadow-2xl border-t-2 border-brand">
-        <div class="absolute -right-12 -bottom-16 w-80 h-80 rounded-full bg-brand/20 blur-3xl pointer-events-none"></div>
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-                <div class="flex items-center space-x-2 text-xs font-bold tracking-widest text-rose-200 uppercase mb-2">
-                    <span>Africa University Chaplaincy</span>
-                    <span>&bull;</span>
-                    <span>Automated Dispatch Engine</span>
+    <x-page-header eyebrow="Africa University Chaplaincy · Automated Dispatch Engine" title="Chaplaincy Notification & Dispatch Center"
+                   description="Real-time monitoring of automated policy alerts, 14-day advance notice triggers, 3-day preacher sermon reminders, 2-day media tech notices, and gatekeeper security passes.">
+        @if(auth()->user()->isOffice())
+            <form method="POST" action="{{ route('notifications.trigger_reminders') }}">
+                @csrf
+                <button type="submit" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    Trigger Daily Policy Checks
+                </button>
+            </form>
+        @endif
+    </x-page-header>
+
+    {{-- Active channels --}}
+    <section aria-label="Dispatch channels" class="card overflow-hidden grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-px !bg-slate-100">
+        @php
+            $channels = [
+                ['Chaplaincy Email (SMTP)', 'chaplaincy@africau.edu', 'Connected &bull; Active', '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>'],
+                ['WhatsApp Dispatcher', '1-Click Direct URL', 'Zero Cost &bull; Instant', '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/>'],
+                ['PWA Push & Bells', 'Service Worker v1.2', 'Browser Telemetry Active', '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>'],
+                ['Calendar iCal (.ics)', 'RFC 5545 Sync', 'Google / Outlook Feed', '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>'],
+            ];
+        @endphp
+        @foreach($channels as [$label, $value, $status, $icon])
+            <div class="bg-white p-5 flex items-start gap-3.5">
+                <span class="w-10 h-10 rounded-xl grid place-items-center shrink-0 text-slate-600 bg-slate-50 ring-1 ring-slate-200/70">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">{!! $icon !!}</svg>
+                </span>
+                <div class="min-w-0">
+                    <span class="card-kicker block">{{ $label }}</span>
+                    <span class="block text-[13px] font-semibold text-slate-900 mt-0.5 truncate">{{ $value }}</span>
+                    <span class="mt-1 inline-flex items-center gap-1.5 text-[11.5px] font-medium text-emerald-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true"></span>{!! $status !!}
+                    </span>
                 </div>
-                <h1 class="text-2xl sm:text-4xl font-black font-cinzel tracking-tight text-white">
-                    Chaplaincy Notification & Dispatch Center
-                </h1>
-                <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl leading-relaxed">
-                    Real-time monitoring of automated policy alerts, 14-day advance notice triggers, 3-day preacher sermon reminders, 2-day media tech notices, and gatekeeper security passes.
-                </p>
             </div>
-            @if(auth()->user()->isOffice())
-                <div class="flex items-center space-x-3 shrink-0">
-                    <form method="POST" action="{{ route('notifications.trigger_reminders') }}">
-                        @csrf
-                        <button type="submit" class="inline-flex items-center space-x-2 px-5 py-3 rounded-2xl bg-white hover:bg-slate-100 text-brand text-xs font-black shadow-lg hover:shadow-xl transition transform active:scale-95 border border-white/30">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                            <span>Trigger Daily Policy Checks</span>
-                        </button>
-                    </form>
+        @endforeach
+    </section>
+
+    {{-- Telemetry columns --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+        {{-- 14-day advance rule alerts --}}
+        <section class="card">
+            <div class="card-header">
+                <div class="min-w-0">
+                    <p class="card-kicker">Proposals</p>
+                    <h2 class="card-title mt-0.5">14-Day Advance Alerts</h2>
                 </div>
-            @endif
-        </div>
-    </div>
-
-    <!-- Active Channel Status Bar -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            </div>
-            <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Chaplaincy Email (SMTP)</span>
-                <span class="text-xs font-bold text-slate-900">chaplaincy@africau.edu</span>
-                <span class="text-[10px] text-emerald-600 font-semibold block">Connected &bull; Active</span>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-green-50 text-green-700 flex items-center justify-center font-bold shrink-0">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.159.57 4.184 1.564 5.938l-1.564 5.714 5.86-1.537c1.7 1.011 3.684 1.595 5.803 1.595 6.627 0 12-5.373 12-12s-5.373-12-12-12z"/></svg>
-            </div>
-            <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">WhatsApp Dispatcher</span>
-                <span class="text-xs font-bold text-slate-900">1-Click Direct URL</span>
-                <span class="text-[10px] text-green-600 font-semibold block">Zero Cost &bull; Instant</span>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-            </div>
-            <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">PWA Push & Bells</span>
-                <span class="text-xs font-bold text-slate-900">Service Worker v1.2</span>
-                <span class="text-[10px] text-purple-600 font-semibold block">Browser Telemetry Active</span>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs flex items-center space-x-3.5">
-            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            </div>
-            <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Calendar iCal (.ics)</span>
-                <span class="text-xs font-bold text-slate-900">RFC 5545 Sync</span>
-                <span class="text-[10px] text-blue-600 font-semibold block">Google / Outlook Feed</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Telemetry Sections Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        <!-- Column 1: 14-Day Advance Rule Urgent Alerts -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-rose-600 animate-pulse"></span>
-                    <h2 class="text-xs font-bold font-cinzel text-slate-900 uppercase tracking-wider">14-Day Advance Alerts</h2>
-                </div>
-                <span class="text-[10px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full font-bold font-mono">{{ $urgentRequests->count() }} Pending</span>
+                <span class="badge badge-rose badge-dot tabular-nums shrink-0">{{ $urgentRequests->count() }} Pending</span>
             </div>
 
-            <div class="space-y-3">
+            <div class="divide-y divide-slate-100">
                 @forelse($urgentRequests as $req)
                     @php
                         $daysLeft = Carbon\Carbon::today()->diffInDays($req->event_date, false);
                     @endphp
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 hover:border-brand transition">
-                        <div class="flex items-center justify-between text-[11px]">
-                            <span class="font-bold text-slate-900 truncate">{{ $req->title }}</span>
-                            <span class="font-mono text-[10px] font-bold {{ $daysLeft < 14 ? 'text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded' : 'text-slate-500' }}">
+                    <div class="px-5 py-4 space-y-1.5 hover:bg-slate-50/60 transition-colors">
+                        <div class="flex items-start justify-between gap-3">
+                            <span class="text-[13px] font-semibold text-slate-900 truncate">{{ $req->title }}</span>
+                            <span class="shrink-0 tabular-nums text-[11px] font-semibold {{ $daysLeft < 14 ? 'badge badge-rose' : 'text-slate-500' }}">
                                 {{ $daysLeft }}d left
                             </span>
                         </div>
-                        <div class="text-[11px] text-slate-500 flex items-center justify-between">
-                            <span>{{ $req->club?->name }}</span>
-                            <span class="font-mono">{{ $req->event_date->format('M d') }}</span>
+                        <div class="text-[12px] text-slate-500 flex items-center justify-between gap-3">
+                            <span class="truncate">{{ $req->club?->name }}</span>
+                            <span class="tabular-nums shrink-0">{{ $req->event_date->format('M d') }}</span>
                         </div>
-                        <div class="pt-1 flex items-center justify-between">
-                            <span class="text-[10px] text-slate-400 font-mono">Ref: {{ $req->reference_no }}</span>
-                            <a href="{{ route('requests.show', $req->id) }}" class="text-[10px] font-bold text-brand hover:underline">
-                                Review Request &rarr;
-                            </a>
+                        <div class="pt-0.5 flex items-center justify-between gap-3">
+                            <span class="text-[11px] text-slate-400 font-mono">Ref: {{ $req->reference_no }}</span>
+                            <a href="{{ route('requests.show', $req->id) }}" class="card-link">Review Request</a>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-8 text-slate-400 text-xs italic">
-                        No pending requests with urgent 14-day rule constraints.
+                    <div class="empty-state !py-10">
+                        <div class="empty-state-mark">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                        </div>
+                        <p class="empty-state-text">No pending requests with urgent 14-day rule constraints.</p>
                     </div>
                 @endforelse
             </div>
-        </div>
+        </section>
 
-        <!-- Column 2: Worship Preparation Deadlines -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                    <h2 class="text-xs font-bold font-cinzel text-slate-900 uppercase tracking-wider">Liturgical Deadlines</h2>
+        {{-- Worship preparation deadlines --}}
+        <section class="card">
+            <div class="card-header">
+                <div class="min-w-0">
+                    <p class="card-kicker">Worship</p>
+                    <h2 class="card-title mt-0.5">Liturgical Deadlines</h2>
                 </div>
-                <span class="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded-full font-bold font-mono">Upcoming Services</span>
+                <span class="badge badge-gold shrink-0">Upcoming Services</span>
             </div>
 
-            <div class="space-y-3">
+            <div class="divide-y divide-slate-100">
                 @forelse($upcomingServices as $service)
                     @php
                         $daysToService = Carbon\Carbon::today()->diffInDays($service->service_date, false);
                     @endphp
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 hover:border-brand transition">
-                        <div class="flex items-center justify-between text-xs font-bold">
-                            <span class="text-slate-900">{{ $service->service_type }}</span>
-                            <span class="font-mono text-[10px] text-slate-500">{{ $service->service_date->format('l, M d') }}</span>
+                    <div class="px-5 py-4 space-y-2 hover:bg-slate-50/60 transition-colors">
+                        <div class="flex items-start justify-between gap-3">
+                            <span class="text-[13px] font-semibold text-slate-900">{{ $service->service_type }}</span>
+                            <span class="text-[11.5px] text-slate-500 shrink-0 tabular-nums">{{ $service->service_date->format('l, M d') }}</span>
                         </div>
-                        <div class="text-[11px] text-slate-600 truncate">
+                        <div class="font-display italic text-[13px] text-slate-600 truncate">
                             Theme: "{{ $service->theme ?: 'Worship Assembly' }}"
                         </div>
-                        <div class="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
-                            <div class="p-1.5 rounded-lg border {{ $service->preacher_submitted_materials ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800' }}">
+                        <div class="flex flex-wrap gap-1.5 pt-0.5">
+                            <span class="badge {{ $service->preacher_submitted_materials ? 'badge-emerald' : 'badge-amber' }}">
                                 Preacher Notes: {{ $service->preacher_submitted_materials ? 'Submitted' : 'Pending (3d)' }}
-                            </div>
-                            <div class="p-1.5 rounded-lg border {{ $service->media_notified ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-slate-100 border-slate-200 text-slate-600' }}">
+                            </span>
+                            <span class="badge {{ $service->media_notified ? 'badge-emerald' : '' }}">
                                 Media Desk: {{ $service->media_notified ? 'Notified' : 'Pending (2d)' }}
-                            </div>
+                            </span>
                         </div>
-                        <div class="pt-1 flex items-center justify-between text-[11px]">
-                            <a href="{{ route('worship.slides', $service->id) }}" target="_blank" class="text-[10px] font-bold text-slate-600 hover:text-slate-900">
+                        <div class="pt-0.5 flex items-center justify-between gap-3 text-[12px]">
+                            <a href="{{ route('worship.slides', $service->id) }}" target="_blank" class="font-semibold text-slate-500 hover:text-slate-900 transition-colors">
                                 Projector Slides
                             </a>
-                            <a href="{{ route('worship.show', $service->id) }}" class="text-[10px] font-bold text-brand hover:underline">
-                                Manage Service &rarr;
-                            </a>
+                            <a href="{{ route('worship.show', $service->id) }}" class="card-link">Manage Service</a>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-8 text-slate-400 text-xs italic">
-                        No upcoming worship service sheets scheduled.
+                    <div class="empty-state !py-10">
+                        <div class="empty-state-mark">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                        <p class="empty-state-text">No upcoming worship service sheets scheduled.</p>
                     </div>
                 @endforelse
             </div>
-        </div>
+        </section>
 
-        <!-- Column 3: Outstanding Post-Activity Reports (§7.1.2) -->
-        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div class="flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-                    <h2 class="text-xs font-bold font-cinzel text-slate-900 uppercase tracking-wider">§7.1.2 Report Filings</h2>
+        {{-- Outstanding post-activity reports (§7.1.2) --}}
+        <section class="card">
+            <div class="card-header">
+                <div class="min-w-0">
+                    <p class="card-kicker">Accountability</p>
+                    <h2 class="card-title mt-0.5">§7.1.2 Report Filings</h2>
                 </div>
-                <span class="text-[10px] bg-indigo-50 text-indigo-800 px-2 py-0.5 rounded-full font-bold font-mono">Post-Event</span>
+                <span class="badge shrink-0">Post-Event</span>
             </div>
 
-            <div class="space-y-3">
+            <div class="divide-y divide-slate-100">
                 @forelse($pendingReports as $ev)
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 hover:border-indigo-500 transition">
-                        <div class="flex items-center justify-between text-[11px] font-bold text-slate-900">
-                            <span class="truncate">{{ $ev->title }}</span>
-                            <span class="text-[10px] text-slate-500 font-mono">{{ $ev->event_date->format('M d') }}</span>
+                    <div class="px-5 py-4 space-y-1.5 hover:bg-slate-50/60 transition-colors">
+                        <div class="flex items-start justify-between gap-3">
+                            <span class="text-[13px] font-semibold text-slate-900 truncate">{{ $ev->title }}</span>
+                            <span class="text-[11.5px] text-slate-500 tabular-nums shrink-0">{{ $ev->event_date->format('M d') }}</span>
                         </div>
-                        <div class="text-[11px] text-slate-500">
+                        <div class="text-[12px] text-slate-500">
                             Sponsoring: <span class="font-semibold text-slate-800">{{ $ev->club?->name }}</span>
                         </div>
-                        <div class="pt-1 flex items-center justify-between text-[10px]">
-                            <span class="text-rose-600 font-semibold">Report Due Within 7 Days</span>
-                            <a href="{{ route('reports.create', ['event_id' => $ev->id]) }}" class="font-bold text-brand hover:underline">
-                                File Report &rarr;
-                            </a>
+                        <div class="pt-0.5 flex items-center justify-between gap-3 text-[11.5px]">
+                            <span class="text-rose-700 font-semibold">Report Due Within 7 Days</span>
+                            <a href="{{ route('reports.create', ['event_id' => $ev->id]) }}" class="card-link">File Report</a>
                         </div>
                     </div>
                 @empty
-                    <div class="text-center py-8 text-slate-400 text-xs italic">
-                        All recent fellowship activities have filed reports in compliance with §7.1.2.
+                    <div class="empty-state !py-10">
+                        <div class="empty-state-mark">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <p class="empty-state-text">All recent fellowship activities have filed reports in compliance with §7.1.2.</p>
                     </div>
                 @endforelse
             </div>
-        </div>
+        </section>
 
     </div>
 
-    <!-- Recent Dispatched Notifications Stream -->
-    <div class="bg-white rounded-3xl shadow-xs border border-slate-200/80 overflow-hidden">
-        <div class="p-6 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/60">
-            <div>
-                <h3 class="text-xs font-bold text-brand uppercase tracking-wider font-cinzel">
-                    Automated System Dispatch Ledger
-                </h3>
-                <p class="text-[11px] text-slate-500 mt-0.5">Cryptographic log of all simulated emails, SMS alerts, and clearance dispatches.</p>
+    {{-- Recent dispatched notifications --}}
+    <section class="card overflow-hidden">
+        <div class="card-header">
+            <div class="min-w-0">
+                <p class="card-kicker">Ledger</p>
+                <h3 class="card-title mt-0.5">Automated System Dispatch Ledger</h3>
+                <p class="text-[12px] text-slate-500 mt-0.5">Cryptographic log of all simulated emails, SMS alerts, and clearance dispatches.</p>
             </div>
-            <span class="text-xs font-mono text-slate-400">Ledger Active</span>
+            <span class="badge badge-emerald badge-dot shrink-0">Ledger Active</span>
         </div>
 
-        <div class="divide-y divide-slate-100 text-xs">
+        <div class="divide-y divide-slate-100">
             @forelse($recentDispatches as $log)
-                <div class="p-4 hover:bg-slate-50/70 transition flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-mono text-xs font-bold shrink-0 mt-0.5">
-                            ⚡
-                        </div>
-                        <div class="space-y-0.5">
-                            <div class="font-bold text-slate-900">
-                                {{ $log->user_name ?: ($log->user?->name ?: 'Automated Sentinel') }}
-                                <span class="ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700">
-                                    {{ $log->action }}
-                                </span>
+                <div class="px-5 py-4 hover:bg-slate-50/60 transition-colors flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div class="flex items-start gap-3.5 min-w-0">
+                        <span class="w-8 h-8 rounded-full grid place-items-center shrink-0 text-gold"
+                              style="background: radial-gradient(circle at 50% 35%, #fff, var(--color-gold-soft)); box-shadow: inset 0 0 0 1px rgb(184 137 43 / .25);">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </span>
+                        <div class="space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-[13px] font-semibold text-slate-900">{{ $log->user_name ?: ($log->user?->name ?: 'Automated Sentinel') }}</span>
+                                <span class="badge uppercase tracking-wider !text-[10px]">{{ $log->action }}</span>
                             </div>
-                            <p class="text-[11px] text-slate-600 max-w-2xl leading-relaxed">
+                            <p class="text-[12.5px] text-slate-600 max-w-2xl leading-relaxed">
                                 {{ $log->notes ?: 'Automated policy notification processed.' }}
                             </p>
                         </div>
                     </div>
-                    <div class="text-right text-[10px] text-slate-400 font-mono shrink-0">
+                    <div class="sm:text-right text-[11px] text-slate-400 font-mono shrink-0 pl-[2.875rem] sm:pl-0">
                         <div>{{ $log->created_at->timezone('Africa/Harare')->format('Y-m-d H:i:s') }} CAT</div>
                         <div>IP: {{ $log->ip_address ?: '127.0.0.1' }}</div>
                     </div>
                 </div>
             @empty
-                <div class="p-8 text-center text-slate-400 text-xs italic">
-                    No dispatches logged in the sentinel database yet.
+                <div class="empty-state">
+                    <div class="empty-state-mark">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <p class="empty-state-text">No dispatches logged in the sentinel database yet.</p>
                 </div>
             @endforelse
         </div>
-    </div>
+    </section>
 
 </div>
 @endsection

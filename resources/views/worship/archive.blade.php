@@ -3,51 +3,36 @@
 @section('title', 'Theme & Hymn History Archive')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
+<div class="page-shell space-y-6">
 
-    <!-- Top Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-brand tracking-wider uppercase">
-                <a href="{{ route('worship.index') }}" class="hover:underline">Worship Planning</a>
-                <span>&bull;</span>
-                <span class="text-slate-400 font-bold">Institutional Memory</span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-bold font-cinzel text-slate-900 tracking-tight mt-1">
-                Theme, Scripture & Hymn History Archive
-            </h1>
-            <p class="text-xs text-slate-500 mt-0.5">
-                Search past sermons, scripture readings, and hymn frequencies in Africa University's chapel database to prevent repetition and track ministry continuity.
-            </p>
-        </div>
-
-        <div class="flex items-center space-x-2">
-            <a href="{{ route('worship.index') }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold transition border border-slate-300 shadow-xs">
-                <span>&larr; Back to Service Sheets</span>
+    <x-page-header eyebrow="Worship Planning · Institutional Memory" title="Theme, Scripture & Hymn History Archive"
+                   description="Search past sermons, scripture readings, and hymn frequencies in Africa University's chapel database to prevent repetition and track ministry continuity.">
+        <a href="{{ route('worship.index') }}" class="btn btn-ghost">
+            <svg fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12l7.5-7.5M3 12h18"/></svg>
+            Back to Service Sheets
+        </a>
+        @if(auth()->user()->isOffice())
+            <a href="{{ route('worship.create') }}" class="btn btn-primary">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                New Service Sheet
             </a>
-            @if(auth()->user()->isOffice())
-                <a href="{{ route('worship.create') }}" class="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-sm">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>New Service Sheet</span>
-                </a>
-            @endif
-        </div>
-    </div>
+        @endif
+    </x-page-header>
 
-    <!-- Search & Filter Form -->
-    <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 p-5">
-        <form method="GET" action="{{ route('worship.archive') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+    {{-- Search & filter --}}
+    <section class="card">
+        <form method="GET" action="{{ route('worship.archive') }}" class="card-body grid grid-cols-1 sm:grid-cols-4 gap-4 items-end" role="search">
             <div class="sm:col-span-2">
-                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Search Keyword (Theme, Hymn, Scripture, or Preacher)</label>
+                <label for="archive-search" class="field-label">Search Keyword (Theme, Hymn, Scripture, or Preacher)</label>
                 <div class="relative">
-                    <input type="text" name="search" value="{{ $search }}" placeholder="e.g. O For a Thousand Tongues, Romans 12, Hope, Grace..." class="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand">
-                    <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" id="archive-search" name="search" value="{{ $search }}" placeholder="e.g. O For a Thousand Tongues, Romans 12, Hope, Grace..." class="field pl-10">
                 </div>
             </div>
 
             <div>
-                <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Preacher Filter</label>
-                <select name="preacher" class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand focus:border-brand">
+                <label for="archive-preacher" class="field-label">Preacher Filter</label>
+                <select id="archive-preacher" name="preacher" class="field">
                     <option value="">All Preachers</option>
                     @foreach($preachersList as $p)
                         <option value="{{ $p }}" {{ $preacherFilter == $p ? 'selected' : '' }}>{{ $p }}</option>
@@ -55,85 +40,82 @@
                 </select>
             </div>
 
-            <div class="flex items-end space-x-2">
-                <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-xs shadow-sm transition">
-                    Search Archive
-                </button>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="btn btn-primary flex-1">Search Archive</button>
                 @if($search || $preacherFilter || $yearFilter)
-                    <a href="{{ route('worship.archive') }}" class="py-2.5 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold text-xs border border-slate-300 transition">
-                        Reset
-                    </a>
+                    <a href="{{ route('worship.archive') }}" class="btn btn-secondary">Reset</a>
                 @endif
             </div>
         </form>
-    </div>
+    </section>
 
-    <!-- Archive Records Table -->
-    <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/60">
-            <h2 class="text-xs font-bold text-brand uppercase tracking-wider">
-                Historical Worship Records ({{ $records->total() }} matches)
-            </h2>
-            <span class="text-xs text-slate-500 font-mono">Total Chapel Archives: {{ $totalServices }} services</span>
+    {{-- Archive records --}}
+    <section class="card overflow-hidden">
+        <div class="card-header flex-wrap">
+            <div class="min-w-0">
+                <p class="card-kicker">Historical Worship Records</p>
+                <h2 class="card-title mt-0.5"><span class="stat-value">{{ $records->total() }}</span> matches</h2>
+            </div>
+            <span class="text-[12px] text-slate-500">Total Chapel Archives: <strong class="font-semibold text-slate-700 tabular-nums">{{ $totalServices }}</strong> services</span>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50/80 text-slate-500 uppercase tracking-wider text-[10px] border-b border-slate-200/80 font-bold">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th class="py-3 px-4">Date & Service</th>
-                        <th class="py-3 px-4">Theme</th>
-                        <th class="py-3 px-4">Scripture</th>
-                        <th class="py-3 px-4">Preacher</th>
-                        <th class="py-3 px-4">Hymns Sung</th>
-                        <th class="py-3 px-4 text-center">Accessibility</th>
-                        <th class="py-3 px-4 text-right">Actions</th>
+                        <th>Date & Service</th>
+                        <th>Theme</th>
+                        <th>Scripture</th>
+                        <th>Preacher</th>
+                        <th>Hymns Sung</th>
+                        <th class="text-center">Accessibility</th>
+                        <th class="text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody>
                     @forelse($records as $rec)
-                        <tr class="hover:bg-slate-50/70 transition">
-                            <td class="py-3.5 px-4 whitespace-nowrap">
-                                <div class="font-bold text-slate-900">{{ $rec->service_date->format('M d, Y') }}</div>
-                                <div class="text-[10px] text-slate-500">{{ $rec->service_type }}</div>
+                        <tr>
+                            <td class="whitespace-nowrap">
+                                <div class="font-semibold text-slate-900 tabular-nums">{{ $rec->service_date->format('M d, Y') }}</div>
+                                <div class="text-[11px] text-slate-500">{{ $rec->service_type }}</div>
                             </td>
-                            <td class="py-3.5 px-4 font-semibold text-slate-900 max-w-xs">
-                                {{ $rec->theme ?: '—' }}
+                            <td class="min-w-[12rem] max-w-xs">
+                                <span class="font-display text-[14px] leading-snug text-slate-900">{{ $rec->theme ?: '—' }}</span>
                             </td>
-                            <td class="py-3.5 px-4 text-slate-600 font-mono text-[11px]">
+                            <td class="text-slate-600 min-w-[9rem]">
                                 {{ $rec->scripture ?: '—' }}
                             </td>
-                            <td class="py-3.5 px-4 text-brand font-semibold">
+                            <td class="font-semibold text-slate-800 min-w-[9rem]">
                                 {{ $rec->preacher ?: 'Chaplaincy' }}
                             </td>
-                            <td class="py-3.5 px-4 max-w-xs text-slate-600 leading-snug">
+                            <td class="min-w-[15rem] max-w-sm text-slate-600 leading-snug text-[12.5px]">
                                 {{ $rec->hymns ?: 'Announced in service' }}
                             </td>
-                            <td class="py-3.5 px-4 text-center">
+                            <td class="text-center">
                                 @if($rec->sign_interpreter_required)
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200" title="{{ $rec->sign_interpreter_name ?: 'Sign Language Interpreter' }}">
-                                        Sign Int.
-                                    </span>
+                                    <span class="badge badge-emerald" title="{{ $rec->sign_interpreter_name ?: 'Sign Language Interpreter' }}">Sign Int.</span>
                                 @else
-                                    <span class="text-slate-400 text-[10px]">—</span>
+                                    <span class="text-slate-300">—</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
-                                <a href="{{ route('worship.slides', $rec->id) }}" target="_blank" title="Project Slides" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-brand text-white text-[10px] font-bold hover:bg-brand-dark transition">
-                                    Slides
-                                </a>
-                                <a href="{{ route('worship.bulletin', $rec->id) }}" target="_blank" title="Print Bulletin" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[10px] font-semibold hover:bg-slate-200 transition">
-                                    PDF / Print
-                                </a>
-                                <a href="{{ route('worship.show', $rec->id) }}" title="View Sheet" class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-brand text-[10px] font-semibold hover:bg-slate-200 transition">
-                                    Details
-                                </a>
+                            <td class="text-right whitespace-nowrap">
+                                <div class="inline-flex items-center gap-1">
+                                    <a href="{{ route('worship.slides', $rec->id) }}" target="_blank" title="Project Slides" class="btn btn-secondary btn-sm">Slides</a>
+                                    <a href="{{ route('worship.bulletin', $rec->id) }}" target="_blank" title="Print Bulletin" class="btn btn-ghost btn-sm">PDF / Print</a>
+                                    <a href="{{ route('worship.show', $rec->id) }}" title="View Sheet" class="btn btn-ghost btn-sm text-brand">Details</a>
+                                </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-12 text-center text-slate-400 text-xs">
-                                No historical service sheets matched your search criteria.
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-state-mark" aria-hidden="true">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                    </div>
+                                    <p class="empty-state-title">Nothing in the archive matches</p>
+                                    <p class="empty-state-text">No historical service sheets matched your search criteria.</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
@@ -142,11 +124,11 @@
         </div>
 
         @if($records->hasPages())
-            <div class="px-6 py-4 border-t border-slate-200/80 bg-slate-50/60">
+            <div class="px-5 py-4 border-t border-slate-100">
                 {{ $records->links() }}
             </div>
         @endif
-    </div>
+    </section>
 
 </div>
 @endsection

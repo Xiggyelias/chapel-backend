@@ -3,140 +3,154 @@
 @section('title', 'Institutional Audit Trail & Governance')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
+@php
+    $auditFilters = [
+        ['All Events', null, empty($actionFilter)],
+        ['Approvals Only', 'approve', $actionFilter === 'approve'],
+        ['Submissions', 'submit', $actionFilter === 'submit'],
+        ['VC Clearances', 'vc_go_ahead', $actionFilter === 'vc_go_ahead'],
+    ];
+@endphp
+<div class="page-shell space-y-6">
 
-    <!-- Top Header & Breadcrumbs -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <div class="flex items-center space-x-2 text-xs font-semibold text-brand tracking-wider uppercase">
-                <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
-                <span>&bull;</span>
-                <span class="text-slate-400 font-bold">Institutional Governance</span>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-bold font-cinzel text-slate-900 tracking-tight mt-1">
-                Security & Activity Audit Ledger
-            </h1>
-            <p class="text-xs text-slate-500 mt-0.5">
-                Immutable, cryptographic-stamped activity records capturing every proposal change, approval decision, VC concurrence, and document transaction.
-            </p>
+    <header class="page-header">
+        <div class="min-w-0">
+            <nav aria-label="Breadcrumb" class="eyebrow">
+                <a href="{{ route('dashboard') }}" class="hover:underline underline-offset-4">Dashboard</a>
+                <span class="text-slate-300" aria-hidden="true">/</span>
+                <span class="text-slate-500">Institutional Governance</span>
+            </nav>
+            <h1 class="page-title">Security &amp; Activity Audit Ledger</h1>
+            <p class="page-lede">Immutable, cryptographic-stamped activity records capturing every proposal change, approval decision, VC concurrence, and document transaction.</p>
         </div>
-
-        <!-- Filter Action Pills -->
-        <div class="flex items-center space-x-2">
-            <span class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-                <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                <span>Audit Sentinel Active</span>
+        <div class="page-actions">
+            <span class="badge badge-emerald py-1 px-2.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 breathe" style="--breathe: 5 150 105" aria-hidden="true"></span>
+                Audit Sentinel Active
             </span>
         </div>
-    </div>
+    </header>
 
-    <!-- Summary KPI Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Recorded Transactions</span>
-            <div class="text-2xl font-black font-cinzel text-slate-900">{{ number_format($totalLogsCount) }}</div>
-            <span class="text-[11px] text-slate-500">All actions logged permanently</span>
+    {{-- Ledger at a glance --}}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div class="dash-stat-card hover:!translate-y-0" style="--tone: var(--color-gold)">
+            <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-gold" aria-hidden="true"></span>
+                Total Recorded Transactions
+            </span>
+            <div class="mt-4 stat-value text-[2.4rem] text-slate-900">{{ number_format($totalLogsCount) }}</div>
+            <div class="mt-2 text-[11.5px] text-slate-500">All actions logged permanently</div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Chaplaincy Decisions Audited</span>
-            <div class="text-2xl font-black font-cinzel text-brand">{{ number_format($approvalActionsCount) }}</div>
-            <span class="text-[11px] text-red-700">Approvals, declines, changes requested</span>
+        <div class="dash-stat-card hover:!translate-y-0" style="--tone: var(--color-brand)">
+            <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand" aria-hidden="true"></span>
+                Chaplaincy Decisions Audited
+            </span>
+            <div class="mt-4 stat-value text-[2.4rem] text-brand-dark">{{ number_format($approvalActionsCount) }}</div>
+            <div class="mt-2 text-[11.5px] text-slate-500">Approvals, declines, changes requested</div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-xs border border-slate-200/80 space-y-1">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Proposals Submitted</span>
-            <div class="text-2xl font-black font-cinzel text-indigo-900">{{ number_format($submissionActionsCount) }}</div>
-            <span class="text-[11px] text-indigo-700">Student leader filings</span>
-        </div>
-    </div>
-
-    <!-- Filter Bar -->
-    <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('audit.index') }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ empty($actionFilter) ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                All Events
-            </a>
-            <a href="{{ route('audit.index', ['action' => 'approve']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'approve' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                Approvals Only
-            </a>
-            <a href="{{ route('audit.index', ['action' => 'submit']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'submit' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                Submissions
-            </a>
-            <a href="{{ route('audit.index', ['action' => 'vc_go_ahead']) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $actionFilter === 'vc_go_ahead' ? 'bg-brand text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
-                VC Clearances
-            </a>
-        </div>
-        <div class="text-xs text-slate-500 font-mono">
-            Immutable SQLite / MySQL DB Ledger
+        <div class="dash-stat-card hover:!translate-y-0" style="--tone: var(--color-slate-300)">
+            <span class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-300" aria-hidden="true"></span>
+                Proposals Submitted
+            </span>
+            <div class="mt-4 stat-value text-[2.4rem] text-slate-900">{{ number_format($submissionActionsCount) }}</div>
+            <div class="mt-2 text-[11.5px] text-slate-500">Student leader filings</div>
         </div>
     </div>
 
-    <!-- Audit Table -->
-    <div class="bg-white rounded-2xl shadow-xs border border-slate-200/80 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
+    {{-- Ledger --}}
+    <section class="card overflow-hidden" aria-labelledby="ledger-heading">
+        <div class="card-header flex-col items-stretch md:flex-row md:items-center">
+            <div class="min-w-0">
+                <p class="card-kicker font-mono !tracking-normal !normal-case">Immutable SQLite / MySQL DB Ledger</p>
+                <h2 id="ledger-heading" class="card-title mt-0.5">Activity ledger</h2>
+            </div>
+            <div class="overflow-x-auto -mx-1 px-1">
+                <nav class="segmented" aria-label="Filter by action">
+                    @foreach($auditFilters as [$label, $action, $isActive])
+                        <a href="{{ $action ? route('audit.index', ['action' => $action]) : route('audit.index') }}"
+                           class="whitespace-nowrap {{ $isActive ? 'is-active' : '' }}"
+                           @if($isActive) aria-current="page" @endif>{{ $label }}</a>
+                    @endforeach
+                </nav>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="table min-w-[62rem]">
                 <thead>
-                    <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        <th class="py-3 px-4">Timestamp (CAT)</th>
-                        <th class="py-3 px-4">Authorized User</th>
-                        <th class="py-3 px-4">Action Taken</th>
-                        <th class="py-3 px-4">Related Dossier</th>
-                        <th class="py-3 px-4">Status Transition</th>
-                        <th class="py-3 px-4">Operational Remarks</th>
-                        <th class="py-3 px-4 text-right">IP Address</th>
+                    <tr>
+                        <th scope="col">Timestamp (CAT)</th>
+                        <th scope="col">Authorized User</th>
+                        <th scope="col">Action Taken</th>
+                        <th scope="col">Related Dossier</th>
+                        <th scope="col">Status Transition</th>
+                        <th scope="col">Operational Remarks</th>
+                        <th scope="col" class="text-right">IP Address</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-xs">
+                <tbody>
                     @forelse($logs as $log)
-                        <tr class="hover:bg-slate-50/60 transition">
-                            <td class="py-3.5 px-4 whitespace-nowrap text-slate-500 font-mono text-[11px]">
+                        @php
+                            $actionTone = match (true) {
+                                str_contains($log->action, 'decline') => 'badge-rose',
+                                str_contains($log->action, 'vc')      => 'badge-gold',
+                                str_contains($log->action, 'approve') => 'badge-emerald',
+                                str_contains($log->action, 'submit')  => 'badge-sky',
+                                default                               => '',
+                            };
+                        @endphp
+                        <tr>
+                            <td class="w-[6.5rem] font-mono text-[11.5px] leading-snug text-slate-500">
                                 {{ $log->created_at->timezone('Africa/Harare')->format('Y-m-d H:i:s') }}
                             </td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
-                                <div class="font-bold text-slate-900">{{ $log->user_name ?: ($log->user?->name ?: 'System Automatic') }}</div>
+                            <td class="min-w-[9rem]">
+                                <div class="font-semibold text-slate-900">{{ $log->user_name ?: ($log->user?->name ?: 'System Automatic') }}</div>
                                 @if($log->user)
-                                    <div class="text-[10px] text-slate-400">{{ $log->user->getRoleDisplayName() }}</div>
+                                    <div class="text-[11px] text-slate-400">{{ $log->user->getRoleDisplayName() }}</div>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
-                                <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider
-                                    {{ str_contains($log->action, 'approve') ? 'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600/20' : '' }}
-                                    {{ str_contains($log->action, 'decline') ? 'bg-rose-50 text-rose-800 ring-1 ring-rose-600/20' : '' }}
-                                    {{ str_contains($log->action, 'submit') ? 'bg-indigo-50 text-indigo-800 ring-1 ring-indigo-600/20' : '' }}
-                                    {{ str_contains($log->action, 'vc') ? 'bg-purple-50 text-purple-800 ring-1 ring-purple-600/20' : '' }}
-                                    {{ !str_contains($log->action, 'approve') && !str_contains($log->action, 'decline') && !str_contains($log->action, 'submit') && !str_contains($log->action, 'vc') ? 'bg-slate-100 text-slate-700' : '' }}">
-                                    {{ $log->action }}
-                                </span>
+                            <td class="whitespace-nowrap">
+                                <span class="badge {{ $actionTone }} font-mono !text-[10.5px]">{{ $log->action }}</span>
                             </td>
-                            <td class="py-3.5 px-4">
+                            <td class="min-w-[13rem]">
                                 @if($log->request)
-                                    <a href="{{ route('requests.show', $log->request?->id) }}" class="font-semibold text-brand hover:underline">
+                                    <a href="{{ route('requests.show', $log->request?->id) }}" class="font-semibold text-brand hover:text-brand-dark hover:underline underline-offset-2">
                                         {{ $log->request?->title }}
                                     </a>
-                                    <div class="text-[10px] text-slate-400">Ref: {{ $log->request?->reference_no }} &bull; {{ $log->request?->club?->name }}</div>
+                                    <div class="text-[11px] text-slate-400">Ref: {{ $log->request?->reference_no }} &bull; {{ $log->request?->club?->name }}</div>
                                 @else
-                                    <span class="text-slate-400">&mdash;</span>
+                                    <span class="text-slate-300">&mdash;</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 whitespace-nowrap">
+                            <td class="whitespace-nowrap text-[12px]">
                                 @if($log->old_status || $log->new_status)
                                     <span class="text-slate-400">{{ $log->old_status ?: 'start' }}</span>
-                                    <span class="text-slate-300 mx-1">&rarr;</span>
-                                    <span class="font-bold text-slate-800">{{ $log->new_status }}</span>
+                                    <span class="text-gold mx-1" aria-hidden="true">&rarr;</span>
+                                    <span class="font-semibold text-slate-800">{{ $log->new_status }}</span>
                                 @else
-                                    <span class="text-slate-400">&mdash;</span>
+                                    <span class="text-slate-300">&mdash;</span>
                                 @endif
                             </td>
-                            <td class="py-3.5 px-4 text-slate-600 max-w-xs truncate" title="{{ $log->notes }}">
-                                {{ $log->notes ?: 'Standard operational execution' }}
+                            <td class="text-slate-600 min-w-[12rem] max-w-[15rem]" title="{{ $log->notes }}">
+                                <span class="line-clamp-2">
+                                {{ $log->notes ?: 'Standard operational execution' }}</span>
                             </td>
-                            <td class="py-3.5 px-4 text-right font-mono text-[11px] text-slate-400">
+                            <td class="text-right font-mono text-[11.5px] text-slate-400">
                                 {{ $log->ip_address ?: '127.0.0.1' }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-12 text-center text-slate-400 text-xs">
-                                No audit events logged under the selected criteria.
+                            <td colspan="7" class="!p-0">
+                                <div class="empty-state">
+                                    <div class="empty-state-mark" aria-hidden="true">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    </div>
+                                    <p class="empty-state-title">Nothing recorded</p>
+                                    <p class="empty-state-text">No audit events logged under the selected criteria.</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
@@ -145,11 +159,11 @@
         </div>
 
         @if($logs->hasPages())
-            <div class="p-4 border-t border-slate-100 bg-slate-50/50">
+            <div class="px-5 py-4 border-t border-slate-100">
                 {{ $logs->links() }}
             </div>
         @endif
-    </div>
+    </section>
 
 </div>
 @endsection

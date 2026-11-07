@@ -7,123 +7,114 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <title>Charter Application Receipt | Kwang-Lim Chapel - Africa University</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+    @include('partials.head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
-        .font-cinzel { font-family: 'Cinzel', Georgia, serif; }
+        @media print {
+            @page { margin: 14mm; }
+            html, body { background: #fff !important; }
+            .receipt-card { box-shadow: none !important; border-color: #D5CEC3 !important; }
+            .receipt-ink { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .receipt-shell { padding-top: 0 !important; }
+        }
     </style>
 </head>
-<body class="min-h-full flex flex-col justify-between p-4 sm:p-6 bg-[#F8FAFC] text-slate-800 relative selection:bg-brand selection:text-white">
-
-    <!-- Ambient Subtle Glow Background -->
-    <div class="fixed inset-0 pointer-events-none overflow-hidden select-none">
-        <div class="absolute -top-32 -left-32 w-96 h-96 bg-red-100/40 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-slate-100 rounded-full blur-3xl"></div>
-    </div>
+<body class="min-h-full bg-paper text-slate-800 antialiased selection:bg-brand selection:text-white">
 
     <!-- Main Receipt Container -->
-    <div class="max-w-xl w-full mx-auto my-auto relative z-10 py-8 space-y-6">
-        
-        <!-- Header & AU Crest -->
-        <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand p-2.5 shadow-md shadow-red-200">
-                <svg class="w-full h-full text-white" viewBox="0 0 100 100" fill="currentColor">
-                    <rect x="44" y="12" width="12" height="76" rx="3" fill="#FFFFFF" />
-                    <rect x="22" y="32" width="56" height="12" rx="3" fill="#FFFFFF" />
-                    <circle cx="50" cy="38" r="16" fill="none" stroke="#FFFFFF" stroke-width="2.5" opacity="0.6" stroke-dasharray="5 3"/>
-                </svg>
-            </div>
-            <div>
-                <div class="text-xs uppercase tracking-widest text-brand font-bold">
-                    Africa University Chaplaincy
-                </div>
-                <h1 class="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
-                    Charter Application Receipt
-                </h1>
-            </div>
-        </div>
+    <main class="receipt-shell max-w-xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-7">
+
+        <!-- Header & Crest -->
+        <header class="text-center">
+            <span class="inline-grid place-items-center w-14 h-14 rounded-full"
+                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .5), 0 10px 22px -8px rgb(165 28 48 / .6);">
+                <x-umc-logo class="w-[1.4rem] h-[1.4rem]" />
+            </span>
+            <p class="mt-5 text-[10.5px] font-bold uppercase tracking-[0.22em] text-brand">Africa University Chaplaincy</p>
+            <h1 class="page-title mt-2 !text-[2rem] sm:!text-[2.4rem]">Charter Application Receipt</h1>
+        </header>
 
         <!-- Receipt Card -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 text-slate-800 shadow-2xl border border-white/20 space-y-6 relative overflow-hidden">
-            <div class="absolute top-0 left-0 right-0 h-2 bg-brand"></div>
+        <section class="receipt-card card overflow-hidden">
+            <div class="h-1 bg-gradient-to-r from-brand via-brand to-gold" aria-hidden="true"></div>
 
-            <!-- Success Pill -->
-            <div class="flex items-center space-x-3 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900">
-                <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                </div>
-                <div>
-                    <div class="font-bold text-xs uppercase tracking-wider text-emerald-950">Application Safely Lodged</div>
-                    <div class="text-[11px] text-emerald-800">Your charter request has been registered in the Chaplaincy staging vault.</div>
-                </div>
-            </div>
-
-            <!-- Tracking Code Box -->
-            <div class="p-4 rounded-2xl bg-slate-900 text-white text-center space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-rose-200">Official Tracking Reference</span>
-                <div class="text-2xl font-mono font-black tracking-wider text-white select-all">
-                    {{ $club->tracking_code ?? session('tracking_code', 'AU-CHTR-' . strtoupper(Str::random(6))) }}
-                </div>
-                <p class="text-[10px] text-slate-400">Keep this reference code for Chaplaincy Office verification and status inquiries.</p>
-            </div>
-
-            <!-- Application Summary -->
-            <div class="space-y-3 divide-y divide-slate-100 text-xs">
-                <div class="pt-2 flex justify-between items-center">
-                    <span class="text-slate-500 font-medium">Fellowship Name</span>
-                    <span class="font-bold text-slate-900 text-right">{{ $club->name ?? 'Student Fellowship' }}</span>
-                </div>
-                <div class="pt-2 flex justify-between items-center">
-                    <span class="text-slate-500 font-medium">Acronym / Code</span>
-                    <span class="font-mono font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded">{{ $club->code ?? 'N/A' }}</span>
-                </div>
-                <div class="pt-2 flex justify-between items-center">
-                    <span class="text-slate-500 font-medium">Founding President</span>
-                    <span class="font-bold text-slate-900">{{ $club->founding_president_name ?? 'Applicant' }}</span>
-                </div>
-                <div class="pt-2 flex justify-between items-center">
-                    <span class="text-slate-500 font-medium">Student / Staff ID</span>
-                    <span class="font-mono text-slate-800">{{ $club->student_id ?? 'Verified' }}</span>
-                </div>
-                <div class="pt-2 flex justify-between items-center">
-                    <span class="text-slate-500 font-medium">Current Status</span>
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
-                        &bull; Pending Chaplaincy Review
+            <div class="p-6 sm:p-8 space-y-6">
+                <!-- Lodged confirmation -->
+                <div class="flex items-start gap-3.5">
+                    <span class="w-9 h-9 rounded-full grid place-items-center shrink-0 bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20" aria-hidden="true">
+                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     </span>
+                    <div>
+                        <p class="text-[13.5px] font-semibold text-slate-900">Application Safely Lodged</p>
+                        <p class="mt-0.5 text-[12.5px] text-slate-500">Your charter request has been registered in the Chaplaincy staging vault.</p>
+                    </div>
+                </div>
+
+                <!-- Tracking Code Box -->
+                <div class="receipt-ink relative grain on-dark rounded-2xl bg-ink text-white text-center px-5 py-6 overflow-hidden"
+                     style="background-image: radial-gradient(90% 120% at 50% 0%, rgb(184 137 43 / 0.16), transparent 65%);">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-gold-light">Official Tracking Reference</p>
+                    <p class="mt-2 font-mono text-[1.6rem] sm:text-[1.85rem] font-semibold tracking-[0.08em] text-white select-all break-all">{{ $club->tracking_code ?? session('tracking_code', 'AU-CHTR-' . strtoupper(Str::random(6))) }}</p>
+                    <p class="mt-2 text-[11.5px] text-white/50">Keep this reference code for Chaplaincy Office verification and status inquiries.</p>
+                </div>
+
+                <!-- Application Summary -->
+                <dl class="divide-y divide-slate-100 text-[13px]">
+                    <div class="py-2.5 flex justify-between items-center gap-4">
+                        <dt class="text-slate-500">Fellowship Name</dt>
+                        <dd class="font-display text-[15px] text-slate-900 text-right">{{ $club->name ?? 'Student Fellowship' }}</dd>
+                    </div>
+                    <div class="py-2.5 flex justify-between items-center gap-4">
+                        <dt class="text-slate-500">Acronym / Code</dt>
+                        <dd class="font-mono text-[12px] font-semibold text-slate-800">{{ $club->code ?? 'N/A' }}</dd>
+                    </div>
+                    <div class="py-2.5 flex justify-between items-center gap-4">
+                        <dt class="text-slate-500">Founding President</dt>
+                        <dd class="font-semibold text-slate-900 text-right">{{ $club->founding_president_name ?? 'Applicant' }}</dd>
+                    </div>
+                    <div class="py-2.5 flex justify-between items-center gap-4">
+                        <dt class="text-slate-500">Student / Staff ID</dt>
+                        <dd class="font-mono text-[12px] text-slate-800">{{ $club->student_id ?? 'Verified' }}</dd>
+                    </div>
+                    <div class="py-2.5 flex justify-between items-center gap-4">
+                        <dt class="text-slate-500">Current Status</dt>
+                        <dd><span class="badge badge-amber badge-dot">Pending Chaplaincy Review</span></dd>
+                    </div>
+                </dl>
+
+                <!-- Security Quarantine Notice -->
+                <div class="rounded-2xl bg-paper ring-1 ring-black/5 p-4 sm:p-5">
+                    <p class="flex items-center gap-2 text-[12.5px] font-semibold text-slate-900">
+                        <svg class="w-4 h-4 text-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                        Security &amp; Quarantine Policy (Chapel Manual §2.3)
+                    </p>
+                    <p class="mt-2 text-[12px] text-slate-600 leading-relaxed">
+                        Per Africa University Chaplaincy regulations, this application is in secure quarantine. No administrative portal logins, Master Calendar reservations, or sanctuary access will be granted until the University Chaplain and Chapel Committee review your draft constitution and ratify the charter.
+                    </p>
+                </div>
+
+                <!-- Return Action -->
+                <div class="no-print flex flex-col sm:flex-row gap-2 pt-1">
+                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg flex-1">
+                        Return to Kwang-Lim Portal Sign In
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                    <button type="button" onclick="window.print()" class="btn btn-secondary btn-lg">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        Print
+                    </button>
                 </div>
             </div>
-
-            <!-- Security Quarantine Notice -->
-            <div class="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 text-amber-950 text-xs space-y-1.5">
-                <div class="font-bold flex items-center space-x-1.5 text-amber-900">
-                    <svg class="w-4 h-4 text-amber-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span>Security & Quarantine Policy (Chapel Manual §2.3)</span>
-                </div>
-                <p class="text-[11px] text-amber-900/90 leading-relaxed">
-                    Per Africa University Chaplaincy regulations, this application is in secure quarantine. No administrative portal logins, Master Calendar reservations, or sanctuary access will be granted until the University Chaplain and Chapel Committee review your draft constitution and ratify the charter.
-                </p>
-            </div>
-
-            <!-- Return Action -->
-            <div class="pt-2">
-                <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-brand hover:bg-brand-dark text-white font-bold text-xs uppercase tracking-wider transition shadow-sm active:scale-95">
-                    <span>Return to Kwang-Lim Portal Sign In</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
-            </div>
-        </div>
+        </section>
 
         <!-- Footer -->
-        <div class="text-center text-[11px] text-slate-400 space-y-1">
-            <p>Kwang-Lim Chapel &bull; Fellowship Registry</p>
-            <p class="text-[10px]">For questions regarding your charter application, contact the Chaplaincy Office.</p>
-        </div>
+        <footer class="text-center space-y-1.5">
+            <p class="text-[12px] font-medium text-slate-500">Kwang-Lim Chapel &bull; Fellowship Registry</p>
+            <p class="text-[11.5px] text-slate-400">For questions regarding your charter application, contact the Chaplaincy Office.</p>
+        </footer>
 
-    </div>
+    </main>
 
 </body>
 </html>

@@ -1,72 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#F6F3EE">
     <title>Meeting Check-In{{ $matchingClub ? ' - ' . $matchingClub->name : '' }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    @include('partials.head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
-    </style>
 </head>
-<body class="min-h-screen text-slate-800 p-4 flex flex-col items-center justify-center">
+<body class="min-h-full bg-paper text-slate-800 antialiased">
+<div class="min-h-screen px-4 py-10 sm:py-14 flex flex-col items-center justify-center"
+     style="background: radial-gradient(80% 40% at 50% 0%, rgb(217 183 108 / .14), transparent 70%);">
 
-    <div class="max-w-md w-full space-y-6">
-        
-        <div class="text-center space-y-2">
-            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand p-2 mb-1 shadow-md shadow-red-200">
-                <x-umc-logo class="w-full h-full" />
-            </div>
-            <div class="text-xs uppercase tracking-widest text-brand font-bold">Africa University Chaplaincy</div>
-            <h1 class="text-2xl font-bold text-slate-900">{{ $matchingClub?->name ?? 'Check-In Code Expired' }}</h1>
-            <p class="text-xs text-slate-500">Fellowship Attendance &bull; {{ date('l, F j, Y') }}</p>
+    <div class="max-w-md w-full space-y-7">
+
+        <div class="text-center" data-reveal>
+            <span class="inline-grid place-items-center w-14 h-14 rounded-full mb-5"
+                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px var(--color-paper), 0 0 0 4px rgb(184 137 43 / .45), 0 12px 24px -12px rgb(94 15 28 / .6);">
+                <x-umc-logo class="w-6 h-6" />
+            </span>
+            <p class="text-[10.5px] uppercase tracking-[0.24em] text-brand font-bold">Africa University Chaplaincy</p>
+            <h1 class="mt-2.5 font-display text-[2rem] sm:text-[2.3rem] leading-[1.06] tracking-[-0.025em] text-slate-900 text-balance" data-ink>{{ $matchingClub?->name ?? 'Check-In Code Expired' }}</h1>
+            <p class="mt-2 text-[13px] text-slate-500">Fellowship Attendance <span class="text-gold mx-1" aria-hidden="true">&#9670;</span> {{ date('l, F j, Y') }}</p>
         </div>
 
         @if(!$matchingClub)
-        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-amber-200 text-center space-y-2">
-            <h2 class="text-base font-bold text-amber-900">This check-in code is not valid today</h2>
-            <p class="text-xs text-slate-600">Kiosk codes change every day. Please scan the QR code currently displayed at the meeting entrance, or ask a club leader to record your attendance.</p>
+        <div class="card card-body text-center sm:p-8" data-reveal>
+            <div class="mx-auto mb-4 grid place-items-center w-12 h-12 rounded-full bg-amber-50 text-amber-600 ring-1 ring-amber-600/25" aria-hidden="true">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8v4l2.5 2.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h2 class="font-display text-[1.25rem] text-slate-900">This check-in code is not valid today</h2>
+            <p class="mt-2 text-[13.5px] leading-relaxed text-slate-600">Kiosk codes change every day. Please scan the QR code currently displayed at the meeting entrance, or ask a club leader to record your attendance.</p>
         </div>
         @else
-        <div id="checkinCard" class="bg-white text-slate-900 rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-6">
-            
-            <div class="text-center space-y-1">
-                <h2 class="text-base font-bold text-slate-800">Welcome to Fellowship 👋</h2>
-                <p class="text-xs text-slate-500">Enter your Student ID or AU Email to record your attendance today.</p>
+        <div id="checkinCard" class="card p-6 sm:p-8 space-y-6" data-reveal>
+
+            <div class="text-center">
+                <h2 class="font-display text-[1.4rem] text-slate-900">Welcome to Fellowship</h2>
+                <p class="mt-1.5 text-[13.5px] leading-relaxed text-slate-500">Enter your Student ID or AU Email to record your attendance today.</p>
             </div>
 
             <form id="checkinForm" onsubmit="submitCheckin(event)" class="space-y-4">
                 @csrf
 
                 <div>
-                    <label for="student_input" class="block text-xs font-semibold text-slate-700 mb-1.5">Student ID or AU Email</label>
-                    <input type="text" id="student_input" required minlength="3" maxlength="255" autocomplete="email" autofocus placeholder="e.g. 102458 or bmutasa@africau.edu" class="w-full text-sm p-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition">
+                    <label for="student_input" class="field-label">Student ID or AU Email</label>
+                    <input type="text" id="student_input" required minlength="3" maxlength="255" autocomplete="email" autofocus placeholder="e.g. 102458 or bmutasa@africau.edu" class="field text-[16px] py-3.5">
                 </div>
 
-                <button type="submit" id="submitBtn" class="w-full py-3.5 px-4 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold uppercase tracking-wider transition shadow-sm active:scale-98">
-                    Confirm My Attendance
-                </button>
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-lg btn-block">Confirm My Attendance</button>
             </form>
 
-            <p id="errorBox" role="alert" class="hidden text-xs text-rose-800 bg-rose-50 border border-rose-200 rounded-xl p-3"></p>
+            <p id="errorBox" role="alert" class="hidden flash-error text-[13px] leading-relaxed"></p>
 
-            <div id="resultBox" role="status" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-2 animate-fade-in">
-                <div class="w-12 h-12 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xl mb-1 shadow-xs">✓</div>
-                <div class="text-base font-bold text-emerald-900" id="resultName">Checked In!</div>
-                <div class="text-xs text-emerald-700 font-medium" id="resultMsg">Attendance successfully recorded. Welcome!</div>
+            <div id="resultBox" role="status" class="hidden text-center py-2 modal-panel">
+                <span class="mx-auto mb-4 grid place-items-center w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-emerald-600/20" style="box-shadow: 0 0 0 6px rgb(5 150 105 / .06);" aria-hidden="true">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 13l4 4L19 7"/></svg>
+                </span>
+                <div class="font-display text-[1.6rem] leading-tight text-slate-900" id="resultName">Checked In!</div>
+                <div class="mt-2 text-[13px] text-emerald-700 font-medium" id="resultMsg">Attendance successfully recorded. Welcome!</div>
             </div>
 
         </div>
         @endif
 
-        <div class="text-center text-xs text-slate-400">
+        <div class="rule-ornament text-[9px]" aria-hidden="true">&#9670;</div>
+
+        <p class="text-center text-[11.5px] leading-relaxed text-slate-400">
             Kwang-Lim Chapel &bull; Africa University &bull; School of Dreams in the Valley of Hope
-        </div>
+        </p>
 
     </div>
+</div>
 
     <script>
         async function submitCheckin(e) {

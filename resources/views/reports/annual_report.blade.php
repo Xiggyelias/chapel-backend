@@ -4,149 +4,182 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Africa University Kwang-Lim Chapel - Annual Ministry Report {{ $year }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+    @include('partials.head')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
-        .font-cinzel { font-family: 'Cinzel', Georgia, serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .report-sheet { box-shadow: 0 1px 2px rgb(28 24 21 / .04), 0 30px 60px -30px rgb(28 24 21 / .28); }
+        .report-prose { hyphens: auto; -webkit-hyphens: auto; text-wrap: pretty; }
+        .report-prose::first-letter {
+            float: left;
+            font-family: var(--font-display);
+            font-size: 3.4em;
+            line-height: .82;
+            padding: .06em .05em 0 0;
+            color: var(--color-brand);
+            font-variation-settings: 'SOFT' 100, 'opsz' 144;
+        }
+        .section-numeral { font-family: var(--font-display); font-style: italic; color: var(--color-gold); }
+        .ledger th { font-size: .625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--color-slate-500); font-weight: 600; padding: .625rem .75rem; border-bottom: 1px solid var(--color-slate-900); }
+        .ledger td { padding: .7rem .75rem; border-bottom: 1px solid rgb(28 24 21 / .08); vertical-align: baseline; }
+        .ledger tbody tr:last-child td { border-bottom: 1px solid var(--color-slate-900); }
+
+        @page { size: A4; margin: 16mm 15mm 18mm; }
         @media print {
             .no-print { display: none !important; }
-            body { background: #ffffff !important; padding: 0 !important; }
-            .report-card { border: none !important; box-shadow: none !important; border-radius: 0 !important; }
+            html, body { background: #ffffff !important; }
+            body { padding: 0 !important; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .report-card { border: none !important; box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; max-width: none !important; }
+            .ledger thead { display: table-header-group; }
+            .ledger tr, .report-figures > div, .report-signatures { break-inside: avoid; }
+            .report-section { break-inside: avoid-page; }
+            a { color: inherit !important; text-decoration: none !important; }
         }
     </style>
 </head>
-<body class="p-4 sm:p-10 text-xs">
+<body class="bg-paper text-slate-800 px-4 py-6 sm:px-10 sm:py-10">
 
-    <!-- Top Action Bar (hidden on print) -->
-    <div class="no-print max-w-5xl mx-auto mb-6 flex items-center justify-between">
-        <a href="{{ route('reports.budget_tracker') }}" class="text-xs text-brand font-bold hover:underline flex items-center space-x-1">
-            <span>&larr; Back to Budget Tracker</span>
+    {{-- Action bar (hidden on print) --}}
+    <div class="no-print max-w-[54rem] mx-auto mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <a href="{{ route('reports.budget_tracker') }}" class="btn btn-ghost self-start -ml-3">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back to Budget Tracker
         </a>
-        <div class="flex items-center space-x-3">
-            <a href="{{ route('exports.budget_tracker') }}" class="px-4 py-2 rounded-xl bg-white text-slate-800 text-xs font-bold border border-slate-300 hover:bg-slate-50 transition shadow-xs">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="{{ route('exports.budget_tracker') }}" class="btn btn-secondary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 Download CSV Data
             </a>
-            <button onclick="window.print()" class="px-5 py-2 rounded-xl bg-brand hover:bg-brand-dark text-white text-xs font-bold transition shadow-sm">
+            <button type="button" onclick="window.print()" class="btn btn-primary">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
                 Print / Save PDF Report
             </button>
         </div>
     </div>
 
-    <!-- Official Report Paper Container -->
-    <div class="report-card max-w-5xl mx-auto bg-white rounded-3xl p-8 sm:p-12 shadow-xl border-2 border-slate-200/80 space-y-8">
-        
-        <!-- Institutional Header -->
-        <div class="border-b-2 border-brand pb-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="flex items-center space-x-4">
-                <div class="w-16 h-16 rounded-2xl bg-brand border border-white/20 flex items-center justify-center p-2.5 shadow-md shrink-0">
-                    <x-umc-logo class="w-full h-full" />
-                </div>
-                <div>
-                    <span class="text-xs font-bold uppercase tracking-wider text-brand block">
-                        Office of the Chaplain
-                    </span>
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 leading-tight">
-                        Kwang-Lim Chapel Annual Ministry Report
-                    </h1>
-                    <p class="text-[11px] text-slate-500 font-mono mt-0.5">
-                        Academic Year {{ $year }}/{{ $year + 1 }} &bull; Kwang-Lim Chapel
-                    </p>
-                </div>
-            </div>
+    {{-- The document --}}
+    <article class="report-card report-sheet max-w-[54rem] mx-auto bg-white rounded-[4px] px-6 py-10 sm:px-16 sm:py-16">
 
-            <div class="text-right sm:border-l border-slate-200 sm:pl-6 space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Report Dossier Ref</span>
-                <span class="font-mono font-bold text-xs text-brand">AU-CHAPEL-AR-{{ $year }}</span>
-                <span class="text-[10px] text-slate-400 block font-mono">Issued: {{ date('F d, Y') }}</span>
-            </div>
-        </div>
+        {{-- Masthead --}}
+        <header class="text-center">
+            <span class="mx-auto w-14 h-14 rounded-full grid place-items-center"
+                  style="background: radial-gradient(circle at 35% 30%, #C52A40, var(--color-brand-deep)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .14), 0 0 0 3px #fff, 0 0 0 4px rgb(184 137 43 / .55);">
+                <x-umc-logo class="w-6 h-6" />
+            </span>
 
-        <!-- Executive Narrative Summary -->
-        <div class="space-y-2">
-            <h2 class="font-cinzel text-sm font-bold uppercase tracking-wider text-brand">
+            <p class="mt-5 text-[10px] font-bold uppercase tracking-[0.28em] text-brand">Africa University &middot; Office of the Chaplain</p>
+            <h1 class="mt-3 font-display text-[2rem] sm:text-[2.6rem] leading-[1.05] tracking-[-0.025em] text-slate-900 text-balance"
+                style="font-weight: 400 !important; font-variation-settings: 'SOFT' 80, 'opsz' 144;">
+                Kwang-Lim Chapel <em class="italic text-brand">Annual Ministry Report</em>
+            </h1>
+            <p class="mt-3 font-display italic text-[15px] text-slate-500">Academic Year {{ $year }}/{{ $year + 1 }} &middot; Kwang-Lim Chapel</p>
+
+            <div class="rule-ornament mt-8 text-[9px]" aria-hidden="true">◆</div>
+
+            <dl class="mt-4 flex flex-wrap justify-center gap-x-10 gap-y-2 text-[11px]">
+                <div class="flex items-baseline gap-2">
+                    <dt class="font-bold uppercase tracking-[0.16em] text-slate-400 text-[9.5px]">Report Dossier Ref</dt>
+                    <dd class="font-semibold text-slate-800 tabular-nums tracking-wide">AU-CHAPEL-AR-{{ $year }}</dd>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <dt class="font-bold uppercase tracking-[0.16em] text-slate-400 text-[9.5px]">Issued</dt>
+                    <dd class="font-semibold text-slate-800 tabular-nums">{{ date('F d, Y') }}</dd>
+                </div>
+            </dl>
+        </header>
+
+        {{-- I. Executive summary --}}
+        <section class="report-section mt-12">
+            <h2 class="flex items-baseline gap-3 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-900">
+                <span class="section-numeral text-[15px] normal-case tracking-normal font-normal">I.</span>
                 Executive Chaplaincy Governance Summary
             </h2>
-            <p class="text-slate-700 leading-relaxed text-justify">
+            <p class="report-prose mt-4 font-display text-[15px] leading-[1.75] text-slate-800 text-justify" style="font-variation-settings: 'SOFT' 40, 'opsz' 14;">
                 In compliance with the Africa University Chapel Manual and Student Life Regulations, this annual report consolidates ministry activities, worship celebrations, post-activity evaluations, financial allocations, and permanent institutional records across all ten official student fellowships and clubs under the Kwang-Lim Chapel spiritual umbrella. The Chaplaincy Office certifies that activities herein were conducted in accordance with university policy, maintaining the highest standards of Christian discipleship, pan-African unity, and responsible student leadership.
             </p>
-        </div>
+        </section>
 
-        <!-- High-Impact Key Performance Telemetry -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Total Activities Conducted</span>
-                <div class="text-2xl font-black font-cinzel text-brand">{{ $totalEvents }}</div>
-                <span class="text-[10px] text-emerald-700 font-semibold">Approved & Scheduled</span>
+        {{-- II. The year in figures --}}
+        <section class="report-section mt-12">
+            <h2 class="flex items-baseline gap-3 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-900">
+                <span class="section-numeral text-[15px] normal-case tracking-normal font-normal">II.</span>
+                The Year in Figures
+            </h2>
+            <dl class="report-figures mt-5 grid grid-cols-2 sm:grid-cols-4 border-y border-slate-900">
+                <div class="px-4 py-5 border-slate-200 border-r">
+                    <dt class="text-[9.5px] font-bold uppercase tracking-[0.14em] text-slate-500 leading-snug min-h-[2.4em]">Total Activities Conducted</dt>
+                    <dd class="mt-3 stat-value text-[2.5rem] text-brand">{{ $totalEvents }}</dd>
+                    <dd class="mt-2 text-[10.5px] text-emerald-700 font-semibold">Approved &amp; Scheduled</dd>
+                </div>
+                <div class="px-4 py-5 border-slate-200 sm:border-r">
+                    <dt class="text-[9.5px] font-bold uppercase tracking-[0.14em] text-slate-500 leading-snug min-h-[2.4em]">Cumulative Headcount</dt>
+                    <dd class="mt-3 flex items-baseline text-slate-900">
+                        <span class="stat-value text-[2.5rem]">{{ number_format($totalHeadcount) }}</span><span class="font-display text-[1.4rem] text-gold">+</span>
+                    </dd>
+                    <dd class="mt-2 text-[10.5px] text-slate-500">Student Worship Attendance</dd>
+                </div>
+                <div class="px-4 py-5 border-slate-200 border-r border-t sm:border-t-0">
+                    <dt class="text-[9.5px] font-bold uppercase tracking-[0.14em] text-slate-500 leading-snug min-h-[2.4em]">Post-Activity Reports Filed</dt>
+                    <dd class="mt-3 stat-value text-[2.5rem] text-slate-900">{{ $totalReports }}</dd>
+                    <dd class="mt-2 text-[10.5px] text-slate-500">Chapel Manual §7.1.2 Filings</dd>
+                </div>
+                <div class="px-4 py-5 border-slate-200 border-t sm:border-t-0">
+                    <dt class="text-[9.5px] font-bold uppercase tracking-[0.14em] text-slate-500 leading-snug min-h-[2.4em]">Financial Execution</dt>
+                    <dd class="mt-3 flex items-baseline text-brand">
+                        <span class="font-display text-[1.3rem] opacity-60">$</span><span class="stat-value text-[2.5rem]">{{ number_format($totalSpending, 2) }}</span>
+                    </dd>
+                    <dd class="mt-2 text-[10.5px] text-slate-500 tabular-nums">Budgeted: ${{ number_format($totalBudget, 2) }}</dd>
+                </div>
+            </dl>
+        </section>
+
+        {{-- III. Fellowship ledger --}}
+        <section class="mt-12">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h2 class="flex items-baseline gap-3 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-900">
+                    <span class="section-numeral text-[15px] normal-case tracking-normal font-normal">III.</span>
+                    Fellowship Performance &amp; Institutional Memory Index
+                </h2>
+                <span class="font-display italic text-[12.5px] text-slate-500">10 Official Chaplaincy Clubs</span>
             </div>
 
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Cumulative Headcount</span>
-                <div class="text-2xl font-black font-cinzel text-slate-900">{{ number_format($totalHeadcount) }}+</div>
-                <span class="text-[10px] text-slate-500">Student Worship Attendance</span>
-            </div>
-
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Post-Activity Reports Filed</span>
-                <div class="text-2xl font-black font-cinzel text-slate-900">{{ $totalReports }}</div>
-                <span class="text-[10px] text-slate-500">Chapel Manual §7.1.2 Filings</span>
-            </div>
-
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Financial Execution</span>
-                <div class="text-2xl font-black font-cinzel text-brand">${{ number_format($totalSpending, 2) }}</div>
-                <span class="text-[10px] text-slate-500">Budgeted: ${{ number_format($totalBudget, 2) }}</span>
-            </div>
-        </div>
-
-        <!-- Club Performance & Vault Sentinel Institutional Health Ledger -->
-        <div class="space-y-3">
-            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
-                <h3 class="font-cinzel text-sm font-bold uppercase tracking-wider text-brand">
-                    Fellowship Performance & Institutional Memory Index
-                </h3>
-                <span class="text-[10px] text-slate-400 font-mono">10 Official Chaplaincy Clubs</span>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50 text-slate-600 text-[10px] uppercase font-bold tracking-wider border-b border-slate-200">
+            <div class="mt-5 overflow-x-auto">
+                <table class="ledger w-full text-left text-[12px] tabular-nums">
+                    <thead>
                         <tr>
-                            <th class="py-3 px-3">Fellowship / Club</th>
-                            <th class="py-3 px-3">Ministry Type</th>
-                            <th class="py-3 px-3 text-center">Roster Size</th>
-                            <th class="py-3 px-3 text-center">Activities</th>
-                            <th class="py-3 px-3 text-center">Reports Filed</th>
-                            <th class="py-3 px-3 text-right">Vault Sentinel Health</th>
+                            <th scope="col" class="!pl-0">Fellowship / Club</th>
+                            <th scope="col">Ministry Type</th>
+                            <th scope="col" class="text-center">Roster Size</th>
+                            <th scope="col" class="text-center">Activities</th>
+                            <th scope="col" class="text-center">Reports Filed</th>
+                            <th scope="col" class="text-right !pr-0">Vault Sentinel Health</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody>
                         @foreach($clubs as $club)
                             @php
                                 $health = $club->getArchiveHealthScore();
                             @endphp
-                            <tr class="hover:bg-slate-50/70 transition">
-                                <td class="py-3 px-3 font-bold text-slate-900">
-                                    {{ $club->name }} ({{ $club->code }})
+                            <tr>
+                                <td class="!pl-0">
+                                    <span class="font-display text-[14px] text-slate-900">{{ $club->name }}</span>
+                                    <span class="text-slate-400 text-[11px]">({{ $club->code }})</span>
                                 </td>
-                                <td class="py-3 px-3 text-slate-600 uppercase text-[10px] font-semibold">
+                                <td class="text-slate-500 capitalize text-[11.5px]">
                                     {{ $club->type }}
                                 </td>
-                                <td class="py-3 px-3 text-center font-mono">
+                                <td class="text-center text-slate-700">
                                     {{ $club->members_count }}
                                 </td>
-                                <td class="py-3 px-3 text-center font-mono font-bold text-brand">
+                                <td class="text-center font-semibold text-brand">
                                     {{ $club->events_count }}
                                 </td>
-                                <td class="py-3 px-3 text-center font-mono">
+                                <td class="text-center text-slate-700">
                                     {{ $club->reports_count }}
                                 </td>
-                                <td class="py-3 px-3 text-right">
-                                    <span class="font-mono font-bold text-slate-900">{{ $health['score'] }}%</span>
-                                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ml-1" style="background-color: {{ $health['score'] >= 70 ? '#e6f4ea' : '#fef7e0' }}; color: {{ $health['score'] >= 70 ? '#137333' : '#b06000' }}">
+                                <td class="text-right !pr-0 whitespace-nowrap">
+                                    <span class="block font-display text-[14px] text-slate-900">{{ $health['score'] }}%</span>
+                                    <span class="mt-0.5 inline-block text-[10.5px] font-semibold {{ $health['score'] >= 70 ? 'text-emerald-700' : 'text-amber-700' }}">
                                         {{ $health['grade'] }}
                                     </span>
                                 </td>
@@ -155,30 +188,35 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </section>
 
-        <!-- Official Signatures Box -->
-        <div class="pt-8 border-t-2 border-slate-200 grid grid-cols-2 gap-8 text-[11px]">
-            <div class="space-y-4">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Prepared By</span>
-                <div class="border-b border-slate-300 pb-1">
-                    <span class="font-bold text-slate-900 block">Chapel Secretary & Administrator</span>
-                    <span class="text-slate-500">Africa University Chaplaincy Office</span>
+        {{-- Attestation --}}
+        <section class="report-signatures mt-16 grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-16 text-[11.5px]">
+            <div>
+                <p class="text-[9.5px] font-bold uppercase tracking-[0.18em] text-slate-400">Prepared By</p>
+                <div class="mt-10 border-t border-slate-400 pt-2.5">
+                    <p class="font-display text-[15px] text-slate-900">Chapel Secretary &amp; Administrator</p>
+                    <p class="text-slate-500">Africa University Chaplaincy Office</p>
                 </div>
-                <div class="text-[10px] text-slate-400 font-mono">Date: {{ date('F d, Y') }}</div>
+                <p class="mt-3 text-[10.5px] text-slate-400 tabular-nums">Date: {{ date('F d, Y') }}</p>
             </div>
 
-            <div class="space-y-4 text-right">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Approved & Confirmed</span>
-                <div class="border-b border-slate-300 pb-1">
-                    <span class="font-bold text-brand block">Rev. University Chaplain</span>
-                    <span class="text-slate-500">Kwang-Lim Chapel &bull; Africa University</span>
+            <div class="sm:text-right">
+                <p class="text-[9.5px] font-bold uppercase tracking-[0.18em] text-slate-400">Approved &amp; Confirmed</p>
+                <div class="mt-10 border-t border-slate-400 pt-2.5">
+                    <p class="font-display text-[15px] text-brand">Rev. University Chaplain</p>
+                    <p class="text-slate-500">Kwang-Lim Chapel &middot; Africa University</p>
                 </div>
-                <div class="text-[10px] text-slate-400 font-mono">Official Seal Affixed</div>
+                <p class="mt-3 text-[10.5px] text-slate-400 italic">Official Seal Affixed</p>
             </div>
-        </div>
+        </section>
 
-    </div>
+        {{-- Colophon --}}
+        <footer class="mt-16 pt-5 border-t border-slate-200 flex items-center justify-between gap-4 text-[10px] text-slate-400">
+            <span class="uppercase tracking-[0.18em]">Kwang-Lim Chapel &middot; Africa University</span>
+            <span class="tabular-nums">AU-CHAPEL-AR-{{ $year }}</span>
+        </footer>
+    </article>
 
 </body>
 </html>

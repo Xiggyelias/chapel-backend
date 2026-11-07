@@ -10,7 +10,7 @@
                 @forelse($dash['todaysSchedule'] as $event)
                     <x-dash.event-row :event="$event" :show-date="false" />
                 @empty
-                    <p class="text-sm text-slate-500">No activities are booked for today.</p>
+                    <p class="text-[13px] text-slate-500">No activities are booked for today.</p>
                 @endforelse
             </x-dash.panel>
 
@@ -27,13 +27,16 @@
             <x-dash.panel title="Venue week ahead" :link="route('calendar.index')">
                 @forelse($dash['weekByDay'] as $date => $events)
                     <div class="pb-3 mb-3 border-b last:border-0 last:mb-0 last:pb-0 border-slate-100">
-                        <h3 class="text-xs font-bold uppercase tracking-wide text-slate-500">{{ \Carbon\Carbon::parse($date)->format('l, M j') }}</h3>
+                        <h3 class="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gold shrink-0" aria-hidden="true"></span>
+                            {{ \Carbon\Carbon::parse($date)->format('l, M j') }}
+                        </h3>
                         @foreach($events as $event)
                             <x-dash.event-row :event="$event" :show-date="false" />
                         @endforeach
                     </div>
                 @empty
-                    <p class="text-sm text-slate-500">The week ahead is clear.</p>
+                    <p class="text-[13px] text-slate-500">The week ahead is clear.</p>
                 @endforelse
             </x-dash.panel>
         </div>
