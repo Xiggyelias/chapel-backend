@@ -92,7 +92,11 @@
         <nav class="flex items-center gap-1 sm:gap-2" aria-label="Site">
             <a href="{{ route('calendar.public') }}" class="hidden sm:inline-flex btn btn-ghost !text-white/70 hover:!text-white hover:!bg-white/5">Public calendar</a>
             <a href="{{ route('clubs.register') }}" class="hidden md:inline-flex btn btn-ghost !text-white/70 hover:!text-white hover:!bg-white/5">Charter a fellowship</a>
-            <a href="{{ route('login') }}" class="btn btn-glass">Sign in</a>
+            @auth
+                <a href="{{ route('dashboard') }}" class="btn btn-gold btn-sm">Dashboard</a>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-glass">Sign in</a>
+            @endauth
         </nav>
     </header>
 
@@ -108,10 +112,17 @@
                 hymnody and the records of every fellowship, kept through the Christian year.
             </p>
             <div class="mt-9 flex flex-wrap items-center gap-3" data-reveal="850">
-                <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-shimmer">
-                    Sign in to the portal
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
-                </a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary btn-lg btn-shimmer">
+                        Enter Dashboard
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-shimmer">
+                        Sign in to the portal
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.5 4.5L21 12l-7.5 7.5M21 12H3"/></svg>
+                    </a>
+                @endauth
                 <a href="{{ route('calendar.public') }}" class="btn btn-glass btn-lg">View the chapel calendar</a>
             </div>
             <p class="mt-10 flex items-center gap-2.5 text-[12px] text-white/45" data-reveal="1000">
@@ -292,7 +303,11 @@
         <nav class="flex items-center gap-5" aria-label="Footer">
             <a href="{{ route('calendar.public') }}" class="hover:text-slate-900 transition">Public calendar</a>
             <a href="{{ route('clubs.register') }}" class="hover:text-slate-900 transition">Club charter</a>
-            <a href="{{ route('login') }}" class="font-semibold text-brand hover:text-brand-dark transition">Sign in</a>
+            @auth
+                <a href="{{ route('dashboard') }}" class="font-semibold text-brand hover:text-brand-dark transition">Dashboard</a>
+            @else
+                <a href="{{ route('login') }}" class="font-semibold text-brand hover:text-brand-dark transition">Sign in</a>
+            @endauth
         </nav>
     </div>
 </footer>

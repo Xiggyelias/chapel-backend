@@ -11,9 +11,9 @@
     <x-page-header eyebrow="Schedule & Bookings" title="Master Calendar"
                    description="Centralized schedule of approved fellowship activities, worship services, and venue bookings">
         {{-- iCal .ics feed for Outlook & Google Calendar --}}
-        <a href="{{ route('calendar.feed_ics') }}" download="kwang-lim-chapel.ics" title="Subscribe or import into Outlook, Google Calendar or Apple Calendar" class="btn btn-secondary">
+        <a href="{{ route('calendar.feed_ics') }}" download="kwang-lim-chapel.ics" title="Add chapel schedule to your phone, Google Calendar, or Outlook" class="btn btn-secondary">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            Subscribe (.ics)
+            Add to Calendar
         </a>
 
         {{-- Shareable feed for Campus Life & SRC --}}

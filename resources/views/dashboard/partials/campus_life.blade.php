@@ -25,12 +25,12 @@
         </div>
 
         <div class="space-y-6">
-            <x-dash.panel title="Subscribe to the chapel calendar" kicker="Calendar feed">
-                <p class="text-[13px] text-slate-600 leading-relaxed">Add every approved chapel activity to Google, Outlook or Apple Calendar. It updates automatically.</p>
+            <x-dash.panel title="Sync schedule with your phone" kicker="Calendar Sync">
+                <p class="text-[13px] text-slate-600 leading-relaxed">Add approved chapel activities to your phone, Google Calendar, or Apple/Outlook so you stay updated automatically.</p>
                 <label for="icsFeed" class="sr-only">Calendar feed URL</label>
                 <div class="mt-4 flex gap-2">
                     <input id="icsFeed" type="text" readonly value="{{ route('calendar.feed_ics') }}" class="field min-w-0 flex-1 py-2 text-[12px] font-mono bg-slate-50 text-slate-600">
-                    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('icsFeed').value).then(() => { this.textContent = 'Copied'; })" class="btn btn-primary shrink-0">Copy</button>
+                    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('icsFeed').value).then(() => { this.textContent = 'Copied!'; setTimeout(() => { this.textContent = 'Copy Link'; }, 2000); })" class="btn btn-primary shrink-0">Copy Link</button>
                 </div>
                 <a href="{{ route('calendar.public') }}" target="_blank" rel="noopener" class="card-link mt-4">Shareable public calendar</a>
             </x-dash.panel>

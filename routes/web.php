@@ -29,10 +29,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
+    return view('welcome');
 })->name('home');
 
-// Public landing page (the root stays a straight redirect to sign-in)
+// Public landing page
 Route::view('/welcome', 'welcome')->name('welcome');
 
 Route::middleware('guest')->group(function () {

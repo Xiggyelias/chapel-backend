@@ -22,9 +22,10 @@ class ExampleTest extends TestCase
     /**
      * Test root route redirects unauthenticated users to login.
      */
-    public function test_root_redirects_to_login_for_guests(): void
+    public function test_root_loads_welcome_page(): void
     {
         $response = $this->get('/');
-        $response->assertRedirect('/login');
+        $response->assertStatus(200);
+        $response->assertSee('Kwang-Lim Chapel');
     }
 }
