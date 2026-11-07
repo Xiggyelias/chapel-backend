@@ -11,12 +11,19 @@ class LiturgicalCalendarService
      */
     public static function getCurrentSeason(?Carbon $date = null): array
     {
-        $date = $date ?: Carbon::today();
+        $date = ($date ?: Carbon::today())->copy()->startOfDay();
         $month = (int) $date->format('m');
         $day = (int) $date->format('d');
 
-        // Advent: Late November through Dec 24
-        if (($month === 11 && $day >= 27) || ($month === 12 && $day <= 24)) {
+        // Movable feasts for this calendar year (matches resources/js/modules/liturgy.js)
+        $year = (int) $date->format('Y');
+        $easter = self::easterSunday($year);
+        $ashWednesday = $easter->copy()->subDays(46);
+        $pentecost = $easter->copy()->addDays(49);
+        $adventSunday = self::firstSundayOfAdvent($year);
+
+        // Advent: fourth Sunday before Christmas through Dec 24
+        if ($date->gte($adventSunday) && ($month === 11 || ($month === 12 && $day <= 24))) {
             return [
                 'name' => 'Season of Advent',
                 'title' => 'Advent (Season of Expectation & Hope)',
@@ -45,8 +52,8 @@ class LiturgicalCalendarService
             ];
         }
 
-        // Epiphany: Jan 6 through early February
-        if ($month === 1 && $day >= 6) {
+        // Epiphany: Jan 6 until Ash Wednesday
+        if ($date->lt($ashWednesday)) {
             return [
                 'name' => 'Season of Epiphany',
                 'title' => 'Epiphany (Manifestation of Christ to the Nations)',
@@ -60,9 +67,8 @@ class LiturgicalCalendarService
             ];
         }
 
-        // Lent (approx February - March / April)
-        if ($month >= 2 && $month <= 4) {
-            // Simplified seasonal approximation for university calendar
+        // Lent: Ash Wednesday through Holy Saturday
+        if ($date->lt($easter)) {
             return [
                 'name' => 'Season of Lent & Passiontide',
                 'title' => 'Lent (Forty Days of Spiritual Renewal)',
@@ -76,8 +82,23 @@ class LiturgicalCalendarService
             ];
         }
 
-        // Eastertide (April - May)
-        if ($month === 5) {
+        // Day of Pentecost: red, the fire of the Spirit
+        if ($date->isSameDay($pentecost)) {
+            return [
+                'name' => 'Day of Pentecost',
+                'title' => 'Pentecost (Descent of the Holy Spirit)',
+                'color' => 'Liturgical Red',
+                'hex' => '#C8102E',
+                'badge_class' => 'bg-rose-100 text-rose-900 border-rose-300',
+                'dot_class' => 'bg-rose-600',
+                'parament' => 'Red Paraments — the tongues of fire and the birth of the Church.',
+                'verse' => '"And they were all filled with the Holy Spirit." — Acts 2:4',
+                'focus' => 'The Spirit poured out on all flesh, mission, and courage in witness.',
+            ];
+        }
+
+        // Eastertide: Easter Day until Pentecost
+        if ($date->lt($pentecost)) {
             return [
                 'name' => 'Eastertide',
                 'title' => 'Eastertide (Season of the Resurrection)',
@@ -103,6 +124,39 @@ class LiturgicalCalendarService
             'verse' => '"I will lift up mine eyes unto the hills, from whence cometh my help. My help cometh from the Lord." — Psalm 121:1-2',
             'focus' => 'Discipleship, fellowship nurturing, university academic diligence, and pan-African ministry leadership.',
         ];
+    }
+
+    /**
+     * Easter Sunday (Western, Gregorian) — Anonymous Gregorian algorithm,
+     * so we don't depend on PHP's optional calendar extension.
+     */
+    public static function easterSunday(int $year): Carbon
+    {
+        $a = $year % 19;
+        $b = intdiv($year, 100);
+        $c = $year % 100;
+        $d = intdiv($b, 4);
+        $e = $b % 4;
+        $f = intdiv($b + 8, 25);
+        $g = intdiv($b - $f + 1, 3);
+        $h = (19 * $a + $b - $d - $g + 15) % 30;
+        $i = intdiv($c, 4);
+        $k = $c % 4;
+        $l = (32 + 2 * $e + 2 * $i - $h - $k) % 7;
+        $m = intdiv($a + 11 * $h + 22 * $l, 451);
+        $month = intdiv($h + $l - 7 * $m + 114, 31);
+        $day = (($h + $l - 7 * $m + 114) % 31) + 1;
+
+        return Carbon::create($year, $month, $day)->startOfDay();
+    }
+
+    /** First Sunday of Advent: the fourth Sunday before Christmas Day. */
+    public static function firstSundayOfAdvent(int $year): Carbon
+    {
+        $christmas = Carbon::create($year, 12, 25)->startOfDay();
+        $offset = $christmas->dayOfWeek === 0 ? 28 : 21 + $christmas->dayOfWeek;
+
+        return $christmas->subDays($offset);
     }
 
     /**
